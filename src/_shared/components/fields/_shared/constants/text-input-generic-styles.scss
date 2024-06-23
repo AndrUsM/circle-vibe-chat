@@ -1,0 +1,13 @@
+.text-input-generic-styles {
+  padding: 0.25rem;
+  border-width: 1px;
+  border-style: solid;
+  outline-color: var(--text-input-outline-color);
+  border-color: var(--text-input-border-color);
+  color: var(--text-input-text-color);
+  outline: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  text-align: left;
+  background: var(--text-input-background);
+}

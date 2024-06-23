@@ -11,3 +11,17 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+:root {
+  --chat-var-color-white: '#ffffff';
+  --chat-var-default-text-color: '#111111';
+  --chat-var-default-form-gap: '0.75rem';
+  --chat-var-default-elements-border-radius: '0.5rem';
+  --chat-var-default-field-background: 'white';
+  --chat-var-default-field-errors-background: 'pink';
+  --chat-var-default-field-errors-color: 'red';
+  --chat-var-default-field-border-errors-color: 'red';
+  --chat-var-default-field-outline-errors-color: 'red';
+  --chat-var-default-field-color-errors-color: 'red';
+}
