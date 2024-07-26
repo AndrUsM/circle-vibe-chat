@@ -1,0 +1,53 @@
+.base-button {
+  border-radius: 0.25rem;
+  border: none;
+  outline: none;
+  font-size: 0.85rem;
+  padding: 0.5rem;
+  text-align: center;
+  opacity: 0.9;
+}
+
+.button {
+  &_color {
+    &-red {
+      background-color: orangered;
+      color: white;
+    }
+
+    &-green {
+      background-color: green;
+      color: white;
+    }
+
+    &-orange {
+      background-color: orange;
+      color: #222222;
+    }
+
+    &-white {
+      background-color: white;
+      color: #222222;
+    }
+  }
+
+  &_style {
+    &-border {
+      border: 1px solid #222222;
+    }
+    &-emphasized {
+      border-bottom: 1px solid #222222;
+    }
+  }
+
+  &_state {
+    &-disabled {
+      cursor: not-allowed;
+      pointer-events: none;
+      opacity: 0.8;
+    }
+    &-active {
+      opacity: 1;
+    }
+  }
+}
