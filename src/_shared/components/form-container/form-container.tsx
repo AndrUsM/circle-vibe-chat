@@ -24,7 +24,7 @@ export const FormContainer: ExtendedReactFunctionalComponent<FormContainerProps>
   return (
     <div className="form-container" style={{
       '--form-container-background': background,
-      '-form-container-text-color': textColor,
+      '--form-container-text-color': textColor,
       '--form-container-direction': direction,
       '--form-container-space': space,
       '--form-container-box-radius': boxRadius,

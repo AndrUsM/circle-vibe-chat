@@ -1,20 +1,15 @@
-import { Form, Formik } from "formik";
-import React, { useCallback, useState } from "react";
-
-import { request } from '@core/request/request';
-import { TextInput } from "../../_shared/components/fields/text-input/text-input";
-import { FormContainer } from "../../_shared/components/form-container/form-container";
+import React, { useState } from "react";
 import { AuthorizationMode } from "./_shared/types/authorization-mode";
 
+import { AuthorizationFormByPhone } from "./authorization-form-by-phone/authorization-form-by-phone";
+import { AuthorizationFormByEmail } from "./authorization-form-by-email/authorization-form-by-email";
+
 export const AuthorizationForm: React.FC = () => {
-  const [AuthorizationFormMode, setAuthorizationFormMode] = useState<AuthorizationMode>('email');
-  const onSubmit = useCallback(async () => {
-    const requestResult = await request({
-      url: "/api/test",
-    });
-  }, []);
+  const [authorizationFormMode] = useState<AuthorizationMode>("email");
 
-  return (
+  if (authorizationFormMode === "email") {
+    return <AuthorizationFormByEmail />;
+  }
 
-  );
+  return <AuthorizationFormByPhone />;
 };

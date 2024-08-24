@@ -1,5 +1,4 @@
 export interface AuthorizationFormByEmail {
-  email?: string;
-  // primaryPhone?: string | null;
+  email: string;
   password: string;
 }

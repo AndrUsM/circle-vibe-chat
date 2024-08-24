@@ -1,0 +1,8 @@
+.cluster-layout {
+  display: flex;
+  flex-direction: column;
+
+  gap: var(--space);
+  justify-content: var(--justify-content);
+  align-items: var(--align-content);
+}
