@@ -19,7 +19,8 @@
     "paths": {
       "@core/*": ["core/*"],
       "@shared/*": ["_shared/*"],
-      "@routes": ["routing/*"]
+      "@routes/*": ["routing/*"],
+      "@users/*": ["features/users/*"]
     }
   },
   "include": ["src"]
