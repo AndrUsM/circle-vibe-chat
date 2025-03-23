@@ -1,6 +1,5 @@
-import React from 'react';
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/shared';
 
-import { ExtendedReactFunctionalComponent } from '../../types/extended-react-functional-component';
 import './styles/tabs.scss';
 
 export const Tabs: ExtendedReactFunctionalComponent = ({ children }) => {

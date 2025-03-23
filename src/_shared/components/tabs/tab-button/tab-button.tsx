@@ -1,4 +1,4 @@
-import { ExtendedReactFunctionalComponent } from "../../../types/extended-react-functional-component";
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/shared';
 
 import '_shared/component/styles/buttons.scss';
 

@@ -10,5 +10,5 @@ export const AuthorizationForm: React.FC = () => {
     return <AuthorizationFormByEmail />;
   }
 
-  return <AuthorizationFormByPhone />;
+  return <AuthorizationFormByEmail />;
 };
