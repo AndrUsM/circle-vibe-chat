@@ -4,10 +4,10 @@ import { AuthorizationForm as Form } from "../../features/users/components/autho
 
 export const AuthorizationForm: React.FC = () => {
   return (
-    <div className="tw-relative">
-      <div className="tw-absolute tw-translate-y-1/2 tw-translate-x-1/2 bg-secondary tw-rounded">
+    <div className="">
+      <div className="bg-secondary">
         <Form />
       </div>
     </div>
-  )
+  );
 };
