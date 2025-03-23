@@ -1,0 +1,9 @@
+@use "./shared/variables.scss";
+@use "./shared/color.scss";
+@use "./shared/default.scss";
+@use "./shared/background.scss";
+
+// @use "tailwindcss";
+@tailwind base;
+@tailwind components;
+@tailwind utilities;

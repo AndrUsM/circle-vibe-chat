@@ -1,0 +1,32 @@
+.text {
+  &-base {
+    color: var(--cv-base);
+  }
+  &-light {
+    color: var(--cv-light);
+  }
+  &-dark {
+    color: var(--cv-dark);
+  }
+  &-primary {
+    color: var(--cv-primary);
+  }
+  &-secondary {
+    color: var(--cv-secondary);
+  }
+  &-warning {
+    color: var(--cv-warning);
+  }
+  &-success {
+    color: var(--cv-success);
+  }
+  &-danger {
+    color: var(--cv-danger);
+  }
+  &-error {
+    color: var(--cv-error);
+  }
+  &-info {
+    color: var(--cv-info);
+  }
+}

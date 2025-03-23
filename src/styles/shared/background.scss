@@ -1,0 +1,14 @@
+.bg {
+  &-secondary {
+    background-color: var(--cv-secondary);
+  }
+  &-warning {
+    background-color: var(--cv-warning);
+  }
+  &-success {
+    background-color: var(--cv-success);
+  }
+  &-danger {
+    background-color: var(--cv-danger);
+  }
+}
