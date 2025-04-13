@@ -11,4 +11,8 @@
   &-danger {
     background-color: var(--cv-danger);
   }
+
+  &-light {
+    background-color: var(--cv-bg-secondary)
+  }
 }

@@ -1,8 +1,11 @@
 @use "./shared/variables.scss";
+
+@use "./shared/background.scss";
+@use "./shared/border-radius.scss";
 @use "./shared/color.scss";
 @use "./shared/default.scss";
-@use "./shared/background.scss";
-
-// @tailwind base;
-// @tailwind components;
-// @tailwind utilities;
+@use "./shared/dimensions.scss";
+@use "./shared/display.scss";
+@use "./shared/margin.scss";
+@use "./shared/padding.scss";
+@use "./shared/text.scss";

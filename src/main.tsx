@@ -5,7 +5,6 @@ import { App } from './App';
 
 import './i18n';
 
-import './tailwind.css';
 import './styles/index.scss';
 
 createRoot(document.getElementById('root')!).render(

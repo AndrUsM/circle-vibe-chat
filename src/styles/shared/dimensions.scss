@@ -1,0 +1,16 @@
+// Width & Height based on 1 unit = 0.25rem
+@for $i from 0 through 100 {
+  .w-#{$i}        { width: #{$i * 0.25}rem; }
+  .h-#{$i}        { height: #{$i * 0.25}rem; }
+  .min-w-#{$i}    { min-width: #{$i * 0.25}rem; }
+  .min-h-#{$i}    { min-height: #{$i * 0.25}rem; }
+  .max-w-#{$i}    { max-width: #{$i * 0.25}rem; }
+  .max-h-#{$i}    { max-height: #{$i * 0.25}rem; }
+}
+
+.w-full    { width: 100%; }
+.h-full    { height: 100%; }
+.min-w-full { min-width: 100%; }
+.min-h-full { min-height: 100%; }
+.h-screen  { height: 100vh; }
+.w-screen  { width: 100vw; }

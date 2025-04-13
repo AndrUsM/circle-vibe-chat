@@ -4,10 +4,8 @@ import { AuthorizationForm as Form } from "../../features/users/components/autho
 
 export const AuthorizationForm: React.FC = () => {
   return (
-    <div className="">
-      <div className="bg-secondary">
-        <Form />
-      </div>
+    <div className="bg-light rounded-1">
+      <Form />
     </div>
   );
 };
