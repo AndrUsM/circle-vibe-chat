@@ -6,4 +6,8 @@
   &-disabled {
     cursor: not-allowed;
   }
+
+  &-resize {
+    cursor: row-resize;
+  }
 }
