@@ -1,17 +1,17 @@
 import { object, string } from "yup";
 
-import { PASSWORD_REGEX } from '@circle-vibe/shared';
+import {
+	PASSWORD_REGEX,
+	SHA1REGEX
+} from '@circle-vibe/shared';
 
-// move to shared
-const SHA1REGEX = /^[a-f0-9]{40}$/i;
-
-export const AUTHORIZATON_FORM_SCHEMA =
+export const AUTHORIZATION_FORM_SCHEMA =
   object({
     identificationKey: string().matches(SHA1REGEX).required(),
-    emmail: string().email(),
+    email: string().email(),
     password: string()
-    .required()
     .max(255)
     .min(8)
-    .matches(PASSWORD_REGEX),
-  });
+    .matches(PASSWORD_REGEX)
+    .required(),
+  })

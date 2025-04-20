@@ -31,3 +31,8 @@
     border-bottom-left-radius: #{$i * 0.25}rem;
   }
 }
+
+.border-none {
+  border: none;
+  outline: none;
+}
