@@ -9,7 +9,7 @@ export const AuthorizationForm: React.FC = () => {
 
   return (
     <div className="centered-form h-full ">
-      <div className="bg-light rounded-1 p-3 min-w-80">
+      <div className="bg-tertiary rounded-1 p-3 min-w-80">
         <Form />
       </div>
     </div>

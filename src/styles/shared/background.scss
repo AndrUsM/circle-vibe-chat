@@ -14,7 +14,10 @@
   &-primary {
     background-color: var(--cv-primary);
   }
-  &-light {
+  &-tertiary {
     background-color: var(--cv-bg-secondary)
+  }
+  &-light {
+    background-color: var(--cv-light);
   }
 }

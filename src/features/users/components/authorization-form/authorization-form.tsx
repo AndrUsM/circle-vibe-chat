@@ -2,12 +2,12 @@ import { useCallback } from "react";
 
 import {
   CenteredVertialLayout,
-  ClusterLayout,
   FormControlInput,
   FormGroup,
   Button,
   FormSubmitButton,
   Form,
+  StackLayout,
 } from "@circle-vibe/shared";
 
 import { AUTHORIZATION_FORM_SCHEMA } from "./constants/authorizaton-form-schema";
@@ -35,7 +35,7 @@ export const AuthorizationForm: React.FC = () => {
         <FormControlInput />
       </FormGroup>
 
-      <ClusterLayout space={"1rem"}>
+      <StackLayout space={"1rem"}>
         <FormSubmitButton> Save</FormSubmitButton>
 
         <CenteredVertialLayout space={"1rem"} justifyContent="center">
@@ -43,7 +43,7 @@ export const AuthorizationForm: React.FC = () => {
 
           <Button color="secondary">Register</Button>
         </CenteredVertialLayout>
-      </ClusterLayout>
+      </StackLayout>
     </Form>
   );
 };

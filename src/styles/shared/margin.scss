@@ -1,25 +1,25 @@
 @for $i from 0 through 100 {
   .m-#{$i} {
-    padding: #{$i * 0.25}rem;
+    margin: #{$i * 0.25}rem;
   }
   .mt-#{$i} {
-    padding-top: #{$i * 0.25}rem;
+    margin-top: #{$i * 0.25}rem;
   }
   .mr-#{$i} {
-    padding-right: #{$i * 0.25}rem;
+    margin-right: #{$i * 0.25}rem;
   }
   .mb-#{$i} {
-    padding-bottom: #{$i * 0.25}rem;
+    margin-bottom: #{$i * 0.25}rem;
   }
   .ml-#{$i} {
-    padding-left: #{$i * 0.25}rem;
+    margin-left: #{$i * 0.25}rem;
   }
   .mx-#{$i} {
-    padding-left: #{$i * 0.25}rem;
-    padding-right: #{$i * 0.25}rem;
+    margin-left: #{$i * 0.25}rem;
+    margin-right: #{$i * 0.25}rem;
   }
   .my-#{$i} {
-    padding-top: #{$i * 0.25}rem;
-    padding-bottom: #{$i * 0.25}rem;
+    margin-top: #{$i * 0.25}rem;
+    margin-bottom: #{$i * 0.25}rem;
   }
 }
