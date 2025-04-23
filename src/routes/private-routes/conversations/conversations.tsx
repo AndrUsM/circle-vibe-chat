@@ -1,4 +1,5 @@
 import { ClusterLayout, StackLayout } from "@circle-vibe/shared";
+import io from 'socket.io-client';
 
 import * as Resizer from "@column-resizer/react";
 
@@ -11,6 +12,9 @@ import { CHATS_MOCK } from "@shared/components/chat/chat.mock-data";
 import { Chat } from "@shared/components/chat/chat";
 
 export const Conversations: React.FC = () => {
+  const socket = io('http://localhost:8080');
+  socket.connect();
+
   return (
     <section className="h-full">
       <ClusterLayout>
