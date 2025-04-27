@@ -10,6 +10,7 @@ import { MESSAGES_MOCK } from "@shared/components/message/message-mock";
 import "./conversation.scss";
 import { CHATS_MOCK } from "@shared/components/chat/chat.mock-data";
 import { Chat } from "@shared/components/chat/chat";
+import { UserAvatar } from "@shared/components/user-avatar";
 
 export const Conversations: React.FC = () => {
   const socket = io('http://localhost:8080');
@@ -17,9 +18,8 @@ export const Conversations: React.FC = () => {
 
   return (
     <section className="h-full">
-      <ClusterLayout>
-        {/* <SectionHeader>Chat Name</SectionHeader> */}
-        {/* <UserAvatar /> */}
+      <ClusterLayout className="p-2">
+        <UserAvatar fallback="US" />
         {/* <Actions */}
         {/* <Settings */}
       </ClusterLayout>
