@@ -4,16 +4,21 @@ import {
   ExtendedReactFunctionalComponent,
   Show,
   StackLayout,
+  Chat as ChatModel,
 } from "@circle-vibe/shared";
-import { ChatModel, MessageModel } from "@core/enums";
+import SharedEnums from "@circle-vibe/shared";
 import { Message } from "../message";
+import { useFormatDatetime } from "@shared/hooks";
 
 interface ChatProps {
   chat: ChatModel;
 }
 
 export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({ chat }) => {
-  const { readableName, lastMessage, hasUnreadMessages, empty, updatedAt } = chat;
+  const format = useFormatDatetime();
+  const { readableName, lastMessage, hasUnreadMessages, empty, updatedAt } =
+    chat;
+
   return (
     <StackLayout
       space="0.5rem"
@@ -24,10 +29,10 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({ chat }) => {
     >
       <span className="block text-lg font-bold">{readableName}</span>
 
-      <span>Last seen: {updatedAt}</span>
+      <span>Last seen: {format(updatedAt)}</span>
 
       <Show.When isTrue={Boolean(lastMessage)}>
-        <Message message={lastMessage as MessageModel} />
+        <Message message={lastMessage as SharedEnums.Message} />
       </Show.When>
     </StackLayout>
   );

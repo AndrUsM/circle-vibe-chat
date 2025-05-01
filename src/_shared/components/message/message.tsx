@@ -5,10 +5,9 @@ import {
   ExtendedReactFunctionalComponent,
   Show,
   StackLayout,
+  MessageType,
+  Message as MessageModel,
 } from "@circle-vibe/shared";
-
-import { MessageModel } from "@core/enums";
-import { MessageType } from "@core/enums/message-type.enum";
 
 import { getUserFullName } from "@shared/utils";
 import { UserAvatar } from "../user-avatar/user-avatar";
@@ -22,7 +21,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   message,
 }) => {
   const { content, images, files, videos, messageType, sender } = message;
-  const avatarUrl = sender?.avatarUrl;
+  const avatarUrl = sender?.avatar.url;
   const imageFallback = getUserAvatarFallback(sender);
 
   return (
@@ -51,14 +50,14 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
             </Show.When>
 
             <Show.When isTrue={messageType === MessageType.IMAGE}>
-              {images.map(({ description, url, id }) => (
-                <img src={url} key={id} alt={description} />
+              {images.map(({ description, url, fileName }) => (
+                <img src={url} key={fileName} alt={description} />
               ))}
             </Show.When>
 
             <Show.When isTrue={messageType === MessageType.FILE}>
-              {files.map(({ description, url, fileName, id }) => (
-                <a href={url} target="_blank" key={id} rel="noopener">
+              {files.map(({ description, url, fileName }) => (
+                <a href={url} target="_blank" key={fileName} rel="noopener">
                   <StackLayout>
                     <span>{fileName}</span>
 

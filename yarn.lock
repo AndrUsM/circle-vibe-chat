@@ -170,10 +170,10 @@
     "@babel/helper-string-parser" "^7.25.9"
     "@babel/helper-validator-identifier" "^7.25.9"
 
-"@circle-vibe/shared@1.0.40":
-  version "1.0.40"
-  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.0.40.tgz#c00448e89e093b0a7517474ca01038e6aee67fb6"
-  integrity sha512-EgLoWs7oczmA0XPjrfv9rVG/+Ad8uopK3qmN7sM+jAVX4PV3Z4wOioJvOJkQ2TX3dFn6AUW0/+auGQbLLAuxbA==
+"@circle-vibe/shared@1.1.0":
+  version "1.1.0"
+  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.1.0.tgz#bce5670408d033331ac222699f42913621da831d"
+  integrity sha512-wle/+FOZWDjScsqpaRwtcJAtPfWGlbyGAn4bFRSFzcM/MLMFqz9ZPwqJzpuk7mT2V7aBx8IJVRIjzTDjxatEZQ==
 
 "@column-resizer/core@1.3.1":
   version "1.3.1"
@@ -1154,6 +1154,11 @@ data-view-byte-offset@^1.0.1:
     call-bound "^1.0.2"
     es-errors "^1.3.0"
     is-data-view "^1.0.1"
+
+date-fns@^4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/date-fns/-/date-fns-4.1.0.tgz#64b3d83fff5aa80438f5b1a633c2e83b8a1c2d14"
+  integrity sha512-Ukq0owbQXxa/U3EGtsdVBkR1w7KOQ5gIBqdH2hkvknzZPYvBxb/aa6E8L7tmjFtkwZBu3UXBbjIgPo/Ez4xaNg==
 
 debug@^4.1.0, debug@^4.3.1, debug@^4.3.2, debug@^4.3.4:
   version "4.4.0"
