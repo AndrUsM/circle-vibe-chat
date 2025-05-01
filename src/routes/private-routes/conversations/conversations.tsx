@@ -1,5 +1,5 @@
 import { ClusterLayout, StackLayout } from "@circle-vibe/shared";
-import io from 'socket.io-client';
+import io from "socket.io-client";
 
 import * as Resizer from "@column-resizer/react";
 
@@ -8,18 +8,19 @@ import { Message } from "@shared/components/message";
 import { MESSAGES_MOCK } from "@shared/components/message/message-mock";
 
 import "./conversation.scss";
-import { CHATS_MOCK } from "@shared/components/chat/chat.mock-data";
 import { Chat } from "@shared/components/chat/chat";
 import { UserAvatar } from "@shared/components/user-avatar";
+import { UserActions } from "./topbar-user-actions/topbar-user-actions";
 
 export const Conversations: React.FC = () => {
-  const socket = io('http://localhost:8080');
+  const socket = io("http://localhost:8080");
   socket.connect();
 
   return (
     <section className="h-full">
       <ClusterLayout className="p-2">
         <UserAvatar fallback="US" />
+        <UserActions />
         {/* <Actions */}
         {/* <Settings */}
       </ClusterLayout>
@@ -32,8 +33,8 @@ export const Conversations: React.FC = () => {
           minSize={100}
         >
           <StackLayout className="w-full p-3 overflow-y-auto">
-            {CHATS_MOCK.map((chat) => (
-              <Chat chat={chat} key={chat._id} />
+            {[].map((chat) => (
+              <Chat chat={chat} key={chat} />
             ))}
           </StackLayout>
         </Resizer.Section>
@@ -48,8 +49,8 @@ export const Conversations: React.FC = () => {
           minSize={100}
         >
           <StackLayout className="w-full p-3 overflow-y-auto">
-            {MESSAGES_MOCK.map((message) => (
-              <Message message={message} key={message.id} />
+            {[].map((message) => (
+              <Message message={message} key={message} />
             ))}
           </StackLayout>
         </Resizer.Section>

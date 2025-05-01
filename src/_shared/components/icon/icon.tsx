@@ -1,62 +1,30 @@
-import {
-  CustomCssVariables,
-} from "@circle-vibe/shared";
-
-import React from "react";
+import { CustomCssVariables } from "@circle-vibe/shared";
+import CIcon from "@coreui/icons-react";
 import classNames from "classnames";
 
-import "./icon.scss";
+import React from "react";
 
-type ReactComponent = React.FC<React.SVGProps<SVGSVGElement>>;
+// https://coreui.io/icons/
 
 export interface IconProps extends React.HTMLAttributes<HTMLDivElement> {
-  readonly name: string;
-  readonly size?: string;
+  readonly name: any;
+  readonly size?: number;
+  readonly className?: string;
   readonly color?: string;
 }
 
 export const Icon = React.forwardRef<HTMLDivElement, IconProps>(
-  ({ name, size, color, className, ...iconAttributes }, ref) => {
-    const isMounted = React.useRef(true);
-    const [IconSVG, setIcon] = React.useState<ReactComponent | null>(null);
-
-    React.useEffect(() => {
-      isMounted.current = true;
-
-      import(`@material-ui/icons`)
-        .then((icons) => {
-          const icon = icons[name] ?? null;
-
-          if (isMounted.current) {
-            setIcon(() => icon);
-          }
-        })
-        .catch(() => {
-          console.error(`Could not find icon "${name}".`);
-
-          if (isMounted.current) {
-            setIcon(null);
-          }
-        });
-
-      return () => {
-        isMounted.current = false;
-      };
-    }, [name]);
-
+  ({ name, color, className, size = 10, ...iconAttributes }, ref) => {
     return (
-      <span
-        ref={ref}
-        className={classNames("icon inline-block", className)}
-        style={
-          {
-            "--vs-icon-size": size,
-          } as CustomCssVariables
-        }
-        {...iconAttributes}
-      >
-        {IconSVG && <IconSVG color={color ?? "var(--cv-base)"} />}
-      </span>
+      <div ref={ref} {...iconAttributes}>
+        <CIcon
+          icon={name}
+          size={"custom-size"}
+          height={size}
+          width={size}
+          color={color ?? "var(--cv-base)"}
+        />
+      </div>
     );
   }
 );

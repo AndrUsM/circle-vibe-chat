@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { StyleHTMLAttributes, useState } from "react";
 import {
   autoUpdate,
   useClick,
@@ -17,12 +17,13 @@ export interface UseDropdownOptions {
 
 export const useDropdown = (options?: UseDropdownOptions) => {
   const [open, setIsOpen] = useState(options?.open ?? false);
+  const onOpenChange = options?.onOpenChange ?? setIsOpen;
   const { refs, floatingStyles, context } = useFloating({
     whileElementsMounted: autoUpdate,
     placement: "bottom",
     transform: true,
-    open,
-    onOpenChange: options?.onOpenChange ?? setIsOpen,
+    open: options?.open ?? open,
+    onOpenChange: onOpenChange,
     strategy: "fixed",
     middleware: DEFAULT_MIDDLEWARE,
     ...options,
@@ -38,7 +39,7 @@ export const useDropdown = (options?: UseDropdownOptions) => {
   );
 
   return {
-    open,
+    open: isMounted,
     referenceProps: {
       ref: setReference,
       ...getReferenceProps,
@@ -49,6 +50,7 @@ export const useDropdown = (options?: UseDropdownOptions) => {
       ...getFloatingProps,
       style: floatingStyles,
     },
-    transitionStyles,
+    setStatus: onOpenChange,
+    transitionStyles: transitionStyles as StyleHTMLAttributes<HTMLDivElement>,
   };
 };

@@ -1,11 +1,12 @@
 import React from "react";
 import { Placement } from "@floating-ui/react";
 import classNames from "classnames";
+import { CContainer } from "@coreui/react";
 
-import { useDropdown } from "src/hooks";
-import { MenuContext } from "./menu.context";
-import { MenuButtonProps } from "./types/menu-button-props";
 import { Dropdown } from "../dropdown";
+import { MenuButtonProps } from "./types";
+import { useDropdown } from "@shared/hooks";
+import { MenuContext } from "./menu.context";
 
 interface DropdownMenuProps extends React.HTMLAttributes<HTMLDivElement> {
   readonly button: (props: MenuButtonProps) => React.ReactNode;
@@ -28,26 +29,19 @@ export const Menu: React.FC<DropdownMenuProps> = ({
   children,
   ...divAttributes
 }) => {
-  const {
-    referenceProps,
-    open,
-    dropdownProps,
-    setDropdownStatus,
-    transitionStyles,
-  } = useDropdown({
-    strategy,
-    placement: dropdownPlacement,
-    ...(isOpen !== undefined && onOpenChange
-      ? { open: isOpen, onOpenChange }
-      : {}),
-  });
+  const { referenceProps, open, contentProps, setStatus, transitionStyles } =
+    useDropdown({
+      ...(isOpen !== undefined && onOpenChange
+        ? { open: isOpen, onOpenChange }
+        : {}),
+    });
 
   const closeMenu = () => {
     if (!onOpenChange) {
       return;
     }
 
-    setDropdownStatus(false);
+    setStatus(false);
   };
 
   return (
@@ -56,15 +50,15 @@ export const Menu: React.FC<DropdownMenuProps> = ({
         className={classNames("relative", ...(divAttributes?.className ?? ""))}
         {...divAttributes}
       >
-        <div className="w-fit" {...referenceProps}>
+        <div className="cursor-pointer" {...referenceProps}>
           {button({
             active: open,
           })}
         </div>
-
+          {open ? 'true' : 'false'}
         <Dropdown
           open={open}
-          dropdownProps={dropdownProps}
+          dropdownProps={contentProps}
           transitionStyles={transitionStyles}
           zIndex={zIndex}
           fullDropdownWidth={fullDropdownWidth}
