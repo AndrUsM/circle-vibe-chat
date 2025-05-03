@@ -3,26 +3,45 @@ import io from "socket.io-client";
 
 import * as Resizer from "@column-resizer/react";
 
-import { SectionHeader, HorizontalDivider } from "@shared/components";
+import { HorizontalDivider, TopbarLogo } from "@shared/components";
 import { Message } from "@shared/components/message";
-import { MESSAGES_MOCK } from "@shared/components/message/message-mock";
 
 import "./conversation.scss";
 import { Chat } from "@shared/components/chat/chat";
 import { UserAvatar } from "@shared/components/user-avatar";
-import { UserActions } from "./topbar-user-actions/topbar-user-actions";
+import { TopbarActions } from "./topbar-actions/topbar-actions";
+import { Link, Route } from "react-router-dom";
+import { Icon } from "@shared/components/icon";
+import { useIcons } from "@shared/hooks";
+import { Tooltip } from "@shared/components/tooltip/tooltip";
 
 export const Conversations: React.FC = () => {
   const socket = io("http://localhost:8080");
   socket.connect();
 
+  const { cilSettings } = useIcons();
+
   return (
     <section className="h-full">
-      <ClusterLayout className="p-2">
-        <UserAvatar fallback="US" />
-        <UserActions />
-        {/* <Actions */}
-        {/* <Settings */}
+      <ClusterLayout
+        className="p-2"
+        alignItems="center"
+        justifyContent="space-between"
+        space="1rem"
+      >
+        <TopbarLogo />
+
+        <ClusterLayout space="1.15rem">
+          <UserAvatar fallback="US" />
+
+          <Link to={"/settings"}>
+            <Tooltip title="Settings">
+              <Icon size={28} name={cilSettings} />
+            </Tooltip>
+          </Link>
+
+          <TopbarActions />
+        </ClusterLayout>
       </ClusterLayout>
 
       <HorizontalDivider height="5px" />

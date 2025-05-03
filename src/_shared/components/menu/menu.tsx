@@ -1,11 +1,10 @@
 import React from "react";
-import { Placement } from "@floating-ui/react";
 import classNames from "classnames";
-import { CContainer } from "@coreui/react";
+import { Placement } from "@floating-ui/react";
 
+import { useDropdown } from "@shared/hooks";
 import { Dropdown } from "../dropdown";
 import { MenuButtonProps } from "./types";
-import { useDropdown } from "@shared/hooks";
 import { MenuContext } from "./menu.context";
 
 interface DropdownMenuProps extends React.HTMLAttributes<HTMLDivElement> {
@@ -55,7 +54,7 @@ export const Menu: React.FC<DropdownMenuProps> = ({
             active: open,
           })}
         </div>
-          {open ? 'true' : 'false'}
+
         <Dropdown
           open={open}
           dropdownProps={contentProps}

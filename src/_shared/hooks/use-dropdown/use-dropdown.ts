@@ -1,11 +1,14 @@
 import { StyleHTMLAttributes, useState } from "react";
 import {
+  AlignedPlacement,
   autoUpdate,
+  Side,
   useClick,
   useDismiss,
   useFloating,
   useInteractions,
   useTransitionStyles,
+  Placement,
 } from "@floating-ui/react";
 import { DROPDOWN_ANIMATION_IN_BOTTOM_POSITION } from "@shared/constants";
 import { DEFAULT_MIDDLEWARE } from "../../constants/default-middleware";
@@ -13,19 +16,20 @@ import { DEFAULT_MIDDLEWARE } from "../../constants/default-middleware";
 export interface UseDropdownOptions {
   open?: boolean;
   onOpenChange?: (open: boolean) => void;
+  placement?: Placement;
 }
 
 export const useDropdown = (options?: UseDropdownOptions) => {
-  const [open, setIsOpen] = useState(options?.open ?? false);
-  const onOpenChange = options?.onOpenChange ?? setIsOpen;
+  const [open, onOpenChange] = useState(options?.open ?? false);
   const { refs, floatingStyles, context } = useFloating({
     whileElementsMounted: autoUpdate,
     placement: "bottom",
     transform: true,
-    open: options?.open ?? open,
-    onOpenChange: onOpenChange,
     strategy: "fixed",
     middleware: DEFAULT_MIDDLEWARE,
+    ...(options?.open !== undefined && options.onOpenChange
+      ? { ...options }
+      : { open, onOpenChange }),
     ...options,
   });
   const { getReferenceProps, getFloatingProps } = useInteractions([
@@ -42,12 +46,12 @@ export const useDropdown = (options?: UseDropdownOptions) => {
     open: isMounted,
     referenceProps: {
       ref: setReference,
-      ...getReferenceProps,
+      ...getReferenceProps(),
     },
     contentProps: {
       open: isMounted,
       ref: setFloating,
-      ...getFloatingProps,
+      ...getFloatingProps(),
       style: floatingStyles,
     },
     setStatus: onOpenChange,

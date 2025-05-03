@@ -1,21 +1,22 @@
-import React, { CSSProperties } from "react";
+import { CSSProperties } from "react";
 
 import { FloatingPortal } from "@floating-ui/react";
+
 import { ExtendedReactFunctionalComponent } from "@circle-vibe/shared";
 
-import './tooltip-content.scss';
+import './popover.scss';
 
-interface TooltipProps {
+interface PopoverProps {
   readonly open?: boolean;
   readonly transitionStyles: CSSProperties;
   readonly tooltipProps?: Record<string, unknown>;
 }
 
-export const TooltipContent: ExtendedReactFunctionalComponent<TooltipProps> = ({
+export const Popover: ExtendedReactFunctionalComponent<PopoverProps> = ({
+  transitionStyles,
+  tooltipProps,
   open,
   children,
-  tooltipProps,
-  transitionStyles,
   ...props
 }) => {
   if (!open) {
@@ -25,7 +26,7 @@ export const TooltipContent: ExtendedReactFunctionalComponent<TooltipProps> = ({
   return (
     <FloatingPortal>
       <div
-        className="bg-light text-default p-2 w-max rounded-1 text-xs tooltip-content"
+        className="bg-light text-default p-2 w-max rounded-1 text-xs popover"
         style={transitionStyles}
         {...props}
         {...tooltipProps}
