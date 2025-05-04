@@ -8,7 +8,6 @@ import {
 export const AUTHORIZATION_FORM_SCHEMA =
   object({
     identificationKey: string().matches(SHA1REGEX).required(),
-    email: string().email(),
     password: string()
     .max(255)
     .min(8)

@@ -3,10 +3,8 @@ export * from './submit-button';
 export * from './section-header';
 export * from './horizontal-divider';
 export * from './topbar-logo';
-// export * from './tabs';
-// export * from './page-layout';
 
-export * from './tooltip';
-export * from './menu';
-export * from './popover';
-export * from './dropdown';
+export * from './message';
+export * from './user-avatar';
+export * from './icon';
+export * from './chat';

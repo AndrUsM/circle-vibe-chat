@@ -1,19 +1,15 @@
-import { ClusterLayout, StackLayout } from "@circle-vibe/shared";
+import { Link } from "react-router-dom";
+import { ClusterLayout, StackLayout, Tooltip, } from "@circle-vibe/shared";
 import io from "socket.io-client";
 
 import * as Resizer from "@column-resizer/react";
 
-import { HorizontalDivider, TopbarLogo } from "@shared/components";
-import { Message } from "@shared/components/message";
+import { useIcons } from "@shared/hooks";
+import { HorizontalDivider, TopbarLogo, Message, Chat, Icon, UserAvatar } from "@shared/components";
+
+import { TopbarActions } from "./topbar-actions";
 
 import "./conversation.scss";
-import { Chat } from "@shared/components/chat/chat";
-import { UserAvatar } from "@shared/components/user-avatar";
-import { TopbarActions } from "./topbar-actions/topbar-actions";
-import { Link, Route } from "react-router-dom";
-import { Icon } from "@shared/components/icon";
-import { useIcons } from "@shared/hooks";
-import { Tooltip } from "@shared/components/tooltip/tooltip";
 
 export const Conversations: React.FC = () => {
   const socket = io("http://localhost:8080");
