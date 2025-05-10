@@ -10,7 +10,7 @@ import {
   StackLayout,
 } from "@circle-vibe/shared";
 
-import { AUTHORIZATION_FORM_SCHEMA } from "./constants/authorizaton-form-schema";
+import { AUTHORIZATION_FORM_SCHEMA } from "./constants/sign-in-form-schema";
 
 export const AuthorizationForm: React.FC = () => {
   const onSubmit = useCallback(async () => {

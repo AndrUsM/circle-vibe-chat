@@ -1,11 +1,22 @@
 import { Link } from "react-router-dom";
-import { ClusterLayout, StackLayout, Tooltip, } from "@circle-vibe/shared";
+import {
+  ClusterLayout,
+  StackLayout,
+  Tooltip,
+Icon,
+  useIcons,
+} from "@circle-vibe/shared";
 import io from "socket.io-client";
 
 import * as Resizer from "@column-resizer/react";
 
-import { useIcons } from "@shared/hooks";
-import { HorizontalDivider, TopbarLogo, Message, Chat, Icon, UserAvatar } from "@shared/components";
+import {
+  HorizontalDivider,
+  TopbarLogo,
+  Message,
+  Chat,
+  UserAvatar,
+} from "@shared/components";
 
 import { TopbarActions } from "./topbar-actions";
 

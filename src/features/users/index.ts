@@ -1,1 +1,1 @@
-export * from './components/authorization-form';
+export * from './components/sign-in-form';
