@@ -2,7 +2,7 @@ import { File, User, UserType } from "@circle-vibe/shared";
 
 type SignUpFormInput = Omit<
   User,
-  "_id" | "avatar" | "birthDate" | "privateToken"
+  "_id" | "avatar" | "birthDate" | "privateToken" | "privateKey"
 > & {
   birthDate?: Date;
   avatar?: File;
@@ -17,12 +17,8 @@ export const SIGN_UP_FORM_INITIAL_VALUES: SignUpFormInput = {
   passwordConfirmation: "",
   avatar: undefined,
   isHiddenContactInfo: true,
-  address: "",
   city: "",
   country: "",
-  phones: [],
-  zipCode: "",
   email: "",
-  secret: false,
   type: UserType.PRIVATE,
 };

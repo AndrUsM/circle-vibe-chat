@@ -15,6 +15,7 @@ export default defineConfig({
     alias: {
       "@shared": resolve("./src/_shared"),
       "@core": resolve("./src/_core"),
+      "@features": resolve("./src/features"),
     },
   },
 });

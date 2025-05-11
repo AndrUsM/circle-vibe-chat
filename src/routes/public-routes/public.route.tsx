@@ -1,16 +1,21 @@
-import React from "react";
+import React, { ReactNode } from "react";
 import { Route } from "react-router-dom";
 
-const SignInLazy = React.lazy(() =>
+const SignInFormLazy = React.lazy(() =>
   import("./sign-in").then(({ SignInForm }) => ({
     default: SignInForm,
   }))
 );
 
-export const PublicRouter = () => {
-  return (
-    <>
-      <Route path="/sign-in" Component={SignInLazy} />
-    </>
-  );
-};
+const SignUpFormLazy = React.lazy(() =>
+  import("./sign-up").then(({ SignUp }) => ({
+    default: SignUp,
+  }))
+);
+
+export const PublicRouter: ReactNode = (
+  <>
+    <Route path="sign-in" Component={SignInFormLazy} />
+    <Route path="sign-up" Component={SignUpFormLazy} />
+  </>
+);

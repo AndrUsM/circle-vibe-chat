@@ -1,6 +1,6 @@
 import React from "react";
 
-import { AuthorizationForm } from "../../../features/users/components/sign-in-form/sign-in-form";
+import { AuthorizationForm } from "@features/users/components/sign-in-form/sign-in-form";
 
 export const SignInForm: React.FC = () => {
   return (

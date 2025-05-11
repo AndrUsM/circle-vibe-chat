@@ -170,10 +170,10 @@
     "@babel/helper-string-parser" "^7.25.9"
     "@babel/helper-validator-identifier" "^7.25.9"
 
-"@circle-vibe/shared@1.1.7":
-  version "1.1.7"
-  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.1.7.tgz#0fba238eac2aa8415efbdd5d5e530bdb07f812e0"
-  integrity sha512-Nwg/NgVRAaDMPKvATFjmn3OMckLfriGeDGH2ARByzC0jTdsYpvbi4cKN893dljHNgMDDoBESyemdW2d0tZRkjg==
+"@circle-vibe/shared@1.1.18":
+  version "1.1.18"
+  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.1.18.tgz#787bff0e79f1362f9a789cdc74e5a8e9215cf48c"
+  integrity sha512-wr/USX0g59hvD2885RmB5gCBrFP5Y0xsv+WnzDyvtSKhCnvR25WTFBL6qgOvGV+Zm8dyaXDYPhqLc+IgulH58g==
   dependencies:
     "@coreui/icons" "^3.0.1"
     "@coreui/icons-react" "2.3.0"
@@ -181,7 +181,7 @@
     date-fns "^4.1.0"
     formik "^2.4.6"
     js-cookie "^3.0.5"
-    react "^18.2.0"
+    react "^19.1.0"
     react-dom "^19.0.0"
     react-router-dom "^7.4.0"
     yup "^1.6.1"
@@ -1429,6 +1429,11 @@ escape-string-regexp@^4.0.0:
   resolved "https://registry.yarnpkg.com/escape-string-regexp/-/escape-string-regexp-4.0.0.tgz#14ba83a5d373e3d311e5afca29cf5bfad965bf34"
   integrity sha512-TtpcNJ3XAzx3Gq8sWRzJaVajRs0uVxA2YAkdb1jm2YkPz4G6egUFAyA3n5vtEIZefPk5Wa4UXbKuS5fKkJWdgA==
 
+eslint-define-config@^2.1.0:
+  version "2.1.0"
+  resolved "https://registry.yarnpkg.com/eslint-define-config/-/eslint-define-config-2.1.0.tgz#9708b3efd57637b6fb685d9c2fb6285b9acfbd71"
+  integrity sha512-QUp6pM9pjKEVannNAbSJNeRuYwW3LshejfyBBpjeMGaJjaDUpVps4C6KVR8R7dWZnD3i0synmrE36znjTkJvdQ==
+
 eslint-plugin-react@^7.37.5:
   version "7.37.5"
   resolved "https://registry.yarnpkg.com/eslint-plugin-react/-/eslint-plugin-react-7.37.5.tgz#2975511472bdda1b272b34d779335c9b0e877065"
@@ -2150,7 +2155,7 @@ lodash@^4.17.21:
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.21.tgz#679591c564c3bffaae8454cf0b3df370c3d6911c"
   integrity sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==
 
-loose-envify@^1.1.0, loose-envify@^1.4.0:
+loose-envify@^1.4.0:
   version "1.4.0"
   resolved "https://registry.yarnpkg.com/loose-envify/-/loose-envify-1.4.0.tgz#71ee51fa7be4caec1a63839f7e682d8132d30caf"
   integrity sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==
@@ -2461,14 +2466,7 @@ react-router@7.5.1:
     set-cookie-parser "^2.6.0"
     turbo-stream "2.4.0"
 
-react@^18.2.0:
-  version "18.3.1"
-  resolved "https://registry.yarnpkg.com/react/-/react-18.3.1.tgz#49ab892009c53933625bd16b2533fc754cab2891"
-  integrity sha512-wS+hAgJShR0KhEvPJArfuPVN1+Hz1t0Y6n5jLrGQbkb4urgPE/0Rve+1kMB1v/oWgHgm4WIcV+i7F2pTVj+2iQ==
-  dependencies:
-    loose-envify "^1.1.0"
-
-react@^19.0.0:
+react@^19.0.0, react@^19.1.0:
   version "19.1.0"
   resolved "https://registry.yarnpkg.com/react/-/react-19.1.0.tgz#926864b6c48da7627f004795d6cce50e90793b75"
   integrity sha512-FS+XFBNvn3GTAWq26joslQgWNoFu08F4kl0J4CgdNKADkdSGXQyTCnKteIAJy96Br6YbpEU1LSzV5dYtjMkMDg==

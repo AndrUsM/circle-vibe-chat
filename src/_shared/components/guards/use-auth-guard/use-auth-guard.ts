@@ -1,18 +1,18 @@
 import { useEffect } from "react";
-
-import { useCookies } from "@shared/hooks";
 import { useNavigate } from "react-router-dom";
+import { useCookies } from "@circle-vibe/shared";
 
 export const useAuthGuard = () => {
-  const { get } = useCookies();
   const navigate = useNavigate();
-  const token = get("token");
+  // const { get } = useCookies();
+  const token = '';
+  // get("token");
 
   useEffect(() => {
     if (token) {
       return;
     }
 
-    navigate("/auth");
+    navigate("/auth/sign-in");
   }, []);
 };

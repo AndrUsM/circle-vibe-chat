@@ -39,9 +39,9 @@ export const AuthorizationForm: React.FC = () => {
         <FormSubmitButton> Save</FormSubmitButton>
 
         <CenteredVertialLayout space={"1rem"} justifyContent="center">
-          <Button color="secondary">Register</Button>
+          <Button color="secondary">Clear</Button>
 
-          <Button color="secondary">Register</Button>
+          <Button color="secondary">Login</Button>
         </CenteredVertialLayout>
       </StackLayout>
     </Form>
