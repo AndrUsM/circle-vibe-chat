@@ -8,6 +8,7 @@ import {
   FormSubmitButton,
   Form,
   StackLayout,
+  HorizontalDivider,
 } from "@circle-vibe/shared";
 
 import { AUTHORIZATION_FORM_SCHEMA } from "./constants/sign-in-form-schema";
@@ -36,12 +37,14 @@ export const AuthorizationForm: React.FC = () => {
       </FormGroup>
 
       <StackLayout space={"1rem"}>
-        <FormSubmitButton> Save</FormSubmitButton>
+        <FormSubmitButton>Sign-in</FormSubmitButton>
+
+        <HorizontalDivider height="1px" />
 
         <CenteredVertialLayout space={"1rem"} justifyContent="center">
-          <Button color="secondary">Clear</Button>
+          <Button color="secondary">Create Account</Button>
 
-          <Button color="secondary">Login</Button>
+          <Button color="secondary">Restore Password</Button>
         </CenteredVertialLayout>
       </StackLayout>
     </Form>

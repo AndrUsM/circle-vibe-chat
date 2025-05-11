@@ -24,7 +24,7 @@ const FILE_UPLOADING_VALIDATION_SCHEMA = mixed<File>()
 export const SIGN_UP_FORM_VALIDATION_SCHEMA = object<User>({
   username: string().required(),
   surname: string().required(),
-  birthDate: string().required(),
+  birthDate: string(),
   password: string().required(),
   passwordConfirmation: string()
     .oneOf([ref("password")], "Passwords must match")

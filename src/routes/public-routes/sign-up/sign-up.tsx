@@ -1,11 +1,20 @@
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/shared";
+import {
+  ExtendedReactFunctionalComponent,
+  StackLayout,
+} from "@circle-vibe/shared";
 import { SignUpForm } from "@features/users/components/sign-up-form";
 
 export const SignUp: ExtendedReactFunctionalComponent = () => {
   return (
-    <div className="form-centered py-10">
-      <div className="bg-tertiary rounded-1 p-3 min-w-80">
-        <SignUpForm />
+    <div className="form-centered py-10 bg-tertiary">
+      <div className="p-3 min-w-80">
+        <StackLayout space="0.5rem">
+          <p className="text-secondary text-center text-3xl font-semibold">
+            Sign-up
+          </p>
+
+          <SignUpForm />
+        </StackLayout>
       </div>
     </div>
   );

@@ -14,6 +14,7 @@ import {
   useCountries,
   FormControlCheckbox,
   FormControlError,
+  HorizontalDivider,
 } from "@circle-vibe/shared";
 
 import { USER_TYPE_DROPDOWN_OPTIONS } from "@shared/constants";
@@ -72,19 +73,13 @@ export const SignUpForm: React.FC = () => {
           <FormControlInput type="file" accept="image/*" />
         </FormGroup>
 
-        <StackLayout space="1rem">
-          <FormGroup formFieldName="isHiddenContactInfo">
-            <FormControlCheckbox>Is Hidden</FormControlCheckbox>
-          </FormGroup>
-
-          <FormGroup label="User Type" formFieldName="type">
-            <FormControlSelect>
-              {USER_TYPE_DROPDOWN_OPTIONS.map(({ key, label }) => (
-                <option value={key}>{t(label)}</option>
-              ))}
-            </FormControlSelect>
-          </FormGroup>
-        </StackLayout>
+        <FormGroup label="User Type" formFieldName="type">
+          <FormControlSelect>
+            {USER_TYPE_DROPDOWN_OPTIONS.map(({ key, label }) => (
+              <option value={key}>{t(label)}</option>
+            ))}
+          </FormControlSelect>
+        </FormGroup>
 
         <ClusterLayout>
           <FormGroup isRequired label="Country" formFieldName="country">
@@ -100,15 +95,20 @@ export const SignUpForm: React.FC = () => {
           </FormGroup>
         </ClusterLayout>
 
+        <FormGroup formFieldName="isHiddenContactInfo">
+          <FormControlCheckbox>Is Hidden</FormControlCheckbox>
+        </FormGroup>
+
+
         <StackLayout space={"1rem"}>
-          <FormSubmitButton> Save</FormSubmitButton>
+          <FormSubmitButton>Sign-up</FormSubmitButton>
+
+          <HorizontalDivider height="1px" />
 
           <CenteredVertialLayout space={"1rem"} justifyContent="center">
-            <Button color="secondary">Back</Button>
+            <Button color="secondary">Sign-in</Button>
 
-            <Button color="secondary">Login</Button>
-
-            <Button color="secondary">Reset Password</Button>
+            <Button color="secondary">Restore Password</Button>
           </CenteredVertialLayout>
         </StackLayout>
       </StackLayout>
