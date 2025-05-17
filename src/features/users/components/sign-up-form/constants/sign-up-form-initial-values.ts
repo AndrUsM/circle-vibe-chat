@@ -1,6 +1,6 @@
 import { File, User, UserType } from "@circle-vibe/shared";
 
-type SignUpFormInput = Omit<
+export type SignUpFormInput = Omit<
   User,
   "_id" | "avatar" | "birthDate" | "privateToken" | "privateKey"
 > & {

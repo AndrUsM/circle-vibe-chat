@@ -15,20 +15,41 @@ import {
   FormControlCheckbox,
   FormControlError,
   HorizontalDivider,
+  User,
 } from "@circle-vibe/shared";
 
 import { USER_TYPE_DROPDOWN_OPTIONS } from "@shared/constants";
 import {
   SIGN_UP_FORM_VALIDATION_SCHEMA,
   SIGN_UP_FORM_INITIAL_VALUES,
+  SignUpFormInput,
 } from "./constants";
+import { request } from "@core/request";
+import { useNavigate } from "react-router-dom";
+import { useNotification } from "@core/hooks";
 
 export const SignUpForm: React.FC = () => {
   const { t } = useTranslation();
+  const notification = useNotification();
+  const navigate = useNavigate();
   const countryDropdownOptions = useCountries();
-  const onSubmit = useCallback(async () => {
-    // ToDo
+  const onSubmit = useCallback(async (data: SignUpFormInput) => {
+    request({
+      url: "users/sign-up",
+      data,
+    }).then(() => {
+      navigate("/auth/sign-in");
+      notification({
+        type: "success",
+        content:
+          "Check your email, and login with identification-key and password!",
+      });
+    });
   }, []);
+
+  const onNavigateToSignInPage = () => {
+    void navigate("/auth/sign-in");
+  };
 
   return (
     <Form
@@ -99,14 +120,15 @@ export const SignUpForm: React.FC = () => {
           <FormControlCheckbox>Is Hidden</FormControlCheckbox>
         </FormGroup>
 
-
         <StackLayout space={"1rem"}>
           <FormSubmitButton>Sign-up</FormSubmitButton>
 
           <HorizontalDivider height="1px" />
 
           <CenteredVertialLayout space={"1rem"} justifyContent="center">
-            <Button color="secondary">Sign-in</Button>
+            <Button color="secondary" onClick={onNavigateToSignInPage}>
+              Sign-in
+            </Button>
 
             <Button color="secondary">Restore Password</Button>
           </CenteredVertialLayout>

@@ -1,7 +1,7 @@
-import { AuthorizationFormByEmail } from "../types/autorization-form-by-email";
+import { SignInFormInput } from "../types";
 
-export const AUTHORIZATION_FORM_BY_EMAIL_INITIAL_VALUS: AuthorizationFormByEmail =
+export const AUTHORIZATION_FORM_INITIAL_VALUES: SignInFormInput =
   {
-    email: "",
+    identificationKey: "",
     password: "",
   };

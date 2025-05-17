@@ -9,9 +9,10 @@ export const RootRoute: React.FC = () => (
     <Routes>
       <Route path="auth">{PublicRouter}</Route>
 
-      {/* <Route path="/app">
+      <Route path="/app">
         <PrivateRouter />
-      </Route> */}
+      </Route>
     </Routes>
+
   </BrowserRouter>
 );
