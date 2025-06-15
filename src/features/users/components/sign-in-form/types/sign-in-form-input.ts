@@ -1,4 +1,4 @@
 export interface SignInFormInput {
-  identificationKey: string;
+  email: string;
   password: string;
 }

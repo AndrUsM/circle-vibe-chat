@@ -1,0 +1,13 @@
+.chat {
+  &.selected {
+    &:before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 0.25rem;
+      height: 100%;
+      background-color: var(--cv-dark);
+    }
+  }
+}

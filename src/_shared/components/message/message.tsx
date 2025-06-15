@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useMemo } from "react";
 
 import {
   CenteredVertialLayout,
@@ -7,6 +7,7 @@ import {
   StackLayout,
   MessageType,
   Message as MessageModel,
+  MessageFileEntityType,
 } from "@circle-vibe/shared";
 
 import { getUserFullName } from "@shared/utils";
@@ -20,16 +21,40 @@ interface MessageProps {
 export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   message,
 }) => {
-  const { content, images, files, videos, messageType, sender } = message;
-  const avatarUrl = sender?.avatar.url;
-  const imageFallback = getUserAvatarFallback(sender);
+  const { content, files, messageType, sender } = message;
+  const avatarUrl = sender?.user.avatarUrl;
+  const senderFullName = getUserFullName(sender?.user);
+  const imageFallback = getUserAvatarFallback(sender?.user);
+
+  const sortedByTypeFiles = useMemo(
+    () => (files?? [])?.reduce((acc, file) => {
+      if (file.entityType === MessageFileEntityType.IMAGE) {
+        acc.images.push(file);
+
+        return acc;
+      }
+
+      if (file.entityType === MessageFileEntityType.VIDEO) {
+        acc.videos.push(file);
+
+        return acc;
+      }
+
+      acc.files.push(file);
+
+      return acc;
+    }, {
+      images: [] as typeof files,
+      videos: [] as typeof files,
+      files: [] as typeof files
+    }),
+    [files]
+  );
 
   return (
     <StackLayout space="0.5rem" className="bg-tertiary rounded-1 p-2">
       <Show>
-        <Show.When
-          isTrue={messageType === MessageType.TEXT || Boolean(content)}
-        >
+        <Show.When isTrue={Boolean(content)}>
           <div className="bg-light p-2 rounded-2">{content}</div>
         </Show.When>
 
@@ -37,7 +62,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
           <StackLayout>
             <Show.When isTrue={messageType === MessageType.VIDEO}>
               <video width={320} height={240} controls muted>
-                {videos.map(({ description, type, url, id }) => (
+                {sortedByTypeFiles.videos?.map(({ description, type, url, id, entityType }) => (
                   <React.Fragment key={id}>
                     <source src={url} type={type} />
 
@@ -50,13 +75,13 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
             </Show.When>
 
             <Show.When isTrue={messageType === MessageType.IMAGE}>
-              {images.map(({ description, url, fileName }) => (
+              {sortedByTypeFiles.images?.map(({ description, url, fileName }) => (
                 <img src={url} key={fileName} alt={description} />
               ))}
             </Show.When>
 
             <Show.When isTrue={messageType === MessageType.FILE}>
-              {files.map(({ description, url, fileName }) => (
+              {sortedByTypeFiles.files?.map(({ description, url, fileName }) => (
                 <a href={url} target="_blank" key={fileName} rel="noopener">
                   <StackLayout>
                     <span>{fileName}</span>
@@ -76,7 +101,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
         <CenteredVertialLayout space="0.5rem">
           <UserAvatar url={avatarUrl ?? undefined} fallback={imageFallback} />
 
-          <div>{getUserFullName(sender)}</div>
+          <div>{senderFullName}</div>
         </CenteredVertialLayout>
       </Show.When>
     </StackLayout>

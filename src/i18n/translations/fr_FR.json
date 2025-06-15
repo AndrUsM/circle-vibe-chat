@@ -1,3 +1,5 @@
 {
+  "saved-messages": "Messages enregistrés",
+  "chat.empty": "Il n'y a pas encore de messages",
   "Welcome to React": "Bienvenue à React et react-i18next"
 }

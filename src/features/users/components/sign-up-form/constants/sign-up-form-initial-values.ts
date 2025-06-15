@@ -2,7 +2,7 @@ import { File, User, UserType } from "@circle-vibe/shared";
 
 export type SignUpFormInput = Omit<
   User,
-  "_id" | "avatar" | "birthDate" | "privateToken" | "privateKey"
+  "_id" | "avatarUrl" | "birthDate" | "privateToken" | "privateKey"
 > & {
   birthDate?: Date;
   avatar?: File;

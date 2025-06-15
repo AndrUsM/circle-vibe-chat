@@ -1,7 +1,4 @@
-import { ExtendedReactFunctionalComponent, Menu } from "@circle-vibe/shared";
-
-import { Icon } from "@shared/components";
-import { useIcons } from "@shared/hooks";
+import { ExtendedReactFunctionalComponent, Menu, useIcons, Icon } from "@circle-vibe/shared";
 
 export const TopbarActions: ExtendedReactFunctionalComponent = () => {
   const icons = useIcons();

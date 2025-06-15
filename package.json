@@ -28,7 +28,7 @@
     ]
   },
   "dependencies": {
-    "@circle-vibe/shared": "1.1.18",
+    "@circle-vibe/shared": "1.1.28",
     "@coreui/icons": "^3.0.1",
     "@coreui/icons-react": "2.3.0",
     "axios": "^1.7.2",

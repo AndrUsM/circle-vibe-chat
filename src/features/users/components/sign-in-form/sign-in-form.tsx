@@ -10,23 +10,45 @@ import {
   Form,
   StackLayout,
   HorizontalDivider,
+  User,
 } from "@circle-vibe/shared";
 
-import { AUTHORIZATION_FORM_SCHEMA, AUTHORIZATION_FORM_INITIAL_VALUES } from "./constants";
+import {
+  AUTHORIZATION_FORM_SCHEMA,
+  AUTHORIZATION_FORM_INITIAL_VALUES,
+} from "./constants";
 import { request } from "@core/request";
-import { useNotification } from "@core/hooks";
+import { useCurrentUser, useNotification } from "@core/hooks";
 import { SignInFormInput } from "./types";
+import { cookiesService, localStorageService } from "@core/services";
+
+interface Response {
+  token: string;
+  user: User;
+}
 
 export const AuthorizationForm: React.FC = () => {
   const navigate = useNavigate();
+  const {setUser} = useCurrentUser();
   const notification = useNotification();
   const onSubmit = useCallback(async (data: SignInFormInput) => {
-    request({
-      url: "users/sign-in",
+    const response = await request<Response>({
+      url: "auth/sign-in",
       data,
-    }).then(() => {
-      navigate("/app/conversations");
+      method: "POST",
     });
+
+    const { token, user } = response.data;
+
+    cookiesService.set('auth-token', String(token));
+    setUser(user);
+
+    notification({
+      type: "success",
+      content: "Successfully signed in!",
+    });
+
+    navigate("/app/conversations");
   }, []);
 
   const onNavigateToSignUpPage = () => {
@@ -39,11 +61,7 @@ export const AuthorizationForm: React.FC = () => {
       validationSchema={AUTHORIZATION_FORM_SCHEMA}
       initialValues={AUTHORIZATION_FORM_INITIAL_VALUES}
     >
-      <FormGroup
-        isRequired
-        label={"Identification code"}
-        formFieldName={"identificationKey"}
-      >
+      <FormGroup isRequired label={"Email"} formFieldName={"email"}>
         <FormControlInput />
       </FormGroup>
 
