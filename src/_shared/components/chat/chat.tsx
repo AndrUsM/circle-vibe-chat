@@ -37,8 +37,9 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
         "bg-warning": hasUnreadMessages,
         "bg-tertiary": !hasUnreadMessages,
       })}
+      onClick={onClick}
     >
-      <span className="block text-lg font-bold" onClick={onClick}>
+      <span className="block text-lg font-bold">
         {/* add flag on BE */}
         {readableName === "saved-messages" ? t(readableName) : readableName}
       </span>

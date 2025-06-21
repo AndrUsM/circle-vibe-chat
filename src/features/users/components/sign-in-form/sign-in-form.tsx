@@ -66,7 +66,7 @@ export const AuthorizationForm: React.FC = () => {
       </FormGroup>
 
       <FormGroup isRequired label="Password" formFieldName="password">
-        <FormControlInput />
+        <FormControlInput type="password" />
       </FormGroup>
 
       <StackLayout space={"1rem"}>

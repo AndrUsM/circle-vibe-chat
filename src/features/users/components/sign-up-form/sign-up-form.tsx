@@ -13,7 +13,6 @@ import {
   FormControlSelect,
   useCountries,
   FormControlCheckbox,
-  FormControlError,
   HorizontalDivider,
   User,
 } from "@circle-vibe/shared";
@@ -35,8 +34,12 @@ export const SignUpForm: React.FC = () => {
   const countryDropdownOptions = useCountries();
   const onSubmit = useCallback(async (data: SignUpFormInput) => {
     request({
-      url: "users/sign-up",
-      data,
+      url: "auth/sign-up",
+      data: {
+        ...data,
+        birthDate: data.birthDate ? new Date(data.birthDate) : null,
+      },
+      method: "POST",
     }).then(() => {
       navigate("/auth/sign-in");
       notification({
@@ -79,7 +82,7 @@ export const SignUpForm: React.FC = () => {
           label="Password Confirmation"
           formFieldName="passwordConfirmation"
         >
-          <FormControlInput type="passwordConfirmation" />
+          <FormControlInput type="password" />
         </FormGroup>
 
         <FormGroup label={"Primary Phone"} formFieldName={"primaryPhone"}>

@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import {
   ClusterLayout,
   StackLayout,
@@ -22,6 +22,7 @@ import {
   MessageType,
   SubmitButton,
   FormSubmitButton,
+  ChatParticipant,
 } from "@circle-vibe/shared";
 import * as Resizer from "@column-resizer/react";
 
@@ -32,11 +33,14 @@ import { TopbarActions } from "./topbar-actions";
 import "./conversation.scss";
 import { useCurrentUser, useSocket } from "@core/hooks";
 import { object, string } from "yup";
+import { getUserFullName } from "@shared/utils";
 
 export const Conversations: React.FC = () => {
   const { cilSettings } = useIcons();
-  const {user} = useCurrentUser();
+  const { user } = useCurrentUser();
   const { socket } = useSocket();
+  const [chatParticipant, setChatPartifipant] =
+    useState<ChatParticipant | null>(null);
   const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
   const [chats, setChats] = useState<ChatModel[]>([]);
   const [messages, setMessages] = useState<MessageModel[]>([]);
@@ -49,6 +53,15 @@ export const Conversations: React.FC = () => {
   };
 
   useEffect(() => {
+    if (selectedChatId || chatParticipant || !chats?.length) {
+      return;
+    }
+
+    const defaultChatId = chats[0].id;
+    handleJoinChat(defaultChatId);
+  }, [chatParticipant, chats]);
+
+  useEffect(() => {
     socket.emit(ChatSocketCommand.REFRESH_CHATS);
   }, []);
 
@@ -57,8 +70,11 @@ export const Conversations: React.FC = () => {
   });
 
   socket.on(ChatSocketCommand.RECEIVE_MESSAGES, (messages) => {
-    console.log(messages);
-    setMessages(messages);
+    setMessages(messages.data);
+  });
+
+  socket.on(ChatSocketCommand.JOIN_CHAT, ({ chatParticipant }) => {
+    setChatPartifipant(chatParticipant);
   });
 
   const handleJoinChat = (chatId: number) => {
@@ -66,11 +82,18 @@ export const Conversations: React.FC = () => {
     socket.emit(ChatSocketCommand.JOIN_CHAT, { chatId });
   };
 
-  const handleSendMessage = ({ message: content }: { message: string }) => {
+  const handleSendMessage = (
+    { message: content }: { message: string },
+    { resetForm }: { resetForm: VoidFunction }
+  ) => {
+    if (!chatParticipant) {
+      return;
+    }
+
     const messageDto = {
       content,
       chatId: selectedChatId,
-      senderId: user.id,
+      senderId: chatParticipant?.id,
       threadId: null,
       hidden: false,
       messageType: MessageType.TEXT,
@@ -81,7 +104,18 @@ export const Conversations: React.FC = () => {
       message: messageDto,
       chatId: selectedChatId,
     });
+
+    resetForm();
   };
+  const avatarFallback = useCallback(
+    () =>
+      [user.username, user.surname]
+        .filter(Boolean)
+        .map((line) => line.charAt(0))
+        .join("")
+        .toUpperCase(),
+    [user]
+  );
 
   return (
     <section className="h-full">
@@ -94,7 +128,7 @@ export const Conversations: React.FC = () => {
         <TopbarLogo />
 
         <ClusterLayout space="1.15rem">
-          <UserAvatar fallback="US" />
+          <UserAvatar fallback={avatarFallback()} />
 
           <Link to={"/settings"}>
             <Tooltip title="Settings">
