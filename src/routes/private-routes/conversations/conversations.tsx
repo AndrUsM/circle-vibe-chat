@@ -1,121 +1,75 @@
+import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { useCallback, useEffect, useState } from "react";
 import {
   ClusterLayout,
   StackLayout,
   Tooltip,
   Icon,
   HorizontalDivider,
-  Chat as ChatModel,
   useIcons,
   ChatSocketCommand,
-  Message as MessageModel,
-  Input,
   Form,
   FormControlInput,
   FormControl,
   FormikFormControl,
   Show,
-  Button,
   CenteredVertialLayout,
-  MessageStatus,
-  MessageType,
-  SubmitButton,
   FormSubmitButton,
-  ChatParticipant,
+  Button,
 } from "@circle-vibe/shared";
 import * as Resizer from "@column-resizer/react";
 
+import {
+  MESSAGE_FORM_INITIAL_VALUE,
+  MESSAGE_FORM_VALIDATION_SCHEMA,
+  MessageFormValues,
+  composeAvatarFallback,
+  useSendMessage,
+} from "@features/messages";
+import {
+  useConversationGateway,
+  useInitialChatSelection,
+} from "@features/conversation";
+
+import { useNotification, useSocket } from "@core/hooks";
 import { TopbarLogo, Message, UserAvatar, Chat } from "@shared/components";
 
 import { TopbarActions } from "./topbar-actions";
 
 import "./conversation.scss";
-import { useCurrentUser, useSocket } from "@core/hooks";
-import { object, string } from "yup";
-import { getUserFullName } from "@shared/utils";
+import { useCallback, useRef } from "react";
+import { Field, Formik, FormikHelpers } from "formik";
 
 export const Conversations: React.FC = () => {
-  const { cilSettings } = useIcons();
-  const { user } = useCurrentUser();
+  const { t } = useTranslation();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const notification = useNotification();
   const { socket } = useSocket();
-  const [chatParticipant, setChatPartifipant] =
-    useState<ChatParticipant | null>(null);
-  const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
-  const [chats, setChats] = useState<ChatModel[]>([]);
-  const [messages, setMessages] = useState<MessageModel[]>([]);
-  const isAnyChatSelected = Boolean(selectedChatId);
-  const MESSAGE_FORM_VALIDATION_SCHEMA = object({
-    message: string().required(),
-  });
-  const MESSAGE_FORM_INITIAL_VALUE = {
-    message: "",
-  };
+  const { cilSettings, cilFile } = useIcons();
+  const {
+    user,
+    chatParticipant,
+    selectedChatId,
+    setSelectedChatId,
+    chats,
+    messages,
+    isAnyChatSelected,
+  } = useConversationGateway();
 
-  useEffect(() => {
-    if (selectedChatId || chatParticipant || !chats?.length) {
-      return;
-    }
-
-    const defaultChatId = chats[0].id;
-    handleJoinChat(defaultChatId);
-  }, [chatParticipant, chats]);
-
-  useEffect(() => {
-    socket.emit(ChatSocketCommand.REFRESH_CHATS);
-  }, []);
-
-  socket.on(ChatSocketCommand.REFRESH_CHATS, (chats) => {
-    setChats(chats);
-  });
-
-  socket.on(ChatSocketCommand.RECEIVE_MESSAGES, (messages) => {
-    setMessages(messages.data);
-  });
-
-  socket.on(ChatSocketCommand.JOIN_CHAT, ({ chatParticipant }) => {
-    setChatPartifipant(chatParticipant);
-  });
+  const allowToPreselectChat = Boolean(selectedChatId || chatParticipant);
 
   const handleJoinChat = (chatId: number) => {
     setSelectedChatId(chatId);
     socket.emit(ChatSocketCommand.JOIN_CHAT, { chatId });
   };
 
-  const handleSendMessage = (
-    { message: content }: { message: string },
-    { resetForm }: { resetForm: VoidFunction }
-  ) => {
-    if (!chatParticipant) {
-      return;
-    }
+  const handleSendMessage = useSendMessage(chatParticipant, selectedChatId);
+  const avatarFallback = composeAvatarFallback(user);
+  const openFileSelectionDialog = useCallback((e: React.SyntheticEvent) => {
+    fileInputRef.current?.click();
+  }, []);
 
-    const messageDto = {
-      content,
-      chatId: selectedChatId,
-      senderId: chatParticipant?.id,
-      threadId: null,
-      hidden: false,
-      messageType: MessageType.TEXT,
-      files: [],
-    };
-
-    socket.emit(ChatSocketCommand.SEND_MESSAGE, {
-      message: messageDto,
-      chatId: selectedChatId,
-    });
-
-    resetForm();
-  };
-  const avatarFallback = useCallback(
-    () =>
-      [user.username, user.surname]
-        .filter(Boolean)
-        .map((line) => line.charAt(0))
-        .join("")
-        .toUpperCase(),
-    [user]
-  );
+  useInitialChatSelection(chats, handleJoinChat, allowToPreselectChat);
 
   return (
     <section className="h-full">
@@ -128,7 +82,7 @@ export const Conversations: React.FC = () => {
         <TopbarLogo />
 
         <ClusterLayout space="1.15rem">
-          <UserAvatar fallback={avatarFallback()} />
+          <UserAvatar fallback={avatarFallback} />
 
           <Link to={"/settings"}>
             <Tooltip title="Settings">
@@ -185,22 +139,42 @@ export const Conversations: React.FC = () => {
 
             <Show.When isTrue={isAnyChatSelected}>
               <Form
+                enableReinitialize={false}
                 onSubmit={handleSendMessage}
                 validationSchema={MESSAGE_FORM_VALIDATION_SCHEMA}
                 initialValues={MESSAGE_FORM_INITIAL_VALUE}
               >
-                <CenteredVertialLayout space="0.5rem">
-                  <FormikFormControl formFieldName="message" className="w-full">
-                    <FormControlInput
-                      className="p-3 rounded-1"
-                      placeholder="Type your message..."
-                    />
-                  </FormikFormControl>
+                {({ setFieldValue }: FormikHelpers<MessageFormValues>) => (
+                  <CenteredVertialLayout space="0.5rem">
+                    <FormikFormControl
+                      formFieldName="content"
+                      className="w-full"
+                    >
+                      <FormControlInput
+                        className="p-3 rounded-1"
+                        placeholder={t("conversations.send.input.placeholder")}
+                      />
+                    </FormikFormControl>
 
-                  <FormSubmitButton color="primary" size="large">
-                    Send
-                  </FormSubmitButton>
-                </CenteredVertialLayout>
+                    <Button type="button" onClick={openFileSelectionDialog}>
+                      <Icon size={18} color="var(--cv-light)" name={cilFile} />
+
+                      <input
+                        type="file"
+                        ref={fileInputRef}
+                        hidden
+                        onChange={(event) => {
+                          event.currentTarget.files &&
+                            setFieldValue("file", event.currentTarget.files[0]);
+                        }}
+                      />
+                    </Button>
+
+                    <FormSubmitButton color="primary" size="large">
+                      {t("conversations.send.button")}
+                    </FormSubmitButton>
+                  </CenteredVertialLayout>
+                )}
               </Form>
             </Show.When>
           </StackLayout>

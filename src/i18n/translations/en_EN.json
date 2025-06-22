@@ -1,5 +1,11 @@
 {
   "saved-messages": "Saved messages",
   "chat.empty": "There is not messages yet",
+  "login.wrong-credentials.message": "Please check email or password",
+  "login.sign-in.submit-button": "Sign in",
+  "login.restore-password.button": "Restore password",
+  "login.create-account.button": "Create Account",
+  "conversations.send.button": "Send",
+  "conversations.send.input.placeholder": "Type your message...",
   "Welcome to React": "Welcome to React and react-i18next"
 }

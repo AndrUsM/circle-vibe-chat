@@ -1,12 +1,13 @@
-import React, { useCallback, useEffect } from "react";
-import { Route, BrowserRouter, Routes } from "react-router-dom";
+import React from "react";
+import { Route, BrowserRouter, Routes, Navigate, Outlet } from "react-router-dom";
+
+import { useRestoreUser } from "@core/hooks";
+import { SocketProvider } from "@core/context/socket/socket.provider";
 
 import { AuthGuard } from "@shared/components/guards";
 
 import { PrivateRouter } from "./private-routes";
 import { PublicRouter } from "./public-routes";
-import { useRestoreUser } from "@core/hooks";
-import { SocketProvider } from "@core/context/socket/socket.provider";
 
 export const RootRoute: React.FC = () => {
   useRestoreUser();
@@ -14,7 +15,12 @@ export const RootRoute: React.FC = () => {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path="auth" children={PublicRouter}></Route>
+        <Route
+          path="auth"
+          // element={<AuthGuard isReverse />}
+          children={PublicRouter}
+        />
+
         <Route
           path="/app"
           element={
@@ -25,6 +31,10 @@ export const RootRoute: React.FC = () => {
         >
           {PrivateRouter}
         </Route>
+
+        {/* !DEFAULT ROUTES */}
+        <Route path="" element={<Navigate to="/auth/sign-in" replace />} />
+        <Route path="*" element={<Navigate to="/auth/sign-in" replace />} />
       </Routes>
     </BrowserRouter>
   );

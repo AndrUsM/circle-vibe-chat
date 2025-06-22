@@ -1,5 +1,5 @@
-import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";
+import { useTranslation } from "react-i18next";
 
 import {
   CenteredVertialLayout,
@@ -13,43 +13,19 @@ import {
   User,
 } from "@circle-vibe/shared";
 
+import { useSignIn } from "@features/users/hooks";
+
 import {
   AUTHORIZATION_FORM_SCHEMA,
   AUTHORIZATION_FORM_INITIAL_VALUES,
 } from "./constants";
-import { request } from "@core/request";
-import { useCurrentUser, useNotification } from "@core/hooks";
-import { SignInFormInput } from "./types";
-import { cookiesService, localStorageService } from "@core/services";
 
-interface Response {
-  token: string;
-  user: User;
-}
 
 export const AuthorizationForm: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
-  const {setUser} = useCurrentUser();
-  const notification = useNotification();
-  const onSubmit = useCallback(async (data: SignInFormInput) => {
-    const response = await request<Response>({
-      url: "auth/sign-in",
-      data,
-      method: "POST",
-    });
 
-    const { token, user } = response.data;
-
-    cookiesService.set('auth-token', String(token));
-    setUser(user);
-
-    notification({
-      type: "success",
-      content: "Successfully signed in!",
-    });
-
-    navigate("/app/conversations");
-  }, []);
+  const onSubmit = useSignIn();
 
   const onNavigateToSignUpPage = () => {
     void navigate("/auth/sign-up");
@@ -70,16 +46,18 @@ export const AuthorizationForm: React.FC = () => {
       </FormGroup>
 
       <StackLayout space={"1rem"}>
-        <FormSubmitButton>Sign-in</FormSubmitButton>
+        <FormSubmitButton>{t("login.sign-in.submit-button")}</FormSubmitButton>
 
         <HorizontalDivider height="1px" />
 
         <CenteredVertialLayout space={"1rem"} justifyContent="center">
           <Button color="secondary" onClick={onNavigateToSignUpPage}>
-            Create Account
+            {t("login.create-account.button")}
           </Button>
 
-          <Button color="secondary">Restore Password</Button>
+          <Button color="secondary">
+            {t("login.restore-password.button")}
+          </Button>
         </CenteredVertialLayout>
       </StackLayout>
     </Form>

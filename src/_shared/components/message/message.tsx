@@ -14,6 +14,8 @@ import { getUserFullName } from "@shared/utils";
 import { UserAvatar } from "../user-avatar/user-avatar";
 import { getUserAvatarFallback } from "@shared/utils/get-user-avatar-fallback";
 
+import './message.scss';
+
 interface MessageProps {
   message: MessageModel;
 }
@@ -62,9 +64,9 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
           <StackLayout>
             <Show.When isTrue={messageType === MessageType.VIDEO}>
               <video width={320} height={240} controls muted>
-                {sortedByTypeFiles.videos?.map(({ description, type, url, id, entityType }) => (
+                {sortedByTypeFiles.videos?.map(({ description, type, url, id }) => (
                   <React.Fragment key={id}>
-                    <source src={url} type={type} />
+                    <source src={url} type={'video/3gpp'} />
 
                     <Show.When isTrue={Boolean(description)}>
                       <span>{description}</span>
@@ -75,8 +77,9 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
             </Show.When>
 
             <Show.When isTrue={messageType === MessageType.IMAGE}>
-              {sortedByTypeFiles.images?.map(({ description, url, fileName }) => (
-                <img src={url} key={fileName} alt={description} />
+              {/* @ts-ignore */}
+              {sortedByTypeFiles.images?.map(({ description, optimizedUrl, fileName }) => (
+                <img className="image-responsive message-image" src={optimizedUrl} key={fileName} alt={description} />
               ))}
             </Show.When>
 
