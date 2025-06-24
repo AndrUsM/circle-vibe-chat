@@ -14,7 +14,7 @@ import io from "socket.io-client";
 interface ISocketContext {
   socket: Socket;
   videoSocket: Socket | null;
-  createVideoSocketConnection(fileName: string): Promise<Socket<any, any> | undefined>;
+  createVideoSocketConnection(): Promise<Socket<any, any> | undefined>;
 }
 
 export const SocketContext = createContext<ISocketContext | null>(null);
@@ -33,18 +33,19 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
   });
   const [videoSocket, setVideoSocket] = useState<Socket | null>(null);
 
-  const createVideoSocketConnection = useCallback(async (filename: string) => {
+  const createVideoSocketConnection = useCallback(async () => {
     if (videoSocket && videoSocket.connected) {
       return;
     }
 
-    const videoSocketConnection = io("http://localhost:3005", {
+    const videoSocketConnection = io("http://localhost:3005/video-upload", {
       transports: ["websocket"],
-      autoConnect: false,
+      autoConnect: true,
+      reconnection: false,
       auth: {
         token: cookiesService.get("auth-token"),
         personalToken: user?.privateToken,
-        filename,
+        // filename,
       },
     });
 
