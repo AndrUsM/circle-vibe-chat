@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { useTranslation } from "react-i18next";
 
 import {
   ExtendedReactFunctionalComponent,
@@ -8,8 +9,8 @@ import {
   useFormatDatetime,
 } from "@circle-vibe/shared";
 import SharedEnums from "@circle-vibe/shared";
-import { Message } from "../message";
-import { useTranslation } from "react-i18next";
+
+import { MessageShortPreview } from "../message-short-preview";
 
 import "./chat.scss";
 
@@ -26,7 +27,7 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
 }) => {
   const { t } = useTranslation();
   const format = useFormatDatetime();
-  const { readableName, lastMessage, hasUnreadMessages, empty, updatedAt } =
+  const { readableName, isSavedMessages, lastMessage, hasUnreadMessages, empty, updatedAt } =
     chat;
 
   return (
@@ -40,14 +41,13 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
       onClick={onClick}
     >
       <span className="block text-lg font-bold">
-        {/* add flag on BE */}
-        {readableName === "saved-messages" ? t(readableName) : readableName}
+        {readableName === "saved-messages" || isSavedMessages ? t(readableName) : readableName}
       </span>
 
       <span>Last seen: {format(updatedAt)}</span>
 
-      <Show.When isTrue={Boolean(lastMessage)}>
-        <Message message={lastMessage as SharedEnums.Message} />
+      <Show.When isTrue={Boolean(lastMessage) && !isSavedMessages}>
+        <MessageShortPreview message={lastMessage as SharedEnums.Message} />
       </Show.When>
 
       <Show.When isTrue={Boolean(empty)}>

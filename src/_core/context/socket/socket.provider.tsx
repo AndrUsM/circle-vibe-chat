@@ -1,6 +1,3 @@
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/shared";
-import { useCurrentUser } from "@core/hooks";
-import { cookiesService } from "@core/services";
 import {
   createContext,
   useCallback,
@@ -10,6 +7,10 @@ import {
 } from "react";
 import { Socket } from "socket.io-client";
 import io from "socket.io-client";
+
+import { ExtendedReactFunctionalComponent, GatewayNamespaces } from "@circle-vibe/shared";
+import { useCurrentUser } from "@core/hooks";
+import { cookiesService } from "@core/services";
 
 interface ISocketContext {
   socket: Socket;
@@ -23,7 +24,7 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
   children,
 }) => {
   const { user } = useCurrentUser();
-  const socket = io("http://localhost:3002", {
+  const socket = io(`http://localhost:3002/${GatewayNamespaces.CHAT_MAIN}`, {
     transports: ["websocket"],
     autoConnect: false,
     auth: {
@@ -38,14 +39,12 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
       return;
     }
 
-    const videoSocketConnection = io("http://localhost:3005/video-upload", {
+    const videoSocketConnection = io(`http://localhost:3005/${GatewayNamespaces.VIDEO_UPLOAD}`, {
       transports: ["websocket"],
       autoConnect: true,
       reconnection: false,
       auth: {
         token: cookiesService.get("auth-token"),
-        personalToken: user?.privateToken,
-        // filename,
       },
     });
 

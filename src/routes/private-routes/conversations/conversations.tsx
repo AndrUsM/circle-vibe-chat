@@ -1,3 +1,5 @@
+import { useCallback, useMemo, useRef } from "react";
+import { Field, Formik, FormikHelpers } from "formik";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
@@ -16,6 +18,8 @@ import {
   CenteredVertialLayout,
   FormSubmitButton,
   Button,
+  composeAvatarFallback,
+  FormControlTextarea,
 } from "@circle-vibe/shared";
 import * as Resizer from "@column-resizer/react";
 
@@ -23,7 +27,6 @@ import {
   MESSAGE_FORM_INITIAL_VALUE,
   MESSAGE_FORM_VALIDATION_SCHEMA,
   MessageFormValues,
-  composeAvatarFallback,
   useSendMessage,
 } from "@features/messages";
 import {
@@ -37,8 +40,6 @@ import { TopbarLogo, Message, UserAvatar, Chat } from "@shared/components";
 import { TopbarActions } from "./topbar-actions";
 
 import "./conversation.scss";
-import { useCallback, useRef } from "react";
-import { Field, Formik, FormikHelpers } from "formik";
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
@@ -68,6 +69,14 @@ export const Conversations: React.FC = () => {
   const openFileSelectionDialog = useCallback((e: React.SyntheticEvent) => {
     fileInputRef.current?.click();
   }, []);
+  const isSavedMessagesChat = useMemo(
+    () => {
+      const selectedChat = chats.find(({ id }) => id === selectedChatId);
+
+      return Boolean(selectedChat?.isSavedMessages);
+    },
+    [chats, selectedChatId]
+  );
 
   useInitialChatSelection(chats, handleJoinChat, allowToPreselectChat);
 
@@ -129,13 +138,16 @@ export const Conversations: React.FC = () => {
           className="flex items-center justify-center w-full"
           minSize={100}
         >
-          <StackLayout
-            justifyContent="end"
-            className="w-full p-3 overflow-y-auto"
-          >
-            {messages.map((message) => (
-              <Message message={message} key={message.id} />
-            ))}
+          <StackLayout justifyContent="end" className="w-full p-3">
+            <StackLayout className="overflow-y-auto">
+              {messages.map((message) => (
+                <Message
+                  message={message}
+                  isSavedMessages={isSavedMessagesChat}
+                  key={message.id}
+                />
+              ))}
+            </StackLayout>
 
             <Show.When isTrue={isAnyChatSelected}>
               <Form
@@ -145,13 +157,13 @@ export const Conversations: React.FC = () => {
                 initialValues={MESSAGE_FORM_INITIAL_VALUE}
               >
                 {({ setFieldValue }: FormikHelpers<MessageFormValues>) => (
-                  <CenteredVertialLayout space="0.5rem">
+                  <ClusterLayout space="0.5rem" alignItems="flex-start">
                     <FormikFormControl
                       formFieldName="content"
                       className="w-full"
                     >
-                      <FormControlInput
-                        className="p-3 rounded-1"
+                      <FormControlTextarea
+                        className="resize-vertical min-h-10 p-3"
                         placeholder={t("conversations.send.input.placeholder")}
                       />
                     </FormikFormControl>
@@ -173,7 +185,7 @@ export const Conversations: React.FC = () => {
                     <FormSubmitButton color="primary" size="large">
                       {t("conversations.send.button")}
                     </FormSubmitButton>
-                  </CenteredVertialLayout>
+                  </ClusterLayout>
                 )}
               </Form>
             </Show.When>

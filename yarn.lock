@@ -170,10 +170,10 @@
     "@babel/helper-string-parser" "^7.25.9"
     "@babel/helper-validator-identifier" "^7.25.9"
 
-"@circle-vibe/shared@1.1.29":
-  version "1.1.29"
-  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.1.29.tgz#7b1089cb42e848b865df5bc09ef9726e5297eaac"
-  integrity sha512-WvFAmMt1DuSSo3flijqXxG0+tg0ikt525Qa9GuBw61m0Lphb0DRat8MFUoGuDPNpK7B2r21DzO5BcrTSGlptOQ==
+"@circle-vibe/shared@1.1.51":
+  version "1.1.51"
+  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.1.51.tgz#dd7a883e4e6ab9ec697906a88f1de0f8aaab9689"
+  integrity sha512-m2yTWSr6tmzDJiev5bsE7Z27yKFe5whiOcby3MqEafgjaKN2NT/e+Q44Sh/Oc0vXU+s/TTeO5xms9CMauhbwjA==
   dependencies:
     "@coreui/icons" "^3.0.1"
     "@coreui/icons-react" "2.3.0"

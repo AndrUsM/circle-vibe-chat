@@ -1,100 +1,64 @@
-import { use, useCallback } from "react";
+import { useCallback } from "react";
 import { useNotification, useSocket } from "@core/hooks";
 import {
-  MessageFileEntityType,
-  MessageFileType,
-  MessageType,
+  FileVideoSocketStartUploadParams,
+  FileVideoSocketSuccessOutput,
+  SendMessageChatSocketParams,
 } from "@circle-vibe/shared";
-
-const CHUNK_SIZE = 0.5 * (1024 * 1024); // 1MB chunks
-
-interface UseSendVideoOutput {
-  filePath: string;
-}
-
-const sleep = (ms: number) => new Promise((resolve) => setTimeout(resolve, ms));
+import { composeSendVideoFileMessageParams, handleUploadingVideoProcess } from "./utils";
 
 export const useSendVideo = () => {
   const { socket, createVideoSocketConnection } = useSocket();
   const notification = useNotification();
 
   return useCallback(
-    async (file: File, messageInputDto: any): Promise<void> => {
-      if (!file) return;
+    async (file: File, messageInputDto: SendMessageChatSocketParams): Promise<void> => {
+      if (!file) {
+        notification({
+          type: "error",
+          content: `Please select video to upload`,
+        });
 
-      // Open a socket connection for this upload
+        return;
+      }
+
       const videoSocket = await createVideoSocketConnection();
 
       return new Promise<void>((resolve, reject) => {
         videoSocket?.on("connect", async () => {
-          console.log("Socket connected:", videoSocket.id);
+          const startVideoUploadPayload: FileVideoSocketStartUploadParams = {
+            fileName: file.name,
+          };
 
-          const reader = file.stream().getReader();
+          videoSocket.emit("START_VIDEO_UPLOAD", startVideoUploadPayload);
 
-          // Send filename to server to create a temp file or identifier
-          videoSocket.emit("START_VIDEO_UPLOAD", { fileName: file.name });
+          notification({
+            type: "success",
+            content: `Started uploading video ${file.name}`,
+          });
 
-          // let offset = 0;
-
-          // while (offset < file.size) {
-          //   const chunk = file.slice(offset, offset + CHUNK_SIZE);
-          //   const buffer = await chunk.arrayBuffer();
-
-          //   socket.emit("UPLOAD_VIDEO_CHUNK", buffer);
-          //   offset += CHUNK_SIZE;
-
-          //   await sleep(1024 * 1024); // wait before sending the next chunk
-          // }
-
-          async function uploadChunks() {
-            while (true) {
-              const { value, done } = await reader.read();
-              console.log(done);
-              if (done) break;
-
-              // Emit binary chunk
-              videoSocket?.emit("UPLOAD_VIDEO_CHUNK", value);
-            }
-          // Notify server upload finished
-          videoSocket?.emit("UPLOAD_VIDEO_END");
-          }
-
-          await uploadChunks();
+          await handleUploadingVideoProcess(file, videoSocket);
         });
 
-        // Listen for server confirmation
         videoSocket?.on(
           "UPLOAD_VIDEO_SUCCESS",
-          ({ filePath }: UseSendVideoOutput) => {
-            console.log("Upload finished successfully");
-            console.log("VIDEO_UPLOADED", filePath);
-
+          ({ filePath }: FileVideoSocketSuccessOutput) => {
             notification({
               type: "success",
               content: "Video uploaded successfully",
             });
 
-            socket.emit("SEND_VIDEO_FILE_MESSAGE", {
-              ...messageInputDto,
-              fileUrl: filePath,
-              optimizedUrl: filePath,
-              fileMeta: {
-                fileName: file.name,
-                url: filePath,
-                optimizedUrl: filePath,
-                type: "VIDEO",
-                description: messageInputDto.content,
-                entityType: MessageFileEntityType.VIDEO,
-                messageId: messageInputDto.messageId,
-              },
-            });
+            socket.emit("SEND_VIDEO_FILE_MESSAGE", composeSendVideoFileMessageParams(messageInputDto, filePath, file));
             videoSocket.disconnect();
             resolve();
           }
         );
 
-        videoSocket?.on("UPLOAD_VIDEO_ERROR", (error) => {
-          console.error("Upload error", error);
+        videoSocket?.on("UPLOAD_VIDEO_ERROR", (error: string) => {
+          notification({
+            type: "error",
+            content: "Something went wrong on video uploading",
+          });
           videoSocket.disconnect();
           reject(error);
         });

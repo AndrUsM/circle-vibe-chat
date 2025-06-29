@@ -18,13 +18,15 @@ import './message.scss';
 
 interface MessageProps {
   message: MessageModel;
+  isSavedMessages?: boolean;
 }
 
 export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   message,
+  isSavedMessages = false,
 }) => {
   const { content, files, messageType, sender } = message;
-  const avatarUrl = sender?.user.avatarUrl;
+  const avatarUrl = sender?.user?.avatarUrl;
   const senderFullName = getUserFullName(sender?.user);
   const imageFallback = getUserAvatarFallback(sender?.user);
 
@@ -57,16 +59,16 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
     <StackLayout space="0.5rem" className="bg-tertiary rounded-1 p-2">
       <Show>
         <Show.When isTrue={Boolean(content)}>
-          <div className="bg-light p-2 rounded-2">{content}</div>
+          <div className="bg-light p-2 rounded-2 white-space-pre-wrap">{content}</div>
         </Show.When>
 
         <Show.Else>
           <StackLayout>
             <Show.When isTrue={messageType === MessageType.VIDEO}>
               <video width={320} height={240} controls muted>
-                {sortedByTypeFiles.videos?.map(({ description, type, url, id }) => (
+                {sortedByTypeFiles.videos?.map(({ description, url, id }) => (
                   <React.Fragment key={id}>
-                    <source src={url} type={'video/3gpp'} />
+                    <source src={url} type={'video/mp4'} />
 
                     <Show.When isTrue={Boolean(description)}>
                       <span>{description}</span>
@@ -90,7 +92,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
                     <span>{fileName}</span>
 
                     <Show.When isTrue={Boolean(description)}>
-                      <span>{description}</span>
+                      <span className="white-space-pre-wrap">{description}</span>
                     </Show.When>
                   </StackLayout>
                 </a>
@@ -100,7 +102,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
         </Show.Else>
       </Show>
 
-      <Show.When isTrue={Boolean(sender)}>
+      <Show.When isTrue={Boolean(sender) && !isSavedMessages}>
         <CenteredVertialLayout space="0.5rem">
           <UserAvatar url={avatarUrl ?? undefined} fallback={imageFallback} />
 

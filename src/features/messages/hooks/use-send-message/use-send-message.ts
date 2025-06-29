@@ -1,14 +1,24 @@
 import { FormikHelpers } from "formik";
 import { useCallback } from "react";
 
-import { ChatParticipant, ChatSocketCommand, MessageType } from "@circle-vibe/shared";
+import {
+  ChatParticipant,
+  ChatSocketCommand,
+  MessageType,
+  SendFileMessageChatSocketParams,
+  SendMessageChatSocketParams,
+} from "@circle-vibe/shared";
 import { useSocket } from "@core/hooks";
 import { MessageFormValues } from "@features/messages/types";
 import {
   composeCreateMessageFileParams,
   composeCreateMessageParams,
+  composeUseSendMessageInput,
+  getMessageType,
 } from "@features/messages/utils";
+
 import { useSendVideo } from "../use-send-video";
+import { useSendFileMessage } from "../use-send-file-message/use-file-message";
 
 export const useSendMessage = (
   chatParticipant: ChatParticipant | null,
@@ -16,6 +26,7 @@ export const useSendMessage = (
 ) => {
   const { socket } = useSocket();
   const sendVideo = useSendVideo();
+  const sendFileMessage = useSendFileMessage();
 
   return useCallback(
     async (
@@ -33,33 +44,37 @@ export const useSendMessage = (
       }
 
       if (formValues.file) {
+        const messageType = getMessageType(formValues);
 
-        const fileMessageDto = composeCreateMessageFileParams(
-          chatParticipant,
-          selectedChatId,
-          formValues
-        );
-
-        if (fileMessageDto.message.messageType === MessageType.VIDEO) {
-          const messageInputDto = composeCreateMessageParams(
-            chatParticipant,
-            selectedChatId,
-            formValues,
-          );
+        if (messageType === MessageType.VIDEO) {
+          const messageInputDto: SendMessageChatSocketParams =
+            composeCreateMessageParams(
+              chatParticipant,
+              selectedChatId,
+              formValues
+            );
 
           await sendVideo(formValues.file, messageInputDto);
 
           resetForm();
-          return
+          return;
         }
 
-        socket.emit("SEND_FILE_MESSAGE", fileMessageDto);
-      } else {
-        const messageDto = composeCreateMessageParams(
-          chatParticipant,
+        const createMessageInput = composeUseSendMessageInput(
+          chatParticipant.id,
           selectedChatId,
           formValues
         );
+
+        await sendFileMessage(formValues.file, createMessageInput);
+        resetForm();
+      } else {
+        const messageDto: SendMessageChatSocketParams =
+          composeCreateMessageParams(
+            chatParticipant,
+            selectedChatId,
+            formValues
+          );
 
         socket.emit(ChatSocketCommand.SEND_MESSAGE, messageDto);
       }

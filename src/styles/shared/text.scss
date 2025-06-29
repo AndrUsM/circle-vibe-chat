@@ -4,6 +4,12 @@
   white-space: preserve nowrap;
 }
 
+.white-space {
+  &-pre-wrap {
+    white-space: pre-wrap;
+  }
+}
+
 @for $i from 0 through 100 {
   .text-#{$i} {
     font-size: #{$i * 0.25}rem;
