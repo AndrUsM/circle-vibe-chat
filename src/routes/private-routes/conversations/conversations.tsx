@@ -1,5 +1,5 @@
 import { useCallback, useMemo, useRef } from "react";
-import { Field, Formik, FormikHelpers } from "formik";
+import { FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import {
@@ -15,7 +15,6 @@ import {
   FormControl,
   FormikFormControl,
   Show,
-  CenteredVertialLayout,
   FormSubmitButton,
   Button,
   composeAvatarFallback,
@@ -156,7 +155,7 @@ export const Conversations: React.FC = () => {
                 validationSchema={MESSAGE_FORM_VALIDATION_SCHEMA}
                 initialValues={MESSAGE_FORM_INITIAL_VALUE}
               >
-                {({ setFieldValue }: FormikHelpers<MessageFormValues>) => (
+                {({ setFieldValue }: FormikProps<MessageFormValues>) => (
                   <ClusterLayout space="0.5rem" alignItems="flex-start">
                     <FormikFormControl
                       formFieldName="content"

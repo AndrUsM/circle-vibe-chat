@@ -1,3 +1,10 @@
 .message-image {
   max-height: 30vh;
 }
+
+.message-description {
+  padding: 0.5rem;
+  position: relative;
+  border-radius: 0.75rem;
+  border: 1px solid var(--cv-secondary);
+}
