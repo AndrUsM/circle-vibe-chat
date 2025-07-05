@@ -54,10 +54,14 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
   }, []);
 
   useEffect(() => {
+    if (!user) {
+      return;
+    }
+
     if (!socket.connected) {
       socket.connect();
     }
-  }, []);
+  }, [user]);
 
   const value = useMemo(
     () => ({ socket, videoSocket, createVideoSocketConnection }),

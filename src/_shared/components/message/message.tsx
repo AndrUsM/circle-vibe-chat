@@ -9,11 +9,11 @@ import {
   Message as MessageModel,
   MessageFileEntityType,
   MessageFile,
+  getUserFullName,
+  composeAvatarFallback
 } from "@circle-vibe/shared";
 
-import { getUserFullName } from "@shared/utils";
 import { UserAvatar } from "../user-avatar/user-avatar";
-import { getUserAvatarFallback } from "@shared/utils/get-user-avatar-fallback";
 
 import "./message.scss";
 
@@ -29,7 +29,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   const { content, files, messageType, sender } = message;
   const avatarUrl = sender?.user?.avatarUrl;
   const senderFullName = getUserFullName(sender?.user);
-  const imageFallback = getUserAvatarFallback(sender?.user);
+  const imageFallback = composeAvatarFallback(sender?.user);
   const VIDEO_MIME_TYPE = "video/mp4";
 
   const sortedByTypeFiles = useMemo(

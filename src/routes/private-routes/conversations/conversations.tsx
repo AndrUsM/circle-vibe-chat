@@ -39,6 +39,7 @@ import { TopbarLogo, Message, UserAvatar, Chat } from "@shared/components";
 import { TopbarActions } from "./topbar-actions";
 
 import "./conversation.scss";
+import { ConversationActions } from "../../../_shared/components/chat/chat-actions";
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
@@ -68,14 +69,11 @@ export const Conversations: React.FC = () => {
   const openFileSelectionDialog = useCallback((e: React.SyntheticEvent) => {
     fileInputRef.current?.click();
   }, []);
-  const isSavedMessagesChat = useMemo(
-    () => {
-      const selectedChat = chats.find(({ id }) => id === selectedChatId);
+  const isSavedMessagesChat = useMemo(() => {
+    const selectedChat = chats.find(({ id }) => id === selectedChatId);
 
-      return Boolean(selectedChat?.isSavedMessages);
-    },
-    [chats, selectedChatId]
-  );
+    return Boolean(selectedChat?.isSavedMessages);
+  }, [chats, selectedChatId]);
 
   useInitialChatSelection(chats, handleJoinChat, allowToPreselectChat);
 
@@ -120,6 +118,7 @@ export const Conversations: React.FC = () => {
             {chats.map((chat) => (
               <Chat
                 chat={chat}
+                chatParticipant={chatParticipant}
                 selected={selectedChatId === chat.id}
                 onClick={() => handleJoinChat(chat.id)}
                 key={chat.id}
@@ -133,10 +132,7 @@ export const Conversations: React.FC = () => {
           className="transition bg-secondary cursor-resize"
         />
 
-        <Resizer.Section
-          className="flex items-center justify-center w-full"
-          minSize={100}
-        >
+        <Resizer.Section className="flex items-center w-full" minSize={100}>
           <StackLayout justifyContent="end" className="w-full p-3">
             <StackLayout className="overflow-y-auto">
               {messages.map((message) => (

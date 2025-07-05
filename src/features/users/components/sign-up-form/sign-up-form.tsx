@@ -14,7 +14,6 @@ import {
   useCountries,
   FormControlCheckbox,
   HorizontalDivider,
-  User,
 } from "@circle-vibe/shared";
 
 import { USER_TYPE_DROPDOWN_OPTIONS } from "@shared/constants";
@@ -61,11 +60,15 @@ export const SignUpForm: React.FC = () => {
       initialValues={SIGN_UP_FORM_INITIAL_VALUES}
     >
       <StackLayout space="0.75rem">
-        <FormGroup isRequired label={"Name"} formFieldName={"username"}>
+        <FormGroup isRequired label={"Name"} formFieldName={"firstname"}>
           <FormControlInput />
         </FormGroup>
 
         <FormGroup isRequired label={"Surname"} formFieldName={"surname"}>
+          <FormControlInput />
+        </FormGroup>
+
+        <FormGroup isRequired label={"Username"} formFieldName={"username"}>
           <FormControlInput />
         </FormGroup>
 
@@ -120,7 +123,11 @@ export const SignUpForm: React.FC = () => {
         </ClusterLayout>
 
         <FormGroup formFieldName="isHiddenContactInfo">
-          <FormControlCheckbox>Is Hidden</FormControlCheckbox>
+          <FormControlCheckbox>Is Contacts Hidden</FormControlCheckbox>
+        </FormGroup>
+
+        <FormGroup formFieldName="isAllowedToSearch">
+          <FormControlCheckbox>Allow to Search</FormControlCheckbox>
         </FormGroup>
 
         <StackLayout space={"1rem"}>
