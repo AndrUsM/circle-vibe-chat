@@ -1,4 +1,10 @@
-import { ExtendedReactFunctionalComponent, Menu, useIcons, Icon, Button } from "@circle-vibe/shared";
+import {
+  ExtendedReactFunctionalComponent,
+  Menu,
+  useIcons,
+  Icon,
+  Button,
+} from "@circle-vibe/components";
 import { cookiesService, localStorageService } from "@core/services";
 import { useCallback } from "react";
 import { useNavigate } from "react-router-dom";

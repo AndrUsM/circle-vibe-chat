@@ -1,6 +1,6 @@
+import { MessageType } from "@circle-vibe/shared";
 import { MessageFormValues } from "@features/messages/types";
 import { getMessageType } from "./get-message-type";
-import { MessageType } from "@circle-vibe/shared";
 
 export interface UseSendMessageInput {
   chatId: number,

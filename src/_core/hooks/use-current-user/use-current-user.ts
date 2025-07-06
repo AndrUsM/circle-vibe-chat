@@ -1,4 +1,5 @@
-import { noop, User } from "@circle-vibe/shared";
+import { User } from "@circle-vibe/shared";
+import { noop } from "@circle-vibe/components";
 import { CurrentUserContext } from "@core/context";
 import { useContext } from "react";
 
@@ -9,6 +10,6 @@ export const useCurrentUser = (): CurrentUserContext => {
   return {
     user: user as User,
     setUser: userContext?.setUser ?? noop,
-    clear: userContext?.clear ?? noop
+    clear: userContext?.clear ?? noop,
   };
-}
+};

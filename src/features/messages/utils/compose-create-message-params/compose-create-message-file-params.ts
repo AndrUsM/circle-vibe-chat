@@ -1,7 +1,5 @@
 import {
-  MessageType,
   SendFileMessageChatSocketParams,
-  SendFileMessageMetaInput,
 } from "@circle-vibe/shared";
 import { composeFileMetaInputDto } from "./compose-file-meta-params";
 import { UseSendMessageInput } from "./compose-use-send-file-message-input";

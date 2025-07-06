@@ -10,8 +10,7 @@ import {
   Form,
   StackLayout,
   HorizontalDivider,
-  User,
-} from "@circle-vibe/shared";
+} from "@circle-vibe/components";
 
 import { useSignIn } from "@features/users/hooks";
 
@@ -19,7 +18,6 @@ import {
   AUTHORIZATION_FORM_SCHEMA,
   AUTHORIZATION_FORM_INITIAL_VALUES,
 } from "./constants";
-
 
 export const AuthorizationForm: React.FC = () => {
   const { t } = useTranslation();

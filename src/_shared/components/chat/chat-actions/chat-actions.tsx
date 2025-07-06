@@ -1,16 +1,17 @@
+import { useCallback } from "react";
+
+import { Chat, ChatParticipant } from "@circle-vibe/shared";
 import {
-  ExtendedReactFunctionalComponent,
   Menu,
   useIcons,
   Icon,
   Button,
   StackLayout,
   HorizontalDivider,
-  Chat,
-  ChatParticipant,
-} from "@circle-vibe/shared";
+  ExtendedReactFunctionalComponent,
+} from "@circle-vibe/components";
+
 // import { cookiesService, localStorageService } from "@core/services";
-import { useCallback } from "react";
 // import { useNavigate } from "react-router-dom";
 
 interface ChatActionsProps {
@@ -53,7 +54,7 @@ export const ChatActions: ExtendedReactFunctionalComponent<
           Delete
         </Button>
         <Button color="secondary" onClick={muteConversationAlerts}>
-          {isMuted ? 'Unmute' : 'Mute'}
+          {isMuted ? "Unmute" : "Mute"}
         </Button>
       </StackLayout>
     </Menu>

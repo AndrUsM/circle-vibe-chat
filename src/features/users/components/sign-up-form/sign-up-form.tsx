@@ -1,5 +1,6 @@
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { useNavigate } from "react-router-dom";
 
 import {
   CenteredVertialLayout,
@@ -14,17 +15,17 @@ import {
   useCountries,
   FormControlCheckbox,
   HorizontalDivider,
-} from "@circle-vibe/shared";
+} from "@circle-vibe/components";
 
+import { request } from "@core/request";
+import { useNotification } from "@core/hooks";
 import { USER_TYPE_DROPDOWN_OPTIONS } from "@shared/constants";
+
 import {
   SIGN_UP_FORM_VALIDATION_SCHEMA,
   SIGN_UP_FORM_INITIAL_VALUES,
   SignUpFormInput,
 } from "./constants";
-import { request } from "@core/request";
-import { useNavigate } from "react-router-dom";
-import { useNotification } from "@core/hooks";
 
 export const SignUpForm: React.FC = () => {
   const { t } = useTranslation();

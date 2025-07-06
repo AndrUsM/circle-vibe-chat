@@ -1,10 +1,9 @@
+import { Message, getUserFullName } from "@circle-vibe/shared";
 import {
   CenteredVertialLayout,
   ExtendedReactFunctionalComponent,
-  Message,
   Show,
-  getUserFullName,
-} from "@circle-vibe/shared";
+} from "@circle-vibe/components";
 
 interface MessageShortPreviewProps {
   message: Message;

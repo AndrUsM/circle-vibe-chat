@@ -175,11 +175,12 @@
     "@babel/helper-string-parser" "^7.25.9"
     "@babel/helper-validator-identifier" "^7.25.9"
 
-"@circle-vibe/shared@1.1.57":
-  version "1.1.57"
-  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.1.57.tgz#c07a14468164169182b0ef9ca239c8b6d7e1ed02"
-  integrity sha512-uM5BWkMy4HHGfZ2XgcMGgda6385Fc253nuokO8CJPQQr/HqAgNmphJsMAnQTLeTOalTYP9b5Ns8TuZwlPke5MA==
+"@circle-vibe/components@1.0.3":
+  version "1.0.3"
+  resolved "https://registry.yarnpkg.com/@circle-vibe/components/-/components-1.0.3.tgz#53b6f76d757c4e067071c2505b70c58884b35f56"
+  integrity sha512-iGnGricU5W2YlVyM+45Ud9lgNivspg7GWftfQQmUyPdOEihWcr2g/ElfckaV78IHiBGVtNNCZvHV8ePAyll/Pg==
   dependencies:
+    "@circle-vibe/shared" "1.2.0"
     "@coreui/icons" "^3.0.1"
     "@coreui/icons-react" "2.3.0"
     classnames "^2.5.1"
@@ -190,6 +191,15 @@
     react-dom "^19.0.0"
     react-router-dom "^7.4.0"
     yup "^1.6.1"
+
+"@circle-vibe/shared@1.2.0":
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.2.0.tgz#0a2da28f84a7af970ac076b39fe311aedc95e653"
+  integrity sha512-ulrTimL1Zs52PL3418fLlfqxs1TsrC978WsKp4TKRndiiSQf+zfAo7V+jFmxXHasQJZtB8hq7iJezfmUkQEOTg==
+  dependencies:
+    date-fns "^4.1.0"
+    formik "^2.4.6"
+    js-cookie "^3.0.5"
 
 "@column-resizer/core@1.3.1":
   version "1.3.1"

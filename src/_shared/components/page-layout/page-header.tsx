@@ -1,4 +1,4 @@
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/shared";
+import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
 
 export const PageHeader: ExtendedReactFunctionalComponent = () => {
   return null;

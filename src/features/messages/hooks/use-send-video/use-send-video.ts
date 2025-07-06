@@ -62,10 +62,6 @@ export const useSendVideo = () => {
           videoSocket.disconnect();
           reject(error);
         });
-
-        videoSocket?.on("disconnect", () => {
-          console.log("Socket disconnected");
-        });
       });
     },
     [createVideoSocketConnection, socket, notification]

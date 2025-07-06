@@ -2,6 +2,7 @@ import { useCallback, useMemo, useRef } from "react";
 import { FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { ChatSocketCommand, composeAvatarFallback } from "@circle-vibe/shared";
 import {
   ClusterLayout,
   StackLayout,
@@ -9,7 +10,6 @@ import {
   Icon,
   HorizontalDivider,
   useIcons,
-  ChatSocketCommand,
   Form,
   FormControlInput,
   FormControl,
@@ -17,9 +17,8 @@ import {
   Show,
   FormSubmitButton,
   Button,
-  composeAvatarFallback,
   FormControlTextarea,
-} from "@circle-vibe/shared";
+} from "@circle-vibe/components";
 import * as Resizer from "@column-resizer/react";
 
 import {
@@ -39,7 +38,6 @@ import { TopbarLogo, Message, UserAvatar, Chat } from "@shared/components";
 import { TopbarActions } from "./topbar-actions";
 
 import "./conversation.scss";
-import { ConversationActions } from "../../../_shared/components/chat/chat-actions";
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();

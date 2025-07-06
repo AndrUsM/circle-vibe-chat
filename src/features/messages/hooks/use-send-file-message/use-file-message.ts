@@ -20,6 +20,7 @@ export const useSendFileMessage = () => {
     const payload = composeCreateMessageFileParams(
       messageInputDto,
       fileUrl.filePath,
+      // @ts-ignore
       fileUrl.optimisedFilePath,
       file
     );

@@ -1,15 +1,14 @@
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 
+import { Chat as ChatModel, ChatParticipant } from "@circle-vibe/shared";
 import {
   ExtendedReactFunctionalComponent,
   Show,
   StackLayout,
-  Chat as ChatModel,
   useFormatDatetime,
   ClusterLayout,
-  ChatParticipant,
-} from "@circle-vibe/shared";
+} from "@circle-vibe/components";
 import SharedEnums from "@circle-vibe/shared";
 
 import { MessageShortPreview } from "../message-short-preview";
@@ -75,7 +74,10 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
       </StackLayout>
 
       <Show.When isTrue={Boolean(selected && chatParticipant)}>
-        <ChatActions chat={chat} chatParticipant={chatParticipant as ChatParticipant} />
+        <ChatActions
+          chat={chat}
+          chatParticipant={chatParticipant as ChatParticipant}
+        />
       </Show.When>
     </ClusterLayout>
   );

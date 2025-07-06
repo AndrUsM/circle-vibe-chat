@@ -8,7 +8,6 @@ export const useInitialChatSelection = (
   selectChatId: SelectChatIdFn,
   hasSelectedChat: boolean
 ) => {
-  // selectedChatId || chatParticipant
   useEffect(() => {
     if (hasSelectedChat || !chats?.length) {
       return;

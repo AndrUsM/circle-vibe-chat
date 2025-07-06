@@ -1,7 +1,7 @@
 import {
   ExtendedReactFunctionalComponent,
   StackLayout,
-} from "@circle-vibe/shared";
+} from "@circle-vibe/components";
 import { SignUpForm } from "@features/users/components/sign-up-form";
 
 export const SignUp: ExtendedReactFunctionalComponent = () => {

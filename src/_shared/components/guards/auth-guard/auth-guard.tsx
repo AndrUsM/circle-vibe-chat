@@ -1,4 +1,4 @@
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/shared";
+import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
 import { cookiesService } from "@core/services";
 import { Navigate, Outlet, useLocation } from "react-router-dom";
 

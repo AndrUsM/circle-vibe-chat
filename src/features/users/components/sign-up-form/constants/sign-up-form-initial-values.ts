@@ -1,4 +1,4 @@
-import { CountryCode, File, User, UserRole, UserType } from "@circle-vibe/shared";
+import { CountryCode, UserType } from "@circle-vibe/shared";
 
 export interface SignUpFormInput {
   username: string;
@@ -7,7 +7,7 @@ export interface SignUpFormInput {
   birthDate?: Date;
   password: string;
   passwordConfirmation: string;
-  avatar: File;
+  avatar: File | null;
   isHiddenContactInfo: boolean;
   isAllowedToSearch: boolean;
   city: string;
@@ -24,7 +24,7 @@ export const SIGN_UP_FORM_INITIAL_VALUES: SignUpFormInput = {
   birthDate: undefined,
   password: "",
   passwordConfirmation: "",
-  avatar: undefined,
+  avatar: null,
   primaryPhone: "",
   isAllowedToSearch: true,
   isHiddenContactInfo: true,

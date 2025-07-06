@@ -1,17 +1,19 @@
 import React, { useMemo } from "react";
 
 import {
-  CenteredVertialLayout,
-  ExtendedReactFunctionalComponent,
-  Show,
-  StackLayout,
   MessageType,
   Message as MessageModel,
   MessageFileEntityType,
   MessageFile,
   getUserFullName,
-  composeAvatarFallback
+  composeAvatarFallback,
 } from "@circle-vibe/shared";
+import {
+  CenteredVertialLayout,
+  ExtendedReactFunctionalComponent,
+  Show,
+  StackLayout,
+} from "@circle-vibe/components";
 
 import { UserAvatar } from "../user-avatar/user-avatar";
 

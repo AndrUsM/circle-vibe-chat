@@ -5,13 +5,11 @@ import {
   ChatParticipant,
   ChatSocketCommand,
   MessageType,
-  SendFileMessageChatSocketParams,
   SendMessageChatSocketParams,
 } from "@circle-vibe/shared";
 import { useSocket } from "@core/hooks";
 import { MessageFormValues } from "@features/messages/types";
 import {
-  composeCreateMessageFileParams,
   composeCreateMessageParams,
   composeUseSendMessageInput,
   getMessageType,

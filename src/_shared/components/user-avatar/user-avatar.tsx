@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-import { ExtendedReactFunctionalComponent, Show } from "@circle-vibe/shared";
+import { ExtendedReactFunctionalComponent, Show } from "@circle-vibe/components";
 
 import "./user-avatar.scss";
 

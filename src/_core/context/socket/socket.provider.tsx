@@ -8,7 +8,8 @@ import {
 import { Socket } from "socket.io-client";
 import io from "socket.io-client";
 
-import { ExtendedReactFunctionalComponent, GatewayNamespaces } from "@circle-vibe/shared";
+import { GatewayNamespaces } from "@circle-vibe/shared";
+import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
 import { useCurrentUser } from "@core/hooks";
 import { cookiesService } from "@core/services";
 
@@ -39,14 +40,17 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
       return;
     }
 
-    const videoSocketConnection = io(`http://localhost:3005/${GatewayNamespaces.VIDEO_UPLOAD}`, {
-      transports: ["websocket"],
-      autoConnect: true,
-      reconnection: false,
-      auth: {
-        token: cookiesService.get("auth-token"),
-      },
-    });
+    const videoSocketConnection = io(
+      `http://localhost:3005/${GatewayNamespaces.VIDEO_UPLOAD}`,
+      {
+        transports: ["websocket"],
+        autoConnect: true,
+        reconnection: false,
+        auth: {
+          token: cookiesService.get("auth-token"),
+        },
+      }
+    );
 
     setVideoSocket(videoSocketConnection);
 
@@ -69,10 +73,6 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
   );
 
   return (
-    <SocketContext.Provider
-      value={value}
-    >
-      {children}
-    </SocketContext.Provider>
+    <SocketContext.Provider value={value}>{children}</SocketContext.Provider>
   );
 };

@@ -1,7 +1,7 @@
 import React from "react";
 
 import { AuthorizationForm } from "@features/users/components/sign-in-form/sign-in-form";
-import { StackLayout } from "@circle-vibe/shared";
+import { StackLayout } from "@circle-vibe/components";
 
 export const SignInForm: React.FC = () => {
   return (
