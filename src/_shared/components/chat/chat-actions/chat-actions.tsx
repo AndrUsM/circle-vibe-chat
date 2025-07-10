@@ -1,4 +1,4 @@
-import { useCallback } from "react";
+import { useCallback, useState } from "react";
 
 import { Chat, ChatParticipant } from "@circle-vibe/shared";
 import {
@@ -10,6 +10,8 @@ import {
   HorizontalDivider,
   ExtendedReactFunctionalComponent,
 } from "@circle-vibe/components";
+import { Modal } from "@shared/components";
+import { ConversationMembers } from "@features/conversation/components/conversation-members/conversation-members";
 
 // import { cookiesService, localStorageService } from "@core/services";
 // import { useNavigate } from "react-router-dom";
@@ -24,39 +26,53 @@ export const ChatActions: ExtendedReactFunctionalComponent<
 > = ({ chat, chatParticipant }) => {
   const icons = useIcons();
   const {} = chat;
-  const { isMuted } = chatParticipant;
+  const { isMuted, id } = chatParticipant;
   // const navigate = useNavigate();
 
+  const [isConversationMembersModalOpen, setIsConversationMembersModalOpen] =
+    useState(false);
+
   const openConversationSettings = useCallback(() => {}, []);
-  const showConversationMembers = useCallback(() => {}, []);
+  const showConversationMembers = useCallback(() => {
+    setIsConversationMembersModalOpen(true);
+  }, []);
   const deleteConversation = useCallback(() => {}, []);
   const leaveConversation = useCallback(() => {}, []);
   const muteConversationAlerts = useCallback(() => {}, []);
 
   return (
-    <Menu
-      backgroundColorOfContent="red"
-      zIndex={10}
-      button={() => <Icon name={icons.cilOptions} size={24} />}
-    >
-      <StackLayout>
-        <div className="text-lg font-medium">Chat Actions</div>
+    <>
+      <Menu
+        backgroundColorOfContent="red"
+        zIndex={10}
+        button={() => <Icon name={icons.cilOptions} size={24} />}
+      >
+        <StackLayout>
+          <div className="text-lg font-medium">Chat Actions</div>
 
-        <Button onClick={openConversationSettings}>Settings</Button>
-        <Button onClick={showConversationMembers}>Members</Button>
+          <Button onClick={openConversationSettings}>Settings</Button>
+          <Button onClick={showConversationMembers}>Members</Button>
 
-        <HorizontalDivider />
+          <HorizontalDivider />
 
-        <Button color="danger" onClick={leaveConversation}>
-          Leave
-        </Button>
-        <Button color="danger" onClick={deleteConversation}>
-          Delete
-        </Button>
-        <Button color="secondary" onClick={muteConversationAlerts}>
-          {isMuted ? "Unmute" : "Mute"}
-        </Button>
-      </StackLayout>
-    </Menu>
+          <Button color="danger" onClick={leaveConversation}>
+            Leave
+          </Button>
+          <Button color="danger" onClick={deleteConversation}>
+            Delete
+          </Button>
+          <Button color="secondary" onClick={muteConversationAlerts}>
+            {isMuted ? "Unmute" : "Mute"}
+          </Button>
+        </StackLayout>
+      </Menu>
+
+      <Modal
+        isOpen={isConversationMembersModalOpen}
+        onClose={() => setIsConversationMembersModalOpen(false)}
+      >
+        <ConversationMembers conversation={chat} chatParticipantId={id} />
+      </Modal>
+    </>
   );
 };

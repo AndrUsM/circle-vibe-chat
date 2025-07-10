@@ -19,7 +19,7 @@ const FILE_UPLOADING_VALIDATION_SCHEMA = mixed<File>()
     }
 
     return value && ["image/jpeg", "image/png"].includes(value.type);
-  });
+  }).nullable();
 
 export const SIGN_UP_FORM_VALIDATION_SCHEMA = object<User>({
   username: string().required(),
