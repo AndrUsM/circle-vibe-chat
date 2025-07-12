@@ -1,0 +1,14 @@
+import { boolean, mixed, number, object, string } from "yup";
+
+import { CreateConversationFormValues } from "../types";
+import { ChatType } from "@circle-vibe/shared";
+
+export const CREATE_CONVERSATION_FORM_VALIDATION_SCHEMA =
+  object<CreateConversationFormValues>({
+    name: string().required(),
+    hidden: boolean(),
+    description: string().max(1000).required(),
+    type: mixed<ChatType>().required(),
+    usersLimit: number().max(100).required(),
+  });
+

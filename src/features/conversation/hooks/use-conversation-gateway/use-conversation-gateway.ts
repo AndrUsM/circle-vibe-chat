@@ -7,7 +7,23 @@ import {
 } from "@circle-vibe/shared";
 import { useCurrentUser, useSocket } from "@core/hooks";
 
-export const useConversationGateway = () => {
+/**
+ * Handles the state of the conversation gateway for the current user.
+ *
+ * @param {VoidFunction} onScrollMessages - Function to be called when messages are received.
+ *
+ * @returns {{
+ *   user: User,
+ *   chatParticipant: ChatParticipant | null,
+ *   setChatParticipant: (chatParticipant: ChatParticipant | null) => void,
+ *   selectedChatId: number | null,
+ *   setSelectedChatId: (selectedChatId: number | null) => void,
+ *   chats: Chat[],
+ *   messages: Message[],
+ *   isAnyChatSelected: boolean,
+ * }}
+ */
+export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   const { user } = useCurrentUser();
   const { socket } = useSocket();
   const [chatParticipant, setChatParticipant] =
@@ -31,6 +47,10 @@ export const useConversationGateway = () => {
 
   socket.on(ChatSocketCommand.JOIN_CHAT, ({ chatParticipant }) => {
     setChatParticipant(chatParticipant);
+
+    setTimeout(() => {
+      onScrollMessages();
+    }, 500);
   });
 
   return useMemo(

@@ -20,7 +20,7 @@ import { useSendFileMessage } from "../use-send-file-message/use-file-message";
 
 export const useSendMessage = (
   chatParticipant: ChatParticipant | null,
-  selectedChatId: number | null
+  selectedChatId: number | null,
 ) => {
   const { socket } = useSocket();
   const sendVideo = useSendVideo();

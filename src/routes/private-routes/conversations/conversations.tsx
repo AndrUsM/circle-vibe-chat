@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -18,6 +18,7 @@ import {
   FormSubmitButton,
   Button,
   FormControlTextarea,
+  CenteredVertialLayout,
 } from "@circle-vibe/components";
 import * as Resizer from "@column-resizer/react";
 
@@ -32,8 +33,19 @@ import {
   useInitialChatSelection,
 } from "@features/conversation";
 
-import { useNotification, useSocket } from "@core/hooks";
-import { TopbarLogo, Message, UserAvatar, Chat } from "@shared/components";
+import { useSocket } from "@core/hooks";
+import {
+  TopbarLogo,
+  Message,
+  UserAvatar,
+  Chat,
+  Modal,
+} from "@shared/components";
+import {
+  AccountSettings,
+  ConversationForm,
+} from "@features/conversation/components";
+import { useScrollToBlockPosition } from "@features/conversation/hooks";
 
 import { TopbarActions } from "./topbar-actions";
 
@@ -41,10 +53,18 @@ import "./conversation.scss";
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
-  const fileInputRef = useRef<HTMLInputElement>(null);
-  const notification = useNotification();
   const { socket } = useSocket();
   const { cilSettings, cilFile } = useIcons();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const onScrollToPosition = useScrollToBlockPosition();
+  const messagesRef = useRef<HTMLDivElement>(null);
+  const onScrollMessages = () => {
+    if (Boolean(messagesRef?.current?.scrollTop)){
+      return;
+    }
+
+    onScrollToPosition(messagesRef, "end", "end");
+  };
   const {
     user,
     chatParticipant,
@@ -53,15 +73,23 @@ export const Conversations: React.FC = () => {
     chats,
     messages,
     isAnyChatSelected,
-  } = useConversationGateway();
+  } = useConversationGateway(onScrollMessages);
 
   const allowToPreselectChat = Boolean(selectedChatId || chatParticipant);
 
   const handleJoinChat = (chatId: number) => {
+    if (selectedChatId === chatId) {
+      return;
+    }
+
     setSelectedChatId(chatId);
     socket.emit(ChatSocketCommand.JOIN_CHAT, { chatId });
   };
 
+  const [openAccountSettings, setOpenAccountSettings] =
+    useState<boolean>(false);
+  const [openChatCreationModal, setOpenChatCreationModal] =
+    useState<boolean>(false);
   const handleSendMessage = useSendMessage(chatParticipant, selectedChatId);
   const avatarFallback = composeAvatarFallback(user);
   const openFileSelectionDialog = useCallback((e: React.SyntheticEvent) => {
@@ -86,7 +114,10 @@ export const Conversations: React.FC = () => {
         <TopbarLogo />
 
         <ClusterLayout space="1.15rem">
-          <UserAvatar fallback={avatarFallback} />
+          <UserAvatar
+            fallback={avatarFallback}
+            onClick={() => setOpenAccountSettings(true)}
+          />
 
           <Link to={"/settings"}>
             <Tooltip title="Settings">
@@ -106,12 +137,21 @@ export const Conversations: React.FC = () => {
           minSize={100}
         >
           <StackLayout className="w-full p-3 overflow-y-auto">
-            <FormControl>
-              <FormControlInput
-                className="p-4 rounded-2"
-                placeholder="Search..."
-              />
-            </FormControl>
+            <CenteredVertialLayout
+              space="1rem"
+              justifyContent="justify-between"
+            >
+              <FormControl className="w-full">
+                <FormControlInput
+                  className="p-4 rounded-2"
+                  placeholder="Search..."
+                />
+              </FormControl>
+
+              <Button size="medium" onClick={setOpenChatCreationModal}>
+                Create
+              </Button>
+            </CenteredVertialLayout>
 
             {chats.map((chat) => (
               <Chat
@@ -132,7 +172,7 @@ export const Conversations: React.FC = () => {
 
         <Resizer.Section className="flex items-center w-full" minSize={100}>
           <StackLayout justifyContent="end" className="w-full p-3">
-            <StackLayout className="overflow-y-auto">
+            <StackLayout ref={messagesRef} className="overflow-y-auto">
               {messages.map((message) => (
                 <Message
                   message={message}
@@ -185,6 +225,20 @@ export const Conversations: React.FC = () => {
           </StackLayout>
         </Resizer.Section>
       </Resizer.Container>
+
+      <Modal
+        isOpen={openAccountSettings}
+        onClose={() => setOpenAccountSettings(false)}
+      >
+        <AccountSettings />
+      </Modal>
+
+      <Modal
+        isOpen={openChatCreationModal}
+        onClose={() => setOpenChatCreationModal(false)}
+      >
+        <ConversationForm />
+      </Modal>
     </section>
   );
 };

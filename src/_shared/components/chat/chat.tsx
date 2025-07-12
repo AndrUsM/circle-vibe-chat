@@ -15,6 +15,7 @@ import { MessageShortPreview } from "../message-short-preview";
 import { ChatActions } from "./chat-actions";
 
 import "./chat.scss";
+import { useMemo } from "react";
 
 interface ChatProps {
   chat: ChatModel;
@@ -32,6 +33,7 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
   const { t } = useTranslation();
   const format = useFormatDatetime();
   const {
+    name,
     readableName,
     isSavedMessages,
     lastMessage,
@@ -39,6 +41,13 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
     empty,
     updatedAt,
   } = chat;
+  const savedMessagesName = useMemo(
+    () =>
+      readableName.includes("saved-messages") || isSavedMessages
+        ? t(name)
+        : name,
+    [name, readableName]
+  );
 
   return (
     <ClusterLayout
@@ -56,11 +65,7 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
       onClick={onClick}
     >
       <StackLayout>
-        <span className="block text-lg font-bold">
-          {readableName === "saved-messages" || isSavedMessages
-            ? t(readableName)
-            : readableName}
-        </span>
+        <span className="block text-lg font-bold">{savedMessagesName}</span>
 
         <span>Last seen: {format(updatedAt)}</span>
 

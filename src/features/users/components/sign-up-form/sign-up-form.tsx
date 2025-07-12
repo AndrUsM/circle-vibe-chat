@@ -41,6 +41,15 @@ export const SignUpForm: React.FC = () => {
       },
       method: "POST",
     }).then(() => {
+      request({
+        url: "auth/start-up",
+        data: {
+          email: data.email,
+          password: data.password,
+        },
+        method: "POST",
+      })
+    }).then(() => {
       navigate("/auth/sign-in");
       notification({
         type: "success",

@@ -1,4 +1,4 @@
-import { ChatParticipant, User } from "@circle-vibe/shared";
+import { User } from "@circle-vibe/shared";
 import { request } from "@core/request";
 import { useState } from "react";
 
@@ -7,7 +7,8 @@ export const useGetUserToInvite = () => {
   const getUserToInvite = async (
     conversationId: number,
     chatParticipantId: number,
-    username: string
+    username: string,
+    personalTargetUserToken?: string,
   ) => {
     setLoading(true);
 
@@ -17,6 +18,7 @@ export const useGetUserToInvite = () => {
       params: {
         chatParticipantId,
         username,
+        personalTargetUserToken,
       },
     });
 

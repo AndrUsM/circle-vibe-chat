@@ -11,6 +11,10 @@ export default defineConfig({
       plugins: [autoprefixer()],
     },
   },
+  server: {
+    port: 5173,
+    host: "0.0.0.0",
+  },
   resolve: {
     alias: {
       "@shared": resolve("./src/_shared"),

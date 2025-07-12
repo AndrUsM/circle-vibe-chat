@@ -3,8 +3,9 @@ import { useState } from "react";
 import { ExtendedReactFunctionalComponent, Show } from "@circle-vibe/components";
 
 import "./user-avatar.scss";
+import classNames from "classnames";
 
-interface UserAvatarProps {
+interface UserAvatarProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   url?: string;
   fallback: string;
 }
@@ -12,6 +13,8 @@ interface UserAvatarProps {
 export const UserAvatar: ExtendedReactFunctionalComponent<UserAvatarProps> = ({
   url,
   fallback,
+  className,
+  ...rest
 }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(true);
 
@@ -19,14 +22,15 @@ export const UserAvatar: ExtendedReactFunctionalComponent<UserAvatarProps> = ({
     <Show>
       <Show.When isTrue={Boolean(url) && isImageLoaded}>
         <img
-          className="user-avatar"
+          className={classNames("user-avatar", className)}
           src={url}
           onError={() => setIsImageLoaded(false)}
+          {...rest}
         />
       </Show.When>
 
       <Show.Else>
-        <div className="user-avatar text-xs">{fallback}</div>
+        <div className={classNames("user-avatar text-xs", className)} {...rest}>{fallback}</div>
       </Show.Else>
     </Show>
   );

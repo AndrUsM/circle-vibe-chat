@@ -2,21 +2,20 @@ import { useCallback, useEffect, useState } from "react";
 import {
   CenteredVertialLayout,
   FormGroup,
-  FormikFormControl,
   StackLayout,
   Form,
-  FormControlSelect,
   ExtendedReactFunctionalComponent,
   FormControlInput,
   SubmitButton,
   Show,
+  HorizontalDivider,
+  FormControlTextarea,
 } from "@circle-vibe/components";
 import {
   ChatParticipant,
   composeAvatarFallback,
   getUserFullName,
   Chat,
-  User,
 } from "@circle-vibe/shared";
 import { UserAvatar } from "@shared/components";
 import {
@@ -30,6 +29,7 @@ import {
   useGetChatParticipants,
 } from "@features/conversation/hooks";
 import { useCopyToClickboard, useNotification } from "@core/hooks";
+import GridLayout from "@shared/components/grid-layout/grid-layout";
 
 interface ConversationMembersProps {
   conversation: Chat;
@@ -43,7 +43,7 @@ export const ConversationMembers: ExtendedReactFunctionalComponent<
     []
   );
   const notification = useNotification();
-  const copyToClickboard = useCopyToClickboard()
+  const copyToClickboard = useCopyToClickboard();
   const [chatInvitation, setChatInvitation] = useState<string | null>(null);
   const getChatParticipants = useGetChatParticipants();
   const { getUserToInvite, loading: isChatParticipantsToInviteLoading } =
@@ -52,17 +52,28 @@ export const ConversationMembers: ExtendedReactFunctionalComponent<
   const handleCopyOfInvite = useCallback(() => {
     copyToClickboard(chatInvitation ?? "");
     notification({
-        type: "success",
-        content: "Invite link successfully copied!",
-      })
+      type: "success",
+      content: "Invite link successfully copied!",
+    });
   }, []);
+  const isChatHasFreeSlots = chatParticipants.length < conversation.usersLimit;
   const onInviteUser = useCallback(
     async (formValue: ManageConversationParticipantsFormValue) => {
       const user = await getUserToInvite(
         conversation.id,
         chatParticipantId,
-        formValue.username
+        formValue.username,
+        formValue.personalToken
       );
+
+      if (!user) {
+        notification({
+          type: "error",
+          content: "User not found",
+        });
+
+        return;
+      }
 
       const generatedInvite = await generateConversationInvite({
         conversationId: conversation.id,
@@ -76,51 +87,94 @@ export const ConversationMembers: ExtendedReactFunctionalComponent<
     []
   );
 
-
   useEffect(() => {
     getChatParticipants(conversation.id).then(setChatParticipants);
   }, []);
 
   return (
-    <StackLayout>
-      <div className="grid">
-        {chatParticipants.map(({ id, user, ...chatParticipant }) => (
-          <CenteredVertialLayout key={id} space="1rem">
-            <UserAvatar
-              url={user.avatarUrl}
-              fallback={composeAvatarFallback(user)}
-            />
+    <StackLayout space="3rem">
+      <StackLayout>
+        <div className="text-xl">Members:</div>
 
-            {getUserFullName(user)}
+        <GridLayout space="1rem" minWidth={"100%"}>
+          {chatParticipants.map(({ id, user, ...chatParticipant }) => (
+            <CenteredVertialLayout key={id} space="1rem">
+              <UserAvatar
+                url={user.avatarUrl}
+                className="cursor-pointer"
+                fallback={composeAvatarFallback(user)}
+              />
 
-            <span>{chatParticipant.chatRole}</span>
-            <span>
-              Notifications: {chatParticipant.isMuted ? "Enabled" : "Disabled"}
-            </span>
-          </CenteredVertialLayout>
-        ))}
-      </div>
+              {getUserFullName(user)}
 
-      <Show.When isTrue={Boolean(chatInvitation)}>
-        <StackLayout>
-          <div>Invitations:</div>
-          <div className="truncate" onClick={handleCopyOfInvite}>
-            {chatInvitation}
+              <span>{chatParticipant.chatRole}</span>
+              <span>
+                Notifications:{" "}
+                {chatParticipant.isMuted ? "Enabled" : "Disabled"}
+              </span>
+            </CenteredVertialLayout>
+          ))}
+        </GridLayout>
+
+        <section>
+          <div>
+            Chat members limit: {chatParticipants?.length ?? 0}/
+            {conversation.usersLimit}
           </div>
-        </StackLayout>
+        </section>
+      </StackLayout>
+
+      <Show.When isTrue={!chatParticipants?.length}>
+        <div className="text-sm">There are no chat members.</div>
       </Show.When>
 
-      <Form
-        validationSchema={MANAGE_CONVERSATION_PARTICIPANTS_VALIDATION_SCHEMA}
-        initialValues={MANAGE_CONVERSATION_PARTICIPANTS_INITIAL_FORM_VALUE}
-        onSubmit={onInviteUser}
-      >
-        <FormGroup label="Add user" formFieldName="username">
-          <FormControlInput disabled={isChatParticipantsToInviteLoading} />
-        </FormGroup>
+      <Show.When isTrue={isChatHasFreeSlots}>
+        <StackLayout>
+          <div className="text-xl">Generate Token to Invite</div>
 
-        <SubmitButton>Find</SubmitButton>
-      </Form>
+          <Form
+            validationSchema={
+              MANAGE_CONVERSATION_PARTICIPANTS_VALIDATION_SCHEMA
+            }
+            initialValues={MANAGE_CONVERSATION_PARTICIPANTS_INITIAL_FORM_VALUE}
+            onSubmit={onInviteUser}
+          >
+            <StackLayout space="1rem">
+              <FormGroup label="Find User By Username" formFieldName="username">
+                <FormControlInput
+                  disabled={isChatParticipantsToInviteLoading}
+                />
+              </FormGroup>
+
+              <HorizontalDivider />
+
+              <div className="text-sm">
+                This is unsave action. Try to find user by username instead of
+                sharing in network personal user token.
+              </div>
+
+              <FormGroup label="Personal Token" formFieldName="personalToken">
+                <FormControlTextarea
+                  className="resize-vertical min-h-10 p-3"
+                  disabled={isChatParticipantsToInviteLoading}
+                />
+              </FormGroup>
+            </StackLayout>
+
+            <SubmitButton>Find</SubmitButton>
+          </Form>
+
+          <Show.When isTrue={Boolean(chatInvitation)}>
+            <div className="text-lg">Generated Token:</div>
+            <StackLayout>
+              <div>Invitations:</div>
+              <div className="truncate" onClick={handleCopyOfInvite}>
+                {chatInvitation}
+              </div>
+            </StackLayout>
+          </Show.When>
+        </StackLayout>
+      </Show.When>
     </StackLayout>
   );
 };

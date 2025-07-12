@@ -7,3 +7,4 @@ export * from './user-avatar';
 export * from './chat';
 export * from './message-short-preview';
 export * from './modal';
+export * from './grid-layout';
