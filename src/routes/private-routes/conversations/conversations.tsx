@@ -18,6 +18,7 @@ import {
   FormSubmitButton,
   Button,
   FormControlTextarea,
+  CenteredVertialLayout,
 } from "@circle-vibe/components";
 import * as Resizer from "@column-resizer/react";
 
@@ -89,12 +90,16 @@ export const Conversations: React.FC = () => {
     fileInputRef.current?.click();
   }, []);
   const isSavedMessagesChat = useMemo(() => {
-    const selectedChat = chats.find(({ id }) => id === selectedChatId);
+    const selectedChat = chats?.data.find(({ id }) => id === selectedChatId);
 
     return Boolean(selectedChat?.isSavedMessages);
   }, [chats, selectedChatId]);
 
-  useInitialChatSelection(chats, handleJoinChat, allowToPreselectChat);
+  useInitialChatSelection(
+    chats?.data ?? [],
+    handleJoinChat,
+    allowToPreselectChat
+  );
 
   return (
     <section className="h-full">
@@ -151,7 +156,7 @@ export const Conversations: React.FC = () => {
               </Button>
             </StackLayout>
 
-            {chats.map((chat) => (
+            {chats?.data.map((chat) => (
               <Chat
                 chat={chat}
                 chatParticipant={chatParticipant}
@@ -160,6 +165,23 @@ export const Conversations: React.FC = () => {
                 key={chat.id}
               />
             ))}
+
+            <Show.When
+              isTrue={Boolean(chats?.totalPages && chats?.totalPages > 1)}
+            >
+              <CenteredVertialLayout
+                space="0.25rem"
+                className="min-h-8 overflow-y-hidden overflow-x-auto"
+              >
+                {Array(chats?.totalPages)
+                  .fill(null)
+                  .map((_, index) => (
+                    <Button size="small" className="font-bold">
+                      {index + 1}
+                    </Button>
+                  ))}
+              </CenteredVertialLayout>
+            </Show.When>
           </StackLayout>
         </Resizer.Section>
 
@@ -171,7 +193,7 @@ export const Conversations: React.FC = () => {
         <Resizer.Section className="flex items-center w-full" minSize={100}>
           <StackLayout justifyContent="end" className="w-full p-3">
             <StackLayout ref={messagesRef} className="overflow-y-auto">
-              {messages.map((message) => (
+              {messages?.data?.map((message) => (
                 <Message
                   message={message}
                   chatParticipantId={Number(chatParticipant?.id)}
@@ -179,6 +201,25 @@ export const Conversations: React.FC = () => {
                   key={message.id}
                 />
               ))}
+
+              <Show.When
+                isTrue={Boolean(
+                  messages?.totalPages && messages?.totalPages > 1
+                )}
+              >
+                <CenteredVertialLayout
+                  space="0.25rem"
+                  className="min-h-8 overflow-y-hidden overflow-x-auto"
+                >
+                  {Array(messages?.totalPages)
+                    .fill(null)
+                    .map((_, index) => (
+                      <Button size="small" className="font-bold">
+                        {index + 1}
+                      </Button>
+                    ))}
+                </CenteredVertialLayout>
+              </Show.When>
             </StackLayout>
 
             <Show.When isTrue={isAnyChatSelected}>

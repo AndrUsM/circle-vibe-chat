@@ -201,10 +201,10 @@
     formik "^2.4.6"
     js-cookie "^3.0.5"
 
-"@circle-vibe/shared@1.2.2":
-  version "1.2.2"
-  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.2.2.tgz#770b4f19714a8557241705f0d08bcfcaad43bc2f"
-  integrity sha512-RyGF/CTfh8LUMmji/cXOuucVuiRdhm8DYaMIidouYEgN0MK4Zi03GEQUo7BLNiEUMQaxwAXPO+pR4wopGAzZFA==
+"@circle-vibe/shared@1.2.3":
+  version "1.2.3"
+  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.2.3.tgz#56f99cc719afcbe6aa2608195c0b6487747a0f23"
+  integrity sha512-CtIn6gHYVedOmEaI7JPGRNmWWoPYwEFnj46VqoDGAA5xAl3U6CFxTYBn7iwWvEDZwT/sEf7Pd1wAlKU7N9Ddzg==
   dependencies:
     date-fns "^4.1.0"
     formik "^2.4.6"

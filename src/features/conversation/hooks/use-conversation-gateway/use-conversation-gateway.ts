@@ -4,6 +4,7 @@ import {
   ChatParticipant,
   ChatSocketCommand,
   Message,
+  PaginatedResponse,
 } from "@circle-vibe/shared";
 import { useCurrentUser, useNotification, useSocket } from "@core/hooks";
 
@@ -30,21 +31,21 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   const [chatParticipant, setChatParticipant] =
     useState<ChatParticipant | null>(null);
   const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
-  const [chats, setChats] = useState<Chat[]>([]);
-  const [messages, setMessages] = useState<Message[]>([]);
+  const [chats, setChats] = useState<PaginatedResponse<Chat> | null>(null);
+  const [messages, setMessages] = useState<PaginatedResponse<Message> | null>(null);
   const isAnyChatSelected = Boolean(selectedChatId);
   const isSavedMessagesSelected = useMemo(() => {
-    const currentChat = chats.find((chat) => chat.id === selectedChatId);
+    const currentChat = chats?.data.find((chat) => chat.id === selectedChatId);
 
     return currentChat?.isSavedMessages;
   }, [chats, selectedChatId]);
 
-  const handleRefreshChats = (chats: Chat[]) => {
+  const handleRefreshChats = (chats: PaginatedResponse<Chat>) => {
     setChats(chats);
   };
 
-  const handleReceiveMessages = (messages: { data: Message[] }) => {
-    setMessages(messages.data);
+  const handleReceiveMessages = (messages: PaginatedResponse<Message>) => {
+    setMessages(messages);
 
     if (!isSavedMessagesSelected) {
       socket.emit(ChatSocketCommand.REFRESH_CHATS, chatParticipant?.chatId);
@@ -67,7 +68,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
 
   const handleNotifyNewMessage = () => {
     if (chatParticipant?.isMuted) {
-      return
+      return;
     }
 
     notification({
@@ -87,7 +88,6 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       ChatSocketCommand.NOTIFY_ABOUT_NEW_MESSAGE,
       handleNotifyNewMessage
     );
-
 
     return () => {
       socket.off(ChatSocketCommand.REFRESH_CHATS, handleRefreshChats);
