@@ -39,41 +39,45 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     return currentChat?.isSavedMessages;
   }, [chats, selectedChatId]);
 
+  const handleRefreshChats = (chats: Chat[]) => {
+    setChats(chats);
+  };
+
+  const handleReceiveMessages = (messages: { data: Message[] }) => {
+    setMessages(messages.data);
+
+    if (!isSavedMessagesSelected) {
+      socket.emit(ChatSocketCommand.REFRESH_CHATS, chatParticipant?.chatId);
+    }
+  };
+
+  const handleJoinChat = ({
+    chatParticipant,
+  }: {
+    chatParticipant: ChatParticipant;
+  }) => {
+    setChatParticipant(chatParticipant);
+  };
+
+  const handleScrollToEnd = () => {
+    setTimeout(() => {
+      onScrollMessages();
+    }, 500);
+  };
+
+  const handleNotifyNewMessage = () => {
+    if (chatParticipant?.isMuted) {
+      return
+    }
+
+    notification({
+      type: "success",
+      content: "New messages received",
+    });
+  };
+
   useEffect(() => {
     socket.emit(ChatSocketCommand.REFRESH_CHATS);
-
-    const handleRefreshChats = (chats: Chat[]) => {
-      setChats(chats);
-    };
-
-    const handleReceiveMessages = (messages: { data: Message[] }) => {
-      setMessages(messages.data);
-
-      if (!isSavedMessagesSelected) {
-        socket.emit(ChatSocketCommand.REFRESH_CHATS, chatParticipant?.chatId);
-      }
-    };
-
-    const handleJoinChat = ({
-      chatParticipant,
-    }: {
-      chatParticipant: ChatParticipant;
-    }) => {
-      setChatParticipant(chatParticipant);
-    };
-
-    const handleScrollToEnd = () => {
-      setTimeout(() => {
-        onScrollMessages();
-      }, 500);
-    };
-
-    const handleNotifyNewMessage = () => {
-      notification({
-        type: "success",
-        content: "New messages received",
-      });
-    };
 
     socket.on(ChatSocketCommand.REFRESH_CHATS, handleRefreshChats);
     socket.on(ChatSocketCommand.RECEIVE_MESSAGES, handleReceiveMessages);
@@ -83,6 +87,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       ChatSocketCommand.NOTIFY_ABOUT_NEW_MESSAGE,
       handleNotifyNewMessage
     );
+
 
     return () => {
       socket.off(ChatSocketCommand.REFRESH_CHATS, handleRefreshChats);
@@ -97,7 +102,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
         handleNotifyNewMessage
       );
     };
-  }, []);
+  }, [socket]);
 
   return useMemo(
     () => ({

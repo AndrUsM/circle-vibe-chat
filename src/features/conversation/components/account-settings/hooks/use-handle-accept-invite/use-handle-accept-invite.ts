@@ -1,4 +1,4 @@
-import { useAcceptInvite } from "@features/conversation/hooks";
+import { useAcceptInvite } from "@features/conversation";
 import { useCallback } from "react";
 import { AcceptInviteFormValues } from "../../types";
 import { useNotification } from "@core/hooks";

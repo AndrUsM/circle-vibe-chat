@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
@@ -18,7 +18,6 @@ import {
   FormSubmitButton,
   Button,
   FormControlTextarea,
-  CenteredVertialLayout,
 } from "@circle-vibe/components";
 import * as Resizer from "@column-resizer/react";
 
@@ -31,25 +30,19 @@ import {
 import {
   useConversationGateway,
   useInitialChatSelection,
+  AccountSettings,
+  Chat,
+  ConversationForm,
+  useScrollToBlockPosition,
 } from "@features/conversation";
 
 import { useSocket } from "@core/hooks";
-import {
-  TopbarLogo,
-  Message,
-  UserAvatar,
-  Chat,
-  Modal,
-} from "@shared/components";
-import {
-  AccountSettings,
-  ConversationForm,
-} from "@features/conversation/components";
-import { useScrollToBlockPosition } from "@features/conversation/hooks";
+import { TopbarLogo, UserAvatar, Modal } from "@shared/components";
 
 import { TopbarActions } from "./topbar-actions";
 
 import "./conversation.scss";
+import { Message } from "@features/messages/components";
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
@@ -59,7 +52,7 @@ export const Conversations: React.FC = () => {
   const onScrollToPosition = useScrollToBlockPosition();
   const messagesRef = useRef<HTMLDivElement>(null);
   const onScrollMessages = () => {
-    if (Boolean(messagesRef?.current?.scrollTop)){
+    if (Boolean(messagesRef?.current?.scrollTop)) {
       return;
     }
 
@@ -137,9 +130,10 @@ export const Conversations: React.FC = () => {
           minSize={100}
         >
           <StackLayout className="w-full p-3 overflow-y-auto">
-            <CenteredVertialLayout
+            <StackLayout
               space="1rem"
               justifyContent="justify-between"
+              className="flex-wrap"
             >
               <FormControl className="w-full">
                 <FormControlInput
@@ -148,10 +142,14 @@ export const Conversations: React.FC = () => {
                 />
               </FormControl>
 
-              <Button size="medium" onClick={setOpenChatCreationModal}>
+              <Button
+                size="medium"
+                className="w-full"
+                onClick={setOpenChatCreationModal}
+              >
                 Create
               </Button>
-            </CenteredVertialLayout>
+            </StackLayout>
 
             {chats.map((chat) => (
               <Chat
@@ -176,6 +174,7 @@ export const Conversations: React.FC = () => {
               {messages.map((message) => (
                 <Message
                   message={message}
+                  chatParticipantId={Number(chatParticipant?.id)}
                   isSavedMessages={isSavedMessagesChat}
                   key={message.id}
                 />

@@ -17,6 +17,7 @@ interface ISocketContext {
   socket: Socket;
   videoSocket: Socket | null;
   createVideoSocketConnection(): Promise<Socket<any, any> | undefined>;
+  connectToChatSocket: VoidFunction;
 }
 
 export const SocketContext = createContext<ISocketContext | null>(null);
@@ -28,6 +29,7 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
   const socket = io(`http://localhost:3002/${GatewayNamespaces.CHAT_MAIN}`, {
     transports: ["websocket"],
     autoConnect: false,
+    reconnection: false,
     auth: {
       token: cookiesService.get("auth-token"),
       personalToken: user?.privateToken,
@@ -57,19 +59,27 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
     return videoSocketConnection;
   }, []);
 
+  const connectToChatSocket = useCallback(() => {
+    if (socket.connected) {
+      return;
+    }
+
+    socket.connect();
+  }, [socket]);
+
   useEffect(() => {
     if (!user) {
       return;
     }
 
-    if (!socket.connected) {
+    if (!socket?.connected) {
       socket.connect();
     }
-  }, [user]);
+  }, [user, socket]);
 
   const value = useMemo(
-    () => ({ socket, videoSocket, createVideoSocketConnection }),
-    [socket, videoSocket, createVideoSocketConnection]
+    () => ({ socket, videoSocket, createVideoSocketConnection, connectToChatSocket }),
+    [socket, videoSocket, createVideoSocketConnection, connectToChatSocket]
   );
 
   return (

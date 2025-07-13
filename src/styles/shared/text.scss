@@ -8,32 +8,72 @@
   &-pre-wrap {
     white-space: pre-wrap;
   }
-}
 
-@for $i from 0 through 100 {
-  .text-#{$i} {
-    font-size: #{$i * 0.25}rem;
+  &-nowrap {
+    white-space: nowrap;
   }
 }
 
-.text-left   { text-align: left; }
-.text-center { text-align: center; }
-.text-right  { text-align: right; }
-.text-justify { text-align: justify; }
+.text-left {
+  text-align: left;
+}
+.text-center {
+  text-align: center;
+}
+.text-right {
+  text-align: right;
+}
+.text-justify {
+  text-align: justify;
+}
 
-.text-base { font-size: 1rem; }
-.text-xs   { font-size: 0.75rem; }
-.text-sm   { font-size: 0.875rem; }
-.text-lg   { font-size: 1.125rem; }
-.text-xl   { font-size: 1.25rem; }
-.text-2xl  { font-size: 1.5rem; }
-.text-3xl  { font-size: 1.875rem; }
-.text-4xl  { font-size: 2.25rem; }
-.text-5xl  { font-size: 3rem; }
-.text-6xl  { font-size: 3.75rem; }
-.text-7xl  { font-size: 4.5rem; }
-.text-8xl  { font-size: 6rem; }
-.text-9xl  { font-size: 8rem; }
+.text-base {
+  font-size: 1rem;
+}
+.text-xs {
+  font-size: 0.75rem;
+}
+.text-sm {
+  font-size: 0.875rem;
+}
+.text-lg {
+  font-size: 1.125rem;
+}
+.text-xl {
+  font-size: 1.25rem;
+}
+.text-2xl {
+  font-size: 1.5rem;
+}
+.text-3xl {
+  font-size: 1.875rem;
+}
+.text-4xl {
+  font-size: 2.25rem;
+}
+.text-5xl {
+  font-size: 3rem;
+}
+.text-6xl {
+  font-size: 3.75rem;
+}
+.text-7xl {
+  font-size: 4.5rem;
+}
+.text-8xl {
+  font-size: 6rem;
+}
+.text-9xl {
+  font-size: 8rem;
+}
+
+.italic {
+  font-style: italic;
+}
+
+.not-italic {
+  font-style: normal;
+}
 
 .font-thin {
   font-weight: 100;
@@ -81,4 +121,20 @@
 
 .text-right {
   text-align: right;
+}
+
+.line-clamp {
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+}
+
+@for $i from 0 through 100 {
+  .line-clamp-#{$i} {
+    -webkit-line-clamp: $i;
+  }
+
+  .text-#{$i} {
+    font-size: #{$i * 0.25}rem;
+  }
 }

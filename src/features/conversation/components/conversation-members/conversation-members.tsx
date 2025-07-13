@@ -10,6 +10,8 @@ import {
   Show,
   HorizontalDivider,
   FormControlTextarea,
+  GridLayout,
+  useCopyToClickboard,
 } from "@circle-vibe/components";
 import {
   ChatParticipant,
@@ -27,9 +29,8 @@ import {
   useGetUserToInvite,
   useGenerateConversationInvite,
   useGetChatParticipants,
-} from "@features/conversation/hooks";
-import { useCopyToClickboard, useNotification } from "@core/hooks";
-import GridLayout from "@shared/components/grid-layout/grid-layout";
+} from "@features/conversation";
+import { useNotification } from "@core/hooks";
 
 interface ConversationMembersProps {
   conversation: Chat;

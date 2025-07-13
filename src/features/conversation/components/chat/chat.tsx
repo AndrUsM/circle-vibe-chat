@@ -11,11 +11,11 @@ import {
 } from "@circle-vibe/components";
 import SharedEnums from "@circle-vibe/shared";
 
-import { MessageShortPreview } from "../message-short-preview";
 import { ChatActions } from "./chat-actions";
 
 import "./chat.scss";
 import { useMemo } from "react";
+import { MessageShortPreview } from "@features/messages/components";
 
 interface ChatProps {
   chat: ChatModel;
@@ -41,7 +41,7 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
     empty,
     updatedAt,
   } = chat;
-  const savedMessagesName = useMemo(
+  const chatName = useMemo(
     () =>
       readableName.includes("saved-messages") || isSavedMessages
         ? t(name)
@@ -55,7 +55,7 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
       justifyContent="space-between"
       alignItems="center"
       className={classNames(
-        "relative overflow-hidden chat p-2 rounded-2 cursor-pointer",
+        "relative overflow-hidden chat p-2 rounded-2 cursor-pointer max-w-full",
         {
           selected: selected,
           "bg-warning": hasUnreadMessages,
@@ -64,13 +64,15 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
       )}
       onClick={onClick}
     >
-      <StackLayout>
-        <span className="block text-lg font-bold">{savedMessagesName}</span>
+      <StackLayout space="0.15rem" className="text-sm max-w-full">
+        <span className="block font-bold">{chatName}</span>
 
         <span>Last seen: {format(updatedAt)}</span>
 
-        <Show.When isTrue={Boolean(lastMessage) && !isSavedMessages}>
-          <MessageShortPreview message={lastMessage as SharedEnums.Message} />
+        <Show.When isTrue={Boolean(lastMessage)}>
+          <div className="p-1">
+            <MessageShortPreview message={lastMessage as SharedEnums.Message} />
+          </div>
         </Show.When>
 
         <Show.When isTrue={Boolean(empty)}>

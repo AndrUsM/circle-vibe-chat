@@ -1,7 +1,7 @@
 import { useCallback } from "react";
 
 import { ChatSocketCommand, CreateChatSocketParams } from "@circle-vibe/shared";
-import { CreateConversationFormValues } from "@features/conversation/components/conversation-form/types";
+import { CreateConversationFormValues } from "@features/conversation";
 
 import { useSocket } from "@core/hooks";
 

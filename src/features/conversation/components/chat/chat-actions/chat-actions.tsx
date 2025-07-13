@@ -11,7 +11,7 @@ import {
   ExtendedReactFunctionalComponent,
 } from "@circle-vibe/components";
 import { Modal } from "@shared/components";
-import { ConversationMembers } from "@features/conversation/components/conversation-members/conversation-members";
+import { ConversationMembers } from "@features/conversation";
 
 // import { cookiesService, localStorageService } from "@core/services";
 // import { useNavigate } from "react-router-dom";

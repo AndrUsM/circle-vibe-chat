@@ -175,10 +175,10 @@
     "@babel/helper-string-parser" "^7.25.9"
     "@babel/helper-validator-identifier" "^7.25.9"
 
-"@circle-vibe/components@1.0.3":
-  version "1.0.3"
-  resolved "https://registry.yarnpkg.com/@circle-vibe/components/-/components-1.0.3.tgz#53b6f76d757c4e067071c2505b70c58884b35f56"
-  integrity sha512-iGnGricU5W2YlVyM+45Ud9lgNivspg7GWftfQQmUyPdOEihWcr2g/ElfckaV78IHiBGVtNNCZvHV8ePAyll/Pg==
+"@circle-vibe/components@1.0.7":
+  version "1.0.7"
+  resolved "https://registry.yarnpkg.com/@circle-vibe/components/-/components-1.0.7.tgz#b8fbb8164b92abba337b0d64c4b93a9753f915d8"
+  integrity sha512-WtIWOtcCbVlx+T6m/P+yoUXELUS9vbDr2eFzN1Kzrp7AeLyLqyHS2mNXyQ6rniSB6Q/GErbQRaRYw5JNAPbiyA==
   dependencies:
     "@circle-vibe/shared" "1.2.0"
     "@coreui/icons" "^3.0.1"
@@ -201,10 +201,10 @@
     formik "^2.4.6"
     js-cookie "^3.0.5"
 
-"@circle-vibe/shared@1.2.1":
-  version "1.2.1"
-  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.2.1.tgz#8823df74d5362090bfd66298cc071d06cdc82812"
-  integrity sha512-1aYMh6+wv03w0yMeu/sSoKhZF8xsReqGpdgHGGX3gKtxz4GLAkI7Z5VrRNdanU5pjAidFFqmszrO19xxeHWdyA==
+"@circle-vibe/shared@1.2.2":
+  version "1.2.2"
+  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.2.2.tgz#770b4f19714a8557241705f0d08bcfcaad43bc2f"
+  integrity sha512-RyGF/CTfh8LUMmji/cXOuucVuiRdhm8DYaMIidouYEgN0MK4Zi03GEQUo7BLNiEUMQaxwAXPO+pR4wopGAzZFA==
   dependencies:
     date-fns "^4.1.0"
     formik "^2.4.6"
