@@ -1,4 +1,6 @@
 {
+  "button.actions.confirm": "Confirm",
+  "button.actions.close": "Close",
   "saved-messages": "Saved messages",
   "chat.empty": "There is not messages yet",
   "login.wrong-credentials.message": "Please check email or password",

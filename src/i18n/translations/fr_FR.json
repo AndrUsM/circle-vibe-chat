@@ -1,4 +1,6 @@
 {
+  "button.actions.confirm": "Confirmer",
+  "button.actions.close": "Fermer",
   "saved-messages": "Messages enregistrés",
   "chat.empty": "Il n'y a pas encore de messages",
   "login.wrong-credentials.message": "Veuillez verifier votre email ou votre mot de passe",

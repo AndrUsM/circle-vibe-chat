@@ -22,6 +22,7 @@ import { useSortedByTypeFiles } from "@features/messages";
 import { UserAvatar } from "../../../../_shared/components/user-avatar/user-avatar";
 
 import "./message.scss";
+import { useConfirmation } from "@shared/hooks";
 
 interface MessageProps {
   message: MessageModel;
@@ -40,6 +41,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   const { content, files, messageType, sender, updatedAt } = message;
   const avatarUrl = sender?.user?.avatarUrl;
   const icons = useIcons();
+  const confirm = useConfirmation();
   const formatDateTime = useFormatDatetime();
   const senderFullName = getUserFullName(sender?.user);
   const imageFallback = composeAvatarFallback(sender?.user);
@@ -72,11 +74,11 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   }, [contentSplitNumber, messageFileLimit, content.length]);
 
   const onDeleteMessage = useCallback(() => {
-
+    confirm("Are your sure you want to delete this message?", "danger").then(() => {
+      console.log("remove");
+    });
   }, []);
-  const onUpdateMessage = useCallback(() => {
-
-  }, []);
+  const onUpdateMessage = useCallback(() => {}, []);
 
   return (
     <StackLayout space="0.5rem" className="bg-tertiary rounded-1 p-2 rounded-2">
@@ -161,15 +163,14 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
         justifyContent="space-between"
         className="flex-wrap"
       >
-        <Show.When isTrue={Boolean(sender) && !isSavedMessages}>
-          <ClusterLayout space="0.5rem" alignItems="center">
+        <ClusterLayout space="0.5rem" alignItems="center">
+          <Show.When isTrue={Boolean(sender) && !isSavedMessages}>
             <UserAvatar url={avatarUrl ?? undefined} fallback={imageFallback} />
 
             <div className="italic">{senderFullName}</div>
-          </ClusterLayout>
-        </Show.When>
-
-        <div>{formatDateTime(updatedAt, FormatDateTime.DATE_TIME)}</div>
+          </Show.When>
+          <div>{formatDateTime(updatedAt, FormatDateTime.DATE_TIME)}</div>
+        </ClusterLayout>
 
         <Show.When isTrue={isSavedMessages || sender.id === chatParticipantId}>
           <ClusterLayout space="0.5rem">

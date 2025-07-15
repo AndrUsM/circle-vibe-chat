@@ -1,7 +1,9 @@
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Suspense, useCallback, useMemo, useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import * as Resizer from "@column-resizer/react";
+
 import { ChatSocketCommand, composeAvatarFallback } from "@circle-vibe/shared";
 import {
   ClusterLayout,
@@ -19,14 +21,24 @@ import {
   Button,
   FormControlTextarea,
   CenteredVertialLayout,
+  LoadingOverlay,
 } from "@circle-vibe/components";
-import * as Resizer from "@column-resizer/react";
+
+import { useSocket } from "@core/hooks";
+import {
+  TopbarLogo,
+  UserAvatar,
+  Modal,
+  PaginationControls,
+  PaginationScrollButton,
+} from "@shared/components";
 
 import {
   MESSAGE_FORM_INITIAL_VALUE,
   MESSAGE_FORM_VALIDATION_SCHEMA,
   MessageFormValues,
   useSendMessage,
+  Message,
 } from "@features/messages";
 import {
   useConversationGateway,
@@ -37,13 +49,9 @@ import {
   useScrollToBlockPosition,
 } from "@features/conversation";
 
-import { useSocket } from "@core/hooks";
-import { TopbarLogo, UserAvatar, Modal } from "@shared/components";
-
 import { TopbarActions } from "./topbar-actions";
 
 import "./conversation.scss";
-import { Message } from "@features/messages/components";
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
@@ -63,10 +71,17 @@ export const Conversations: React.FC = () => {
     user,
     chatParticipant,
     selectedChatId,
-    setSelectedChatId,
     chats,
     messages,
     isAnyChatSelected,
+    messagesPage,
+    chatsPage,
+    chatsLoading,
+    messagesLoading,
+    resetMessagesState,
+    setSelectedChatId,
+    triggerGetPaginatedMessages,
+    triggerGetPaginatedChats,
   } = useConversationGateway(onScrollMessages);
 
   const allowToPreselectChat = Boolean(selectedChatId || chatParticipant);
@@ -76,7 +91,9 @@ export const Conversations: React.FC = () => {
       return;
     }
 
+    resetMessagesState();
     setSelectedChatId(chatId);
+
     socket.emit(ChatSocketCommand.JOIN_CHAT, { chatId });
   };
 
@@ -112,10 +129,13 @@ export const Conversations: React.FC = () => {
         <TopbarLogo />
 
         <ClusterLayout space="1.15rem">
-          <UserAvatar
-            fallback={avatarFallback}
-            onClick={() => setOpenAccountSettings(true)}
-          />
+          <Tooltip title="Account settings">
+            <UserAvatar
+              className="cursor-pointer"
+              fallback={avatarFallback}
+              onClick={() => setOpenAccountSettings(true)}
+            />
+          </Tooltip>
 
           <Link to={"/settings"}>
             <Tooltip title="Settings">
@@ -131,7 +151,7 @@ export const Conversations: React.FC = () => {
 
       <Resizer.Container className="conversations">
         <Resizer.Section
-          className="flex items-center justify-center w-full"
+          className="relative flex items-center justify-center w-full"
           minSize={100}
         >
           <StackLayout className="w-full p-3 overflow-y-auto">
@@ -166,23 +186,16 @@ export const Conversations: React.FC = () => {
               />
             ))}
 
-            <Show.When
-              isTrue={Boolean(chats?.totalPages && chats?.totalPages > 1)}
-            >
-              <CenteredVertialLayout
-                space="0.25rem"
-                className="min-h-8 overflow-y-hidden overflow-x-auto"
-              >
-                {Array(chats?.totalPages)
-                  .fill(null)
-                  .map((_, index) => (
-                    <Button size="small" className="font-bold">
-                      {index + 1}
-                    </Button>
-                  ))}
-              </CenteredVertialLayout>
-            </Show.When>
+            <PaginationControls
+              paginatedResponse={chats}
+              currentPage={chatsPage}
+              onPageChange={triggerGetPaginatedChats}
+            />
           </StackLayout>
+
+          <Show.When isTrue={chatsLoading}>
+            <LoadingOverlay />
+          </Show.When>
         </Resizer.Section>
 
         <Resizer.Bar
@@ -190,7 +203,10 @@ export const Conversations: React.FC = () => {
           className="transition bg-secondary cursor-resize"
         />
 
-        <Resizer.Section className="flex items-center w-full" minSize={100}>
+        <Resizer.Section
+          className="relative flex items-center w-full"
+          minSize={100}
+        >
           <StackLayout justifyContent="end" className="w-full p-3">
             <StackLayout ref={messagesRef} className="overflow-y-auto">
               {messages?.data?.map((message) => (
@@ -201,26 +217,19 @@ export const Conversations: React.FC = () => {
                   key={message.id}
                 />
               ))}
-
-              <Show.When
-                isTrue={Boolean(
-                  messages?.totalPages && messages?.totalPages > 1
-                )}
-              >
-                <CenteredVertialLayout
-                  space="0.25rem"
-                  className="min-h-8 overflow-y-hidden overflow-x-auto"
-                >
-                  {Array(messages?.totalPages)
-                    .fill(null)
-                    .map((_, index) => (
-                      <Button size="small" className="font-bold">
-                        {index + 1}
-                      </Button>
-                    ))}
-                </CenteredVertialLayout>
-              </Show.When>
             </StackLayout>
+
+            <CenteredVertialLayout
+              space="0.5rem"
+              justifyContent="space-between"
+            >
+              <PaginationControls
+                paginatedResponse={messages}
+                currentPage={messagesPage}
+                onPageChange={triggerGetPaginatedMessages}
+              />
+              <PaginationScrollButton messagesRef={messagesRef} />
+            </CenteredVertialLayout>
 
             <Show.When isTrue={isAnyChatSelected}>
               <Form
@@ -263,6 +272,10 @@ export const Conversations: React.FC = () => {
               </Form>
             </Show.When>
           </StackLayout>
+
+          <Show.When isTrue={messagesLoading}>
+            <LoadingOverlay />
+          </Show.When>
         </Resizer.Section>
       </Resizer.Container>
 
@@ -277,7 +290,15 @@ export const Conversations: React.FC = () => {
         isOpen={openChatCreationModal}
         onClose={() => setOpenChatCreationModal(false)}
       >
-        <ConversationForm />
+        <StackLayout>
+          <section>
+            <p className="text-2xl font-semibold">Create conversation</p>
+
+            <HorizontalDivider color="var(--cv-bg-secondary)" />
+          </section>
+
+          <ConversationForm />
+        </StackLayout>
       </Modal>
     </section>
   );

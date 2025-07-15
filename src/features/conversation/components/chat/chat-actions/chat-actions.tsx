@@ -43,7 +43,6 @@ export const ChatActions: ExtendedReactFunctionalComponent<
   return (
     <>
       <Menu
-        backgroundColorOfContent="red"
         zIndex={10}
         button={() => <Icon name={icons.cilOptions} size={24} />}
       >

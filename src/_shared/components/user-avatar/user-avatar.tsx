@@ -1,9 +1,9 @@
 import { useState } from "react";
+import classNames from "classnames";
 
 import { ExtendedReactFunctionalComponent, Show } from "@circle-vibe/components";
 
 import "./user-avatar.scss";
-import classNames from "classnames";
 
 interface UserAvatarProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   url?: string;

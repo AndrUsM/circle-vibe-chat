@@ -15,6 +15,7 @@
 @use "./shared/width.scss";
 @use "./shared/position.scss";
 @use "./shared/images.scss";
+@use "./shared/animations.scss";
 
 @use './shared/button.scss';
 @use './shared/form.scss';
@@ -26,6 +27,7 @@ body, html {
   margin: 0;
   padding: 0;
   height: 100%;
+  color: var(--cv-base);
 }
 
 .root {

@@ -5,8 +5,14 @@ import {
   ChatSocketCommand,
   Message,
   PaginatedResponse,
+  RequestChatsWithPaginationChatSocketParams,
+  RequestMessagesWithPaginationChatSocketParams,
+  DEFAULT_PAGINATION_PAGE_SIZE,
 } from "@circle-vibe/shared";
 import { useCurrentUser, useNotification, useSocket } from "@core/hooks";
+import { composePaginationResponse } from "@shared/utils";
+import { request } from "@core/request";
+import { cookiesService } from "@core/services";
 
 /**
  * Handles the state of the conversation gateway for the current user.
@@ -28,11 +34,17 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   const { user } = useCurrentUser();
   const notification = useNotification();
   const { socket } = useSocket();
+  const [chatsLoading, setChatsLoading] = useState(false);
+  const [messagesLoading, setMessagesLoading] = useState(false);
+  const [messagesPage, setMessagesPage] = useState(1);
+  const [chatsPage, setChatsPage] = useState(1);
   const [chatParticipant, setChatParticipant] =
     useState<ChatParticipant | null>(null);
   const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
   const [chats, setChats] = useState<PaginatedResponse<Chat> | null>(null);
-  const [messages, setMessages] = useState<PaginatedResponse<Message> | null>(null);
+  const [messages, setMessages] = useState<PaginatedResponse<Message> | null>(
+    null
+  );
   const isAnyChatSelected = Boolean(selectedChatId);
   const isSavedMessagesSelected = useMemo(() => {
     const currentChat = chats?.data.find((chat) => chat.id === selectedChatId);
@@ -40,15 +52,24 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     return currentChat?.isSavedMessages;
   }, [chats, selectedChatId]);
 
-  const handleRefreshChats = (chats: PaginatedResponse<Chat>) => {
-    setChats(chats);
+  const resetMessagesState = () => {
+    setMessagesPage(1);
+    setMessages(null);
+    setMessagesLoading(true);
+  }
+
+  const handleReceiveChats = (chats: PaginatedResponse<Chat>) => {
+    setChatsPage(1);
+    setChats(composePaginationResponse(chats));
+    setChatsLoading(false);
   };
 
   const handleReceiveMessages = (messages: PaginatedResponse<Message>) => {
-    setMessages(messages);
+    setMessages(composePaginationResponse(messages));
+    setMessagesLoading(false);
 
     if (!isSavedMessagesSelected) {
-      socket.emit(ChatSocketCommand.REFRESH_CHATS, chatParticipant?.chatId);
+      socket.emit(ChatSocketCommand.RECEIVE_CHATS, chatParticipant?.chatId);
     }
   };
 
@@ -57,6 +78,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   }: {
     chatParticipant: ChatParticipant;
   }) => {
+    setMessagesPage(1);
     setChatParticipant(chatParticipant);
   };
 
@@ -77,10 +99,50 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     });
   };
 
-  useEffect(() => {
-    socket.emit(ChatSocketCommand.REFRESH_CHATS);
+  const triggerGetPaginatedMessages = (page: number) => {
+    if (!selectedChatId || page === messagesPage) {
+      return;
+    }
 
-    socket.on(ChatSocketCommand.REFRESH_CHATS, handleRefreshChats);
+    setMessagesPage(page);
+
+    const params: RequestMessagesWithPaginationChatSocketParams = {
+      chatId: selectedChatId,
+      page,
+      pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
+    };
+
+    setMessagesLoading(true);
+    socket.emit(ChatSocketCommand.REQUEST_MESSAGES_WITH_PAGINATION, params);
+  };
+
+  const triggerGetPaginatedChats = (page: number) => {
+    if (chats?.totalItems && page === chatsPage) {
+      return;
+    }
+
+    setMessagesPage(page);
+    setChatsLoading(true);
+
+    const userId = user?.id;
+    const params: RequestChatsWithPaginationChatSocketParams = {
+      userId,
+      page,
+      pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
+    };
+
+    socket.emit(ChatSocketCommand.REQUEST_CHATS_WITH_PAGINATION, params);
+  };
+
+  const refreshToken = (token: string) => {
+    cookiesService.set("auth-token", token);
+  };
+
+  useEffect(() => {
+    triggerGetPaginatedChats(1);
+
+    socket.on(ChatSocketCommand.REFRESH_TOKEN, refreshToken);
+    socket.on(ChatSocketCommand.RECEIVE_CHATS, handleReceiveChats);
     socket.on(ChatSocketCommand.RECEIVE_MESSAGES, handleReceiveMessages);
     socket.on(ChatSocketCommand.JOIN_CHAT, handleJoinChat);
     socket.on(ChatSocketCommand.SCROLL_TO_END_OF_MESSAGES, handleScrollToEnd);
@@ -90,7 +152,8 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     );
 
     return () => {
-      socket.off(ChatSocketCommand.REFRESH_CHATS, handleRefreshChats);
+      socket.off(ChatSocketCommand.REFRESH_TOKEN, refreshToken);
+      socket.off(ChatSocketCommand.RECEIVE_CHATS, handleReceiveChats);
       socket.off(ChatSocketCommand.RECEIVE_MESSAGES, handleReceiveMessages);
       socket.off(ChatSocketCommand.JOIN_CHAT, handleJoinChat);
       socket.off(
@@ -107,23 +170,34 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   return useMemo(
     () => ({
       user,
+      messagesPage,
+      chatsPage,
       chatParticipant,
-      setChatParticipant,
       selectedChatId,
-      setSelectedChatId,
       chats,
       messages,
       isAnyChatSelected,
+      chatsLoading,
+      messagesLoading,
+      resetMessagesState,
+      setChatParticipant,
+      setSelectedChatId,
+      triggerGetPaginatedChats,
+      triggerGetPaginatedMessages,
     }),
     [
       user,
+      chatsPage,
+      messagesPage,
       chatParticipant,
-      setChatParticipant,
       selectedChatId,
-      setSelectedChatId,
       chats,
       messages,
       isAnyChatSelected,
+      chatsLoading,
+      messagesLoading,
+      setChatParticipant,
+      setSelectedChatId,
     ]
   );
 };

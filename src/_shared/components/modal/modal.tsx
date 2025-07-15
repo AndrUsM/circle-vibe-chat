@@ -1,16 +1,18 @@
 import { useEffect } from "react";
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import { CustomCssVariables, ExtendedReactFunctionalComponent } from "@circle-vibe/components";
 
 import './modal.scss';
 
 interface ModalProps {
   onClose: () => void;
   isOpen: boolean;
+  minWidth?: string;
 }
 
 export const Modal: ExtendedReactFunctionalComponent<ModalProps> = ({
   onClose,
   isOpen,
+  minWidth,
   children,
 }) => {
   useEffect(() => {
@@ -34,6 +36,9 @@ export const Modal: ExtendedReactFunctionalComponent<ModalProps> = ({
         role="dialog"
         aria-modal="true"
         onClick={(e) => e.stopPropagation()}
+        style={{
+          "--modal-min-width": minWidth,
+        } as CustomCssVariables}
       >
         <button className="modal-close" onClick={onClose}>
           ×
