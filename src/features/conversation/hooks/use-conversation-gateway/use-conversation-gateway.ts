@@ -116,11 +116,9 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     socket.emit(ChatSocketCommand.REQUEST_MESSAGES_WITH_PAGINATION, params);
   };
 
-  const triggerGetPaginatedChats = (page: number) => {
-    if (chats?.totalItems && page === chatsPage) {
-      return;
-    }
-
+  const triggerGetPaginatedChats = (page: number, filters?: {
+    name?: string,
+  }) => {
     setMessagesPage(page);
     setChatsLoading(true);
 
@@ -129,10 +127,15 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       userId,
       page,
       pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
+      name: filters?.name
     };
 
     socket.emit(ChatSocketCommand.REQUEST_CHATS_WITH_PAGINATION, params);
   };
+
+  const triggerSearchChatsByName = (name: string) => {
+    triggerGetPaginatedChats(1, { name });
+  }
 
   const refreshToken = (token: string) => {
     cookiesService.set("auth-token", token);
@@ -183,6 +186,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       setChatParticipant,
       setSelectedChatId,
       triggerGetPaginatedChats,
+      triggerSearchChatsByName,
       triggerGetPaginatedMessages,
     }),
     [
@@ -198,6 +202,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       messagesLoading,
       setChatParticipant,
       setSelectedChatId,
+      triggerSearchChatsByName,
     ]
   );
 };

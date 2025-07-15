@@ -1,7 +1,8 @@
-import { Suspense, useCallback, useMemo, useRef, useState } from "react";
+import { useCallback, useMemo, useRef, useState } from "react";
 import { FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
+import { useDebouncedCallback } from "use-debounce";
 import * as Resizer from "@column-resizer/react";
 
 import { ChatSocketCommand, composeAvatarFallback } from "@circle-vibe/shared";
@@ -13,7 +14,6 @@ import {
   HorizontalDivider,
   useIcons,
   Form,
-  FormControlInput,
   FormControl,
   FormikFormControl,
   Show,
@@ -22,6 +22,7 @@ import {
   FormControlTextarea,
   CenteredVertialLayout,
   LoadingOverlay,
+  Input,
 } from "@circle-vibe/components";
 
 import { useSocket } from "@core/hooks";
@@ -82,7 +83,15 @@ export const Conversations: React.FC = () => {
     setSelectedChatId,
     triggerGetPaginatedMessages,
     triggerGetPaginatedChats,
+    triggerSearchChatsByName,
   } = useConversationGateway(onScrollMessages);
+
+  const debouncedChatSearch = useDebouncedCallback(
+    (value) => {
+      triggerSearchChatsByName(value);
+    },
+    1000
+  );
 
   const allowToPreselectChat = Boolean(selectedChatId || chatParticipant);
 
@@ -161,9 +170,12 @@ export const Conversations: React.FC = () => {
               className="flex-wrap"
             >
               <FormControl className="w-full">
-                <FormControlInput
+                <Input
                   className="p-4 rounded-2"
                   placeholder="Search..."
+                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                    debouncedChatSearch(String(e.target.value));
+                  }}
                 />
               </FormControl>
 

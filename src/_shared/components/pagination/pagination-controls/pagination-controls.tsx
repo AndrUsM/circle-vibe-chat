@@ -12,6 +12,13 @@ export const PaginationControls: ExtendedReactFunctionalComponent<PaginationCont
   currentPage,
   onPageChange,
 }) => {
+  const onPageSelect = (page: number) => {
+    if (page === currentPage) {
+      return;
+    }
+
+    onPageChange(page);
+  }
   return (
     <Show.When
       isTrue={Boolean(paginatedResponse?.totalPages && paginatedResponse?.totalPages > 1)}
@@ -28,7 +35,7 @@ export const PaginationControls: ExtendedReactFunctionalComponent<PaginationCont
               size="small"
               className="font-bold"
               color={currentPage === index + 1 ? "primary" : "secondary"}
-              onClick={() => onPageChange(index + 1)}
+              onClick={() => onPageSelect(index + 1)}
             >
               {index + 1}
             </Button>
