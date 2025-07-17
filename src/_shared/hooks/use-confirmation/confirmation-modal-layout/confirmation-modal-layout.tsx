@@ -26,7 +26,7 @@ export const ConfirmationModalLayout: ExtendedReactFunctionalComponent<
 
       <HorizontalDivider color="var(--cv-bg-secondary)" />
 
-      <ClusterLayout justifyContent="center" space="2rem" alignItems="center">
+      <ClusterLayout justifyContent="center" space="1.5rem" alignItems="center">
         <Button size="medium" color="secondary" onClick={onClose}>
           {t("button.actions.close")}
         </Button>
