@@ -4,7 +4,6 @@ import { useCallback } from "react";
 import {
   ChatParticipant,
   ChatSocketCommand,
-  DEFAULT_PAGINATION_PAGE_SIZE,
   MessageType,
   SendMessageChatSocketParams,
 } from "@circle-vibe/shared";
@@ -16,22 +15,25 @@ import {
   getMessageType,
 } from "@features/messages/utils";
 
-import { useSendVideo } from "../use-send-video";
 import { useSendFileMessage } from "../use-send-file-message/use-file-message";
+import { useSendVideoAsBuffer } from "../use-send-video-as-buffer";
 
 export const useSendMessage = (
   chatParticipant: ChatParticipant | null,
-  selectedChatId: number | null
+  selectedChatId: number | null,
+  setMessagesLoading: (loading: boolean) => void
 ) => {
   const { socket } = useSocket();
-  const sendVideo = useSendVideo();
+  const sendVideo = useSendVideoAsBuffer();
   const sendFileMessage = useSendFileMessage();
 
   return useCallback(
     async (
       formValues: MessageFormValues,
-      { resetForm }: FormikHelpers<MessageFormValues>
+      { resetForm, setFieldValue }: FormikHelpers<MessageFormValues>
     ) => {
+      setMessagesLoading(true);
+
       const hasContent = Boolean(formValues.content || formValues.file);
 
       if (!hasContent) {
@@ -46,22 +48,22 @@ export const useSendMessage = (
         const messageType = getMessageType(formValues);
 
         if (messageType === MessageType.VIDEO) {
-          const messageInputDto: SendMessageChatSocketParams =
-            composeCreateMessageParams(
-              chatParticipant,
-              selectedChatId,
-              formValues
-            );
+          try {
+            const messageInputDto: SendMessageChatSocketParams =
+              composeCreateMessageParams(
+                chatParticipant,
+                selectedChatId,
+                formValues
+              );
 
-          await sendVideo(formValues.file, messageInputDto);
+            await sendVideo(formValues.file, messageInputDto);
 
-          socket.emit(ChatSocketCommand.REQUEST_MESSAGES_WITH_PAGINATION, {
-            chatId: selectedChatId,
-            page: 1,
-            pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
-          });
+            resetForm();
+            setMessagesLoading(false);
+          } catch (error) {
+            setMessagesLoading(false);
+          }
 
-          resetForm();
           return;
         }
 
@@ -72,7 +74,9 @@ export const useSendMessage = (
         );
 
         await sendFileMessage(formValues.file, createMessageInput);
+
         resetForm();
+        setMessagesLoading(false);
       } else {
         const messageDto: SendMessageChatSocketParams =
           composeCreateMessageParams(
@@ -85,6 +89,7 @@ export const useSendMessage = (
       }
 
       resetForm();
+      setMessagesLoading(false);
     },
     [socket, chatParticipant, selectedChatId]
   );

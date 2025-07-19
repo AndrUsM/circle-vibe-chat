@@ -7,3 +7,4 @@ export * from './use-accept-invite';
 export * from './use-handle-chat-creation';
 export * from './use-scroll-to-block-position';
 export * from './use-active-conversation';
+export * from './use-convert-video-to-mp4';

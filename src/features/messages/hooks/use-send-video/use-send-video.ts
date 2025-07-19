@@ -57,7 +57,7 @@ export const useSendVideo = () => {
 
             socket.emit(
               ChatSocketCommand.SEND_VIDEO_FILE_MESSAGE,
-              composeSendVideoFileMessageParams(messageInputDto, filePath, file)
+              composeSendVideoFileMessageParams(messageInputDto, filePath, filePath, file)
             );
 
             videoSocket.disconnect();

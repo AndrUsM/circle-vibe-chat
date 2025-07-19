@@ -60,12 +60,12 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
   }, []);
 
   const connectToChatSocket = useCallback(() => {
-    if (socket.connected) {
+    if (socket?.connected) {
       return;
     }
 
     socket.connect();
-  }, [socket]);
+  }, [socket.id, socket.disconnected]);
 
   useEffect(() => {
     if (!user) {
@@ -75,7 +75,7 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
     if (!socket?.connected) {
       socket.connect();
     }
-  }, [user, socket.connected]);
+  }, [user, socket?.disconnected]);
 
   const value = useMemo(
     () => ({ socket, videoSocket, createVideoSocketConnection, connectToChatSocket }),

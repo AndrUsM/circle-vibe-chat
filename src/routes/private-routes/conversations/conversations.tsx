@@ -59,7 +59,7 @@ import "./conversation.scss";
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
   const confirm = useConfirmation();
-  const { cilSettings, cilFile, cilReload } = useIcons();
+  const { cilSettings, cilFile } = useIcons();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const onScrollToPosition = useScrollToBlockPosition();
   const messagesRef = useRef<HTMLDivElement>(null);

@@ -1,4 +1,8 @@
-import { UploadFileOutputDto, UploadImageOutputDto } from "@circle-vibe/shared";
+import {
+  UploadFileOutputDto,
+  UploadImageOutputDto,
+  UploadVideoOutputDto,
+} from "@circle-vibe/shared";
 import { fileServerRequest } from "@core/request";
 
 export const useSendFile = () => {
@@ -8,7 +12,6 @@ export const useSendFile = () => {
 
     const response = await fileServerRequest({
       method: "POST",
-
       url: "/files/upload",
       data,
     });
@@ -29,8 +32,22 @@ export const useSendFile = () => {
     return response.data as UploadImageOutputDto;
   };
 
+  const uploadVideo = async (file: File) => {
+    const data = new FormData();
+    data.append("video", file);
+
+    const response = await fileServerRequest({
+      method: "POST",
+      url: "/videos/upload",
+      data,
+    });
+
+    return response.data as UploadVideoOutputDto;
+  };
+
   return {
     uploadFile,
     uploadImage,
+    uploadVideo,
   };
 };

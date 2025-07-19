@@ -72,10 +72,13 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   const resetMessagesState = () => {
     setMessagesPage(1);
     setMessages(null);
-    setMessagesLoading(true);
   };
 
-  const handleSendMessage = useSendMessage(chatParticipant, selectedChatId);
+  const handleSendMessage = useSendMessage(
+    chatParticipant,
+    selectedChatId,
+    setMessagesLoading,
+  );
 
   const socketListenerReceiveChats = (chats: PaginatedResponse<Chat>) => {
     setChatsPage(1);
@@ -163,9 +166,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     cookiesService.set("auth-token", token);
   };
 
-  useEffect(() => {
-    triggerGetPaginatedChats(1);
-
+  const subscribeToListeners = () => {
     socket.on(ChatSocketCommand.REFRESH_TOKEN, socketListenerRefreshToken);
     socket.on(ChatSocketCommand.RECEIVE_CHATS, socketListenerReceiveChats);
     socket.on(
@@ -181,6 +182,11 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       ChatSocketCommand.NOTIFY_ABOUT_NEW_MESSAGE,
       socketListenerNotifyNewMessage
     );
+  };
+
+  useEffect(() => {
+    triggerGetPaginatedChats(1);
+    subscribeToListeners();
 
     return () => {
       socket.off(ChatSocketCommand.REFRESH_TOKEN, socketListenerRefreshToken);
