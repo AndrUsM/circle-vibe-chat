@@ -2,15 +2,16 @@ import { ChatParticipant, SendMessageChatSocketParams } from "@circle-vibe/share
 import { MessageFormValues } from "@features/messages/types";
 
 import { getMessageType } from "./get-message-type";
+import { encodeBase64 } from "@core/utils";
 
 export const composeCreateMessageParams = (
   chatParticipant: ChatParticipant,
   selectedChatId: number,
-  formValues: MessageFormValues
+  formValues: MessageFormValues,
 ): SendMessageChatSocketParams => {
   const messageType = getMessageType(formValues);
   return {
-    content: formValues.content,
+    content: encodeBase64(formValues.content ?? ''),
     chatId: selectedChatId,
     senderId: chatParticipant?.id,
     threadId: undefined,

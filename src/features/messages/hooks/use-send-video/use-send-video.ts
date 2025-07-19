@@ -1,18 +1,25 @@
 import { useCallback } from "react";
 import { useNotification, useSocket } from "@core/hooks";
 import {
+  ChatSocketCommand,
   FileVideoSocketStartUploadParams,
   FileVideoSocketSuccessOutput,
   SendMessageChatSocketParams,
 } from "@circle-vibe/shared";
-import { composeSendVideoFileMessageParams, handleUploadingVideoProcess } from "./utils";
+import {
+  composeSendVideoFileMessageParams,
+  handleUploadingVideoProcess,
+} from "./utils";
 
 export const useSendVideo = () => {
   const { socket, createVideoSocketConnection } = useSocket();
   const notification = useNotification();
 
   return useCallback(
-    async (file: File, messageInputDto: SendMessageChatSocketParams): Promise<void> => {
+    async (
+      file: File,
+      messageInputDto: SendMessageChatSocketParams
+    ): Promise<void> => {
       if (!file) {
         notification({
           type: "error",
@@ -25,7 +32,7 @@ export const useSendVideo = () => {
       const videoSocket = await createVideoSocketConnection();
 
       return new Promise<void>((resolve, reject) => {
-        videoSocket?.on("connect", async () => {
+        videoSocket?.on("connect", () => {
           const startVideoUploadPayload: FileVideoSocketStartUploadParams = {
             fileName: file.name,
           };
@@ -37,7 +44,7 @@ export const useSendVideo = () => {
             content: `Started uploading video ${file.name}`,
           });
 
-          await handleUploadingVideoProcess(file, videoSocket);
+          handleUploadingVideoProcess(file, videoSocket);
         });
 
         videoSocket?.on(
@@ -48,7 +55,11 @@ export const useSendVideo = () => {
               content: "Video uploaded successfully",
             });
 
-            socket.emit("SEND_VIDEO_FILE_MESSAGE", composeSendVideoFileMessageParams(messageInputDto, filePath, file));
+            socket.emit(
+              ChatSocketCommand.SEND_VIDEO_FILE_MESSAGE,
+              composeSendVideoFileMessageParams(messageInputDto, filePath, file)
+            );
+
             videoSocket.disconnect();
             resolve();
           }

@@ -1,5 +1,7 @@
 .message-image {
   max-height: 30vh;
+  user-select: none;
+  cursor: pointer;
 }
 
 .message-description {

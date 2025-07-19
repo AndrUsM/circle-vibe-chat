@@ -4,6 +4,7 @@ import { useCallback } from "react";
 import {
   ChatParticipant,
   ChatSocketCommand,
+  DEFAULT_PAGINATION_PAGE_SIZE,
   MessageType,
   SendMessageChatSocketParams,
 } from "@circle-vibe/shared";
@@ -20,7 +21,7 @@ import { useSendFileMessage } from "../use-send-file-message/use-file-message";
 
 export const useSendMessage = (
   chatParticipant: ChatParticipant | null,
-  selectedChatId: number | null,
+  selectedChatId: number | null
 ) => {
   const { socket } = useSocket();
   const sendVideo = useSendVideo();
@@ -53,6 +54,12 @@ export const useSendMessage = (
             );
 
           await sendVideo(formValues.file, messageInputDto);
+
+          socket.emit(ChatSocketCommand.REQUEST_MESSAGES_WITH_PAGINATION, {
+            chatId: selectedChatId,
+            page: 1,
+            pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
+          });
 
           resetForm();
           return;

@@ -1,8 +1,8 @@
 import { PaginatedResponse } from "@circle-vibe/shared";
 
-export const composePaginationResponse = (
-  data: PaginatedResponse<any>
-) => ({
-  ...data,
-  data: data?.data.reverse(),
-});
+export const composePaginationResponse = (response: PaginatedResponse<any>) => {
+  return {
+    ...response,
+    data: response.data.reverse(),
+  };
+};

@@ -75,7 +75,7 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
     if (!socket?.connected) {
       socket.connect();
     }
-  }, [user, socket]);
+  }, [user, socket.connected]);
 
   const value = useMemo(
     () => ({ socket, videoSocket, createVideoSocketConnection, connectToChatSocket }),

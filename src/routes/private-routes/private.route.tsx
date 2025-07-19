@@ -2,8 +2,8 @@ import React from "react";
 import { Route } from "react-router-dom";
 
 const ConversationsLazy = React.lazy(() =>
-  import("./conversations").then(({ Conversations }) => ({
-    default: Conversations,
+  import("./conversations").then(({ ConversationsParent }) => ({
+    default: ConversationsParent,
   }))
 );
 

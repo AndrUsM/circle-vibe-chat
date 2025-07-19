@@ -5,7 +5,7 @@ import { Link } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
 import * as Resizer from "@column-resizer/react";
 
-import { ChatSocketCommand, composeAvatarFallback } from "@circle-vibe/shared";
+import { composeAvatarFallback, MessageFile } from "@circle-vibe/shared";
 import {
   ClusterLayout,
   StackLayout,
@@ -25,7 +25,6 @@ import {
   Input,
 } from "@circle-vibe/components";
 
-import { useSocket } from "@core/hooks";
 import {
   TopbarLogo,
   UserAvatar,
@@ -33,12 +32,15 @@ import {
   PaginationControls,
   PaginationScrollButton,
 } from "@shared/components";
+import { useConfirmation } from "@shared/hooks";
 
 import {
   MESSAGE_FORM_INITIAL_VALUE,
   MESSAGE_FORM_VALIDATION_SCHEMA,
   MessageFormValues,
-  useSendMessage,
+  useDeleteMessage,
+  usePreviewFileState,
+  FilePreview,
   Message,
 } from "@features/messages";
 import {
@@ -56,11 +58,18 @@ import "./conversation.scss";
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
-  const { socket } = useSocket();
-  const { cilSettings, cilFile } = useIcons();
+  const confirm = useConfirmation();
+  const { cilSettings, cilFile, cilReload } = useIcons();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const onScrollToPosition = useScrollToBlockPosition();
   const messagesRef = useRef<HTMLDivElement>(null);
+  const [openAccountSettings, setOpenAccountSettings] =
+    useState<boolean>(false);
+  const [openChatCreationModal, setOpenChatCreationModal] =
+    useState<boolean>(false);
+  const deleteMessage = useDeleteMessage();
+  const { toggleFileDialogVisibility, previewFile } = usePreviewFileState();
+
   const onScrollMessages = () => {
     if (Boolean(messagesRef?.current?.scrollTop)) {
       return;
@@ -68,6 +77,7 @@ export const Conversations: React.FC = () => {
 
     onScrollToPosition(messagesRef, "end", "end");
   };
+
   const {
     user,
     chatParticipant,
@@ -79,38 +89,18 @@ export const Conversations: React.FC = () => {
     chatsPage,
     chatsLoading,
     messagesLoading,
-    resetMessagesState,
-    setSelectedChatId,
+    allowToPreselectChat,
+    onChatSelect,
     triggerGetPaginatedMessages,
     triggerGetPaginatedChats,
     triggerSearchChatsByName,
+    handleSendMessage,
   } = useConversationGateway(onScrollMessages);
 
-  const debouncedChatSearch = useDebouncedCallback(
-    (value) => {
-      triggerSearchChatsByName(value);
-    },
-    1000
-  );
+  const debouncedChatSearch = useDebouncedCallback((value) => {
+    triggerSearchChatsByName(value);
+  }, 1000);
 
-  const allowToPreselectChat = Boolean(selectedChatId || chatParticipant);
-
-  const handleJoinChat = (chatId: number) => {
-    if (selectedChatId === chatId) {
-      return;
-    }
-
-    resetMessagesState();
-    setSelectedChatId(chatId);
-
-    socket.emit(ChatSocketCommand.JOIN_CHAT, { chatId });
-  };
-
-  const [openAccountSettings, setOpenAccountSettings] =
-    useState<boolean>(false);
-  const [openChatCreationModal, setOpenChatCreationModal] =
-    useState<boolean>(false);
-  const handleSendMessage = useSendMessage(chatParticipant, selectedChatId);
   const avatarFallback = composeAvatarFallback(user);
   const openFileSelectionDialog = useCallback((e: React.SyntheticEvent) => {
     fileInputRef.current?.click();
@@ -121,9 +111,19 @@ export const Conversations: React.FC = () => {
     return Boolean(selectedChat?.isSavedMessages);
   }, [chats, selectedChatId]);
 
+  const onDeleteMessage = useCallback(
+    async (messageId: number) => {
+      await confirm("Are your sure you want to delete this message?", "danger");
+
+      deleteMessage(Number(selectedChatId), messageId, messagesPage);
+    },
+    [selectedChatId, messagesPage]
+  );
+  const onUpdateMessage = useCallback(() => {}, []);
+
   useInitialChatSelection(
     chats?.data ?? [],
-    handleJoinChat,
+    onChatSelect,
     allowToPreselectChat
   );
 
@@ -138,7 +138,7 @@ export const Conversations: React.FC = () => {
         <TopbarLogo />
 
         <ClusterLayout space="1.15rem">
-          <Tooltip title="Account settings">
+          <Tooltip title={t("conversations.actions.account-settings")}>
             <UserAvatar
               className="cursor-pointer"
               fallback={avatarFallback}
@@ -172,7 +172,7 @@ export const Conversations: React.FC = () => {
               <FormControl className="w-full">
                 <Input
                   className="p-4 rounded-2"
-                  placeholder="Search..."
+                  placeholder={t("input.search.placeholder")}
                   onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
                     debouncedChatSearch(String(e.target.value));
                   }}
@@ -184,7 +184,7 @@ export const Conversations: React.FC = () => {
                 className="w-full"
                 onClick={setOpenChatCreationModal}
               >
-                Create
+                {t("button.actions.create")}
               </Button>
             </StackLayout>
 
@@ -193,7 +193,7 @@ export const Conversations: React.FC = () => {
                 chat={chat}
                 chatParticipant={chatParticipant}
                 selected={selectedChatId === chat.id}
-                onClick={() => handleJoinChat(chat.id)}
+                onClick={() => onChatSelect(chat.id)}
                 key={chat.id}
               />
             ))}
@@ -223,10 +223,13 @@ export const Conversations: React.FC = () => {
             <StackLayout ref={messagesRef} className="overflow-y-auto">
               {messages?.data?.map((message) => (
                 <Message
+                  key={message.id}
                   message={message}
                   chatParticipantId={Number(chatParticipant?.id)}
                   isSavedMessages={isSavedMessagesChat}
-                  key={message.id}
+                  onDeleteMessage={onDeleteMessage}
+                  onUpdateMessage={onUpdateMessage}
+                  onOpenFile={toggleFileDialogVisibility}
                 />
               ))}
             </StackLayout>
@@ -240,6 +243,7 @@ export const Conversations: React.FC = () => {
                 currentPage={messagesPage}
                 onPageChange={triggerGetPaginatedMessages}
               />
+
               <PaginationScrollButton messagesRef={messagesRef} />
             </CenteredVertialLayout>
 
@@ -304,13 +308,25 @@ export const Conversations: React.FC = () => {
       >
         <StackLayout>
           <section>
-            <p className="text-2xl font-semibold">Create conversation</p>
+            <p className="text-2xl font-semibold">
+              {t("conversations.buttons.create-conversation")}
+            </p>
 
             <HorizontalDivider color="var(--cv-bg-secondary)" />
           </section>
 
           <ConversationForm />
         </StackLayout>
+      </Modal>
+
+      <Modal
+        isOpen={Boolean(previewFile)}
+        onClose={() => toggleFileDialogVisibility()}
+      >
+        <FilePreview
+          messageFile={previewFile as MessageFile}
+          onClose={toggleFileDialogVisibility}
+        />
       </Modal>
     </section>
   );

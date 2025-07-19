@@ -1,6 +1,9 @@
 {
   "button.actions.confirm": "Confirm",
   "button.actions.close": "Close",
+  "button.actions.cancel": "Cancel",
+  "button.actions.create": "Create",
+  "input.search.placeholder": "Search...",
   "saved-messages": "Saved messages",
   "chat.empty": "There is not messages yet",
   "login.wrong-credentials.message": "Please check email or password",
@@ -9,5 +12,6 @@
   "login.create-account.button": "Create Account",
   "conversations.send.button": "Send",
   "conversations.send.input.placeholder": "Type your message...",
-  "Welcome to React": "Welcome to React and react-i18next"
+  "conversations.actions.account-settings": "Account Settings",
+  "conversations.buttons.create-conversation": "Create conversation"
 }

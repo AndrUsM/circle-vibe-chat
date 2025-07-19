@@ -6,3 +6,4 @@ export * from './use-get-chat-participants';
 export * from './use-accept-invite';
 export * from './use-handle-chat-creation';
 export * from './use-scroll-to-block-position';
+export * from './use-active-conversation';

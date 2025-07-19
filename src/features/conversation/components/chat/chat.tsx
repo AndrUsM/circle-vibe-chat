@@ -1,6 +1,8 @@
+import { useMemo } from "react";
 import classNames from "classnames";
 import { useTranslation } from "react-i18next";
 
+import SharedEnums from "@circle-vibe/shared";
 import { Chat as ChatModel, ChatParticipant } from "@circle-vibe/shared";
 import {
   ExtendedReactFunctionalComponent,
@@ -9,13 +11,11 @@ import {
   useFormatDatetime,
   ClusterLayout,
 } from "@circle-vibe/components";
-import SharedEnums from "@circle-vibe/shared";
 
+import { MessageShortPreview } from "@features/messages";
 import { ChatActions } from "./chat-actions";
 
 import "./chat.scss";
-import { useMemo } from "react";
-import { MessageShortPreview } from "@features/messages/components";
 
 interface ChatProps {
   chat: ChatModel;
@@ -41,13 +41,10 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
     empty,
     updatedAt,
   } = chat;
-  const chatName = useMemo(
-    () =>
-      readableName.includes("saved-messages") || isSavedMessages
-        ? t(name)
-        : name,
-    [name, readableName]
-  );
+  const chatName = useMemo(() => {
+    const useSavedMessagesKey = readableName.includes("saved-messages") || isSavedMessages;
+    return useSavedMessagesKey ? t(name) : name;
+  }, [name, readableName]);
 
   return (
     <ClusterLayout
@@ -83,7 +80,6 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
       <Show.When isTrue={Boolean(selected && chatParticipant)}>
         <ChatActions
           chat={chat}
-          chatParticipant={chatParticipant as ChatParticipant}
         />
       </Show.When>
     </ClusterLayout>

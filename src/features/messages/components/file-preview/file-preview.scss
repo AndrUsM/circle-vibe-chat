@@ -1,0 +1,10 @@
+.file-preview {
+  &-image {
+    object-fit: contain;
+    max-height: 90vh;
+  }
+
+  &-documents {
+    min-height: 10rem;
+  }
+}

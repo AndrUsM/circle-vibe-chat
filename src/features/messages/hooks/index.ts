@@ -4,3 +4,4 @@ export * from './use-send-video';
 export * from './use-sorted-by-type-files';
 export * from './use-delete-message';
 export * from './use-update-message';
+export * from './use-preview-file-state';

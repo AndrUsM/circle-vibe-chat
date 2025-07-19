@@ -1,4 +1,5 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useContext, useEffect, useMemo, useState } from "react";
+
 import {
   Chat,
   ChatParticipant,
@@ -9,71 +10,89 @@ import {
   RequestMessagesWithPaginationChatSocketParams,
   DEFAULT_PAGINATION_PAGE_SIZE,
 } from "@circle-vibe/shared";
+
 import { useCurrentUser, useNotification, useSocket } from "@core/hooks";
-import { composePaginationResponse } from "@shared/utils";
-import { request } from "@core/request";
 import { cookiesService } from "@core/services";
 
+import { composePaginationResponse } from "@shared/utils";
+
+import { useSendMessage } from "@features/messages";
+import { ConversationContext } from "@features/conversation";
+
 /**
- * Handles the state of the conversation gateway for the current user.
+ * A custom React hook that manages the conversation gateway logic, handling chat and message interactions.
  *
- * @param {VoidFunction} onScrollMessages - Function to be called when messages are received.
+ * @param {VoidFunction} onScrollMessages - A callback function to handle scrolling messages.
+ * @returns {object} - An object containing various state variables, handlers, and trigger functions for chat and message management.
  *
- * @returns {{
- *   user: User,
- *   chatParticipant: ChatParticipant | null,
- *   setChatParticipant: (chatParticipant: ChatParticipant | null) => void,
- *   selectedChatId: number | null,
- *   setSelectedChatId: (selectedChatId: number | null) => void,
- *   chats: Chat[],
- *   messages: Message[],
- *   isAnyChatSelected: boolean,
- * }}
+ * The hook:
+ * - Initializes and maintains state for chats, messages, pagination, and loading indicators.
+ * - Sets up socket listeners for chat and message events, including receiving chats and messages,
+ *   joining a chat, scrolling to the end of messages, and notifying about new messages.
+ * - Handles chat and message selection, sending, and pagination logic.
+ * - Provides functions to trigger chat and message retrieval with pagination and search functionality.
+ * - Manages user authentication token refresh through socket events.
  */
+
 export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   const { user } = useCurrentUser();
+  const {
+    currentConversationParticipant: chatParticipant,
+    setCurrentConversationParticipant: setChatParticipant,
+    selectedChatId,
+    setSelectedChatId,
+  } = useContext(ConversationContext);
   const notification = useNotification();
   const { socket } = useSocket();
   const [chatsLoading, setChatsLoading] = useState(false);
   const [messagesLoading, setMessagesLoading] = useState(false);
   const [messagesPage, setMessagesPage] = useState(1);
   const [chatsPage, setChatsPage] = useState(1);
-  const [chatParticipant, setChatParticipant] =
-    useState<ChatParticipant | null>(null);
-  const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
   const [chats, setChats] = useState<PaginatedResponse<Chat> | null>(null);
   const [messages, setMessages] = useState<PaginatedResponse<Message> | null>(
     null
   );
   const isAnyChatSelected = Boolean(selectedChatId);
-  const isSavedMessagesSelected = useMemo(() => {
-    const currentChat = chats?.data.find((chat) => chat.id === selectedChatId);
+  const allowToPreselectChat = useMemo<boolean>(
+    () => Boolean(selectedChatId || chatParticipant),
+    [selectedChatId, chatParticipant]
+  );
 
-    return currentChat?.isSavedMessages;
-  }, [chats, selectedChatId]);
+  const onChatSelect = (chatId: number) => {
+    if (selectedChatId === chatId) {
+      return;
+    }
+
+    resetMessagesState();
+    setSelectedChatId(chatId);
+
+    socket.emit(ChatSocketCommand.JOIN_CHAT, { chatId });
+  };
 
   const resetMessagesState = () => {
     setMessagesPage(1);
     setMessages(null);
     setMessagesLoading(true);
-  }
+  };
 
-  const handleReceiveChats = (chats: PaginatedResponse<Chat>) => {
+  const handleSendMessage = useSendMessage(chatParticipant, selectedChatId);
+
+  const socketListenerReceiveChats = (chats: PaginatedResponse<Chat>) => {
     setChatsPage(1);
     setChats(composePaginationResponse(chats));
     setChatsLoading(false);
   };
 
-  const handleReceiveMessages = (messages: PaginatedResponse<Message>) => {
+  const socketListenerReceiveMessages = (
+    messages: PaginatedResponse<Message>
+  ) => {
     setMessages(composePaginationResponse(messages));
     setMessagesLoading(false);
 
-    if (!isSavedMessagesSelected) {
-      socket.emit(ChatSocketCommand.RECEIVE_CHATS, chatParticipant?.chatId);
-    }
+    socket.emit(ChatSocketCommand.RECEIVE_CHATS, chatParticipant?.chatId);
   };
 
-  const handleJoinChat = ({
+  const socketListenerJoinChat = ({
     chatParticipant,
   }: {
     chatParticipant: ChatParticipant;
@@ -82,13 +101,13 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     setChatParticipant(chatParticipant);
   };
 
-  const handleScrollToEnd = () => {
+  const socketListenerScrollToEnd = () => {
     setTimeout(() => {
       onScrollMessages();
     }, 500);
   };
 
-  const handleNotifyNewMessage = () => {
+  const socketListenerNotifyNewMessage = () => {
     if (chatParticipant?.isMuted) {
       return;
     }
@@ -116,9 +135,12 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     socket.emit(ChatSocketCommand.REQUEST_MESSAGES_WITH_PAGINATION, params);
   };
 
-  const triggerGetPaginatedChats = (page: number, filters?: {
-    name?: string,
-  }) => {
+  const triggerGetPaginatedChats = (
+    page: number,
+    filters?: {
+      name?: string;
+    }
+  ) => {
     setMessagesPage(page);
     setChatsLoading(true);
 
@@ -127,7 +149,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       userId,
       page,
       pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
-      name: filters?.name
+      name: filters?.name,
     };
 
     socket.emit(ChatSocketCommand.REQUEST_CHATS_WITH_PAGINATION, params);
@@ -135,40 +157,49 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
 
   const triggerSearchChatsByName = (name: string) => {
     triggerGetPaginatedChats(1, { name });
-  }
+  };
 
-  const refreshToken = (token: string) => {
+  const socketListenerRefreshToken = (token: string) => {
     cookiesService.set("auth-token", token);
   };
 
   useEffect(() => {
     triggerGetPaginatedChats(1);
 
-    socket.on(ChatSocketCommand.REFRESH_TOKEN, refreshToken);
-    socket.on(ChatSocketCommand.RECEIVE_CHATS, handleReceiveChats);
-    socket.on(ChatSocketCommand.RECEIVE_MESSAGES, handleReceiveMessages);
-    socket.on(ChatSocketCommand.JOIN_CHAT, handleJoinChat);
-    socket.on(ChatSocketCommand.SCROLL_TO_END_OF_MESSAGES, handleScrollToEnd);
+    socket.on(ChatSocketCommand.REFRESH_TOKEN, socketListenerRefreshToken);
+    socket.on(ChatSocketCommand.RECEIVE_CHATS, socketListenerReceiveChats);
+    socket.on(
+      ChatSocketCommand.RECEIVE_MESSAGES,
+      socketListenerReceiveMessages
+    );
+    socket.on(ChatSocketCommand.JOIN_CHAT, socketListenerJoinChat);
+    socket.on(
+      ChatSocketCommand.SCROLL_TO_END_OF_MESSAGES,
+      socketListenerScrollToEnd
+    );
     socket.on(
       ChatSocketCommand.NOTIFY_ABOUT_NEW_MESSAGE,
-      handleNotifyNewMessage
+      socketListenerNotifyNewMessage
     );
 
     return () => {
-      socket.off(ChatSocketCommand.REFRESH_TOKEN, refreshToken);
-      socket.off(ChatSocketCommand.RECEIVE_CHATS, handleReceiveChats);
-      socket.off(ChatSocketCommand.RECEIVE_MESSAGES, handleReceiveMessages);
-      socket.off(ChatSocketCommand.JOIN_CHAT, handleJoinChat);
+      socket.off(ChatSocketCommand.REFRESH_TOKEN, socketListenerRefreshToken);
+      socket.off(ChatSocketCommand.RECEIVE_CHATS, socketListenerReceiveChats);
+      socket.off(
+        ChatSocketCommand.RECEIVE_MESSAGES,
+        socketListenerReceiveMessages
+      );
+      socket.off(ChatSocketCommand.JOIN_CHAT, socketListenerJoinChat);
       socket.off(
         ChatSocketCommand.SCROLL_TO_END_OF_MESSAGES,
-        handleScrollToEnd
+        socketListenerScrollToEnd
       );
       socket.off(
         ChatSocketCommand.NOTIFY_ABOUT_NEW_MESSAGE,
-        handleNotifyNewMessage
+        socketListenerNotifyNewMessage
       );
     };
-  }, [socket]);
+  }, [socket?.id]);
 
   return useMemo(
     () => ({
@@ -182,6 +213,9 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       isAnyChatSelected,
       chatsLoading,
       messagesLoading,
+      allowToPreselectChat,
+      onChatSelect,
+      handleSendMessage,
       resetMessagesState,
       setChatParticipant,
       setSelectedChatId,
@@ -200,6 +234,9 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       isAnyChatSelected,
       chatsLoading,
       messagesLoading,
+      allowToPreselectChat,
+      onChatSelect,
+      handleSendMessage,
       setChatParticipant,
       setSelectedChatId,
       triggerSearchChatsByName,
