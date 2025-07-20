@@ -10,16 +10,13 @@ import {
   HorizontalDivider,
   ExtendedReactFunctionalComponent,
   Show,
+  Modal,
 } from "@circle-vibe/components";
-import { Modal } from "@shared/components";
 import {
   ConversationMembers,
   useActiveConversation,
 } from "@features/conversation";
 import { useUpdateConversationParticipant } from "@api/conversation-participants";
-
-// import { cookiesService, localStorageService } from "@core/services";
-// import { useNavigate } from "react-router-dom";
 
 interface ChatActionsProps {
   chat: Chat;

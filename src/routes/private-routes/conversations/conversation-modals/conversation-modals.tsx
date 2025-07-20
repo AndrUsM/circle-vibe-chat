@@ -2,13 +2,13 @@ import {
   ExtendedReactFunctionalComponent,
   HorizontalDivider,
   StackLayout,
+  Modal,
 } from "@circle-vibe/components";
 import { MessageFile } from "@circle-vibe/shared";
 
 import { AccountSettings, ConversationForm } from "@features/conversation";
 import { FilePreview } from "@features/messages";
 
-import { Modal } from "@shared/components";
 import { useTranslation } from "react-i18next";
 
 interface ConversationModalsProps {

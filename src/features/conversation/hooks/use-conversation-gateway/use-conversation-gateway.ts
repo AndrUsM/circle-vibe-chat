@@ -133,7 +133,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     });
   };
 
-  const triggerGetPaginatedMessages = (page: number, options: {
+  const triggerGetPaginatedMessages = (page: number, options?: {
     force?: boolean
   }) => {
     const isSamePage = options?.force ? false : page === messagesPage;

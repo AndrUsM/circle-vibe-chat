@@ -1,8 +1,7 @@
 import { useCallback } from "react";
 import { createRoot } from "react-dom/client";
 
-import { Modal } from "@shared/components";
-
+import { Modal } from "@circle-vibe/components";
 import { ConfirmationModalLayout } from "./confirmation-modal-layout";
 
 let modalRoot = document.getElementById("modal-root");

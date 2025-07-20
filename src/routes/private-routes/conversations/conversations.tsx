@@ -18,6 +18,8 @@ import {
   CenteredVertialLayout,
   LoadingOverlay,
   Input,
+  Modal,
+  useBoolean,
 } from "@circle-vibe/components";
 
 import { useDeleteMessage } from "@api/messages";
@@ -26,10 +28,8 @@ import {
   UserAvatar,
   PaginationControls,
   PaginationScrollButton,
-  Modal,
 } from "@shared/components";
 import {
-  useBoolean,
   useConfirmation,
   useScrollToBlockPosition,
 } from "@shared/hooks";
