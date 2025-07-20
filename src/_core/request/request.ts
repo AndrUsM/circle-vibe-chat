@@ -9,7 +9,7 @@ const axiosInstance = axios.create({
 
 axiosInstance.interceptors.response.use(
   async (response) => {
-    if (response.status === 401) {
+    if (response.status === 403) {
       const refreshTokenResponse = await request<{
         token: string
       }>({

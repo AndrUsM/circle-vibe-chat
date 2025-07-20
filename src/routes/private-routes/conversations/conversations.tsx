@@ -20,11 +20,13 @@ import {
   Input,
 } from "@circle-vibe/components";
 
+import { useDeleteMessage } from "@api/messages";
 import {
   TopbarLogo,
   UserAvatar,
   PaginationControls,
   PaginationScrollButton,
+  Modal,
 } from "@shared/components";
 import {
   useBoolean,
@@ -33,9 +35,11 @@ import {
 } from "@shared/hooks";
 
 import {
-  useDeleteMessage,
   usePreviewFileState,
   Message,
+  useUpdateMessageState,
+  MessageUpdateDialog,
+  MessageUpdateFormValues,
 } from "@features/messages";
 import {
   useConversationGateway,
@@ -55,8 +59,8 @@ export const Conversations: React.FC = () => {
   const { cilSettings } = useIcons();
   const onScrollToPosition = useScrollToBlockPosition();
   const deleteMessage = useDeleteMessage();
-
   const messagesRef = useRef<HTMLDivElement>(null);
+
   const [
     openAccountSettings,
     toggleOpenAccountSettings,
@@ -68,6 +72,12 @@ export const Conversations: React.FC = () => {
     setOpenChatCreationModal,
   ] = useBoolean(false);
   const { toggleFileDialogVisibility, previewFile } = usePreviewFileState();
+  const {
+    openMessageUpdateDialog,
+    onCloseMessageUpdateDialog,
+    onOpenMessageUpdateDialog,
+    messageUpdateDialogState,
+  } = useUpdateMessageState();
 
   const onScrollMessages = () => {
     if (Boolean(messagesRef?.current?.scrollTop)) {
@@ -89,6 +99,7 @@ export const Conversations: React.FC = () => {
     messagesLoading,
     selectedChatId,
     user,
+    handleRefreshMessages,
     onChatSelect,
     triggerGetPaginatedMessages,
     triggerGetPaginatedChats,
@@ -116,7 +127,12 @@ export const Conversations: React.FC = () => {
     },
     [selectedChatId, messagesPage]
   );
-  const onUpdateMessage = useCallback(() => {}, []);
+  const onUpdateMessage = useCallback((messageId: number) => {
+    onOpenMessageUpdateDialog({
+      chatId: Number(selectedChatId),
+      messageId,
+    });
+  }, [selectedChatId]);
 
   useInitialChatSelection(
     chats?.data ?? [],
@@ -264,6 +280,21 @@ export const Conversations: React.FC = () => {
         previewFile={previewFile}
         toggleFileDialogVisibility={toggleFileDialogVisibility}
       />
+
+      <Modal
+        isOpen={openMessageUpdateDialog}
+        onClose={onCloseMessageUpdateDialog}
+      >
+        <MessageUpdateDialog
+          chatId={Number(messageUpdateDialogState?.chatId)}
+          messageId={Number(messageUpdateDialogState?.messageId)}
+          initialValues={messageUpdateDialogState?.initialValues as MessageUpdateFormValues}
+          onSuccess={() => {
+            handleRefreshMessages();
+            onCloseMessageUpdateDialog();
+          }}
+        />
+      </Modal>
     </section>
   );
 };

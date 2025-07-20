@@ -1,21 +1,40 @@
-// import { ChatSocketCommand } from "@circle-vibe/shared";
-// import { useSocket } from "@core/hooks";
-import { useNotification } from "@core/hooks";
-import { request } from "@core/request"
+import { useCallback } from "react";
 
-export const useUpdateMessage = (chatId: number, messageId: number) => {
-  // const {socket} = useSocket();
+import { Message } from "@circle-vibe/shared";
+
+import { useNotification } from "@core/hooks";
+import { request } from "@core/request";
+
+interface UseUpdateMessageOption {
+  content: string;
+}
+
+export const useUpdateMessage = () => {
   const notification = useNotification();
 
-  return request({
-    url: `chat/${chatId}/message/${messageId}`,
-    method: 'PUT',
-    data: {}
-  }).then(() => {
-    notification({
-      type: "success",
-      content: "Successfully updated message!",
-    });
-    //  socket.emit(ChatSocketCommand.REFRESH_MESSAGES, { chatId, messageId });
-  });
-}
+  return useCallback(
+    async (
+      chatId: number,
+      messageId: number,
+      options: UseUpdateMessageOption
+    ) => {
+      const response = await request({
+        url: `chat/${chatId}/message/${messageId}`,
+        method: "PUT",
+        data: options,
+      });
+
+      if (response?.data) {
+        notification({
+          type: "success",
+          content: "Successfully updated message!",
+        });
+
+        return response.data as Message;
+      }
+
+      return null;
+    },
+    []
+  );
+};

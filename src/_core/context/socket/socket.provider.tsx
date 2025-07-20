@@ -15,6 +15,10 @@ import { cookiesService } from "@core/services";
 
 interface ISocketContext {
   socket: Socket;
+  /**
+   * @deprecated video socket is deprecated feature and will be removed
+   * in the future releases
+   */
   videoSocket: Socket | null;
   createVideoSocketConnection(): Promise<Socket<any, any> | undefined>;
   connectToChatSocket: VoidFunction;
