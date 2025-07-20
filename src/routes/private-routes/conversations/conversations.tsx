@@ -1,11 +1,10 @@
-import { useCallback, useMemo, useRef, useState } from "react";
-import { FormikProps } from "formik";
+import { Suspense, useCallback, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
 import { useDebouncedCallback } from "use-debounce";
 import * as Resizer from "@column-resizer/react";
 
-import { composeAvatarFallback, MessageFile } from "@circle-vibe/shared";
+import { composeAvatarFallback } from "@circle-vibe/shared";
 import {
   ClusterLayout,
   StackLayout,
@@ -13,13 +12,9 @@ import {
   Icon,
   HorizontalDivider,
   useIcons,
-  Form,
   FormControl,
-  FormikFormControl,
   Show,
-  FormSubmitButton,
   Button,
-  FormControlTextarea,
   CenteredVertialLayout,
   LoadingOverlay,
   Input,
@@ -28,46 +23,50 @@ import {
 import {
   TopbarLogo,
   UserAvatar,
-  Modal,
   PaginationControls,
   PaginationScrollButton,
 } from "@shared/components";
-import { useConfirmation } from "@shared/hooks";
+import {
+  useBoolean,
+  useConfirmation,
+  useScrollToBlockPosition,
+} from "@shared/hooks";
 
 import {
-  MESSAGE_FORM_INITIAL_VALUE,
-  MESSAGE_FORM_VALIDATION_SCHEMA,
-  MessageFormValues,
   useDeleteMessage,
   usePreviewFileState,
-  FilePreview,
   Message,
 } from "@features/messages";
 import {
   useConversationGateway,
   useInitialChatSelection,
-  AccountSettings,
   Chat,
-  ConversationForm,
-  useScrollToBlockPosition,
 } from "@features/conversation";
 
 import { TopbarActions } from "./topbar-actions";
+import { ConversationModals } from "./conversation-modals";
+import { MessageForm } from "./message-form";
 
 import "./conversation.scss";
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
   const confirm = useConfirmation();
-  const { cilSettings, cilFile } = useIcons();
-  const fileInputRef = useRef<HTMLInputElement>(null);
+  const { cilSettings } = useIcons();
   const onScrollToPosition = useScrollToBlockPosition();
-  const messagesRef = useRef<HTMLDivElement>(null);
-  const [openAccountSettings, setOpenAccountSettings] =
-    useState<boolean>(false);
-  const [openChatCreationModal, setOpenChatCreationModal] =
-    useState<boolean>(false);
   const deleteMessage = useDeleteMessage();
+
+  const messagesRef = useRef<HTMLDivElement>(null);
+  const [
+    openAccountSettings,
+    toggleOpenAccountSettings,
+    setOpenAccountSettings,
+  ] = useBoolean(false);
+  const [
+    openChatCreationModal,
+    toggleOpenChatCreationModal,
+    setOpenChatCreationModal,
+  ] = useBoolean(false);
   const { toggleFileDialogVisibility, previewFile } = usePreviewFileState();
 
   const onScrollMessages = () => {
@@ -79,17 +78,17 @@ export const Conversations: React.FC = () => {
   };
 
   const {
-    user,
-    chatParticipant,
-    selectedChatId,
+    allowToPreselectChat,
     chats,
-    messages,
-    isAnyChatSelected,
-    messagesPage,
+    chatParticipant,
     chatsPage,
     chatsLoading,
+    isAnyChatSelected,
+    messages,
+    messagesPage,
     messagesLoading,
-    allowToPreselectChat,
+    selectedChatId,
+    user,
     onChatSelect,
     triggerGetPaginatedMessages,
     triggerGetPaginatedChats,
@@ -102,9 +101,7 @@ export const Conversations: React.FC = () => {
   }, 1000);
 
   const avatarFallback = composeAvatarFallback(user);
-  const openFileSelectionDialog = useCallback((e: React.SyntheticEvent) => {
-    fileInputRef.current?.click();
-  }, []);
+
   const isSavedMessagesChat = useMemo(() => {
     const selectedChat = chats?.data.find(({ id }) => id === selectedChatId);
 
@@ -142,7 +139,7 @@ export const Conversations: React.FC = () => {
             <UserAvatar
               className="cursor-pointer"
               fallback={avatarFallback}
-              onClick={() => setOpenAccountSettings(true)}
+              onClick={toggleOpenAccountSettings}
             />
           </Tooltip>
 
@@ -182,7 +179,7 @@ export const Conversations: React.FC = () => {
               <Button
                 size="medium"
                 className="w-full"
-                onClick={setOpenChatCreationModal}
+                onClick={toggleOpenChatCreationModal}
               >
                 {t("button.actions.create")}
               </Button>
@@ -190,11 +187,11 @@ export const Conversations: React.FC = () => {
 
             {chats?.data.map((chat) => (
               <Chat
+                key={chat.id}
                 chat={chat}
                 chatParticipant={chatParticipant}
                 selected={selectedChatId === chat.id}
                 onClick={() => onChatSelect(chat.id)}
-                key={chat.id}
               />
             ))}
 
@@ -221,16 +218,17 @@ export const Conversations: React.FC = () => {
         >
           <StackLayout justifyContent="end" className="w-full p-3">
             <StackLayout ref={messagesRef} className="overflow-y-auto">
-              {messages?.data?.map((message) => (
-                <Message
-                  key={message.id}
-                  message={message}
-                  chatParticipantId={Number(chatParticipant?.id)}
-                  isSavedMessages={isSavedMessagesChat}
-                  onDeleteMessage={onDeleteMessage}
-                  onUpdateMessage={onUpdateMessage}
-                  onOpenFile={toggleFileDialogVisibility}
-                />
+              {(messages?.data ?? [])?.map((message) => (
+                <Suspense key={message.id} fallback={<LoadingOverlay />}>
+                  <Message
+                    message={message}
+                    chatParticipantId={Number(chatParticipant?.id)}
+                    isSavedMessages={isSavedMessagesChat}
+                    onDeleteMessage={onDeleteMessage}
+                    onUpdateMessage={onUpdateMessage}
+                    onOpenFile={toggleFileDialogVisibility}
+                  />
+                </Suspense>
               ))}
             </StackLayout>
 
@@ -248,44 +246,7 @@ export const Conversations: React.FC = () => {
             </CenteredVertialLayout>
 
             <Show.When isTrue={isAnyChatSelected}>
-              <Form
-                enableReinitialize={false}
-                onSubmit={handleSendMessage}
-                validationSchema={MESSAGE_FORM_VALIDATION_SCHEMA}
-                initialValues={MESSAGE_FORM_INITIAL_VALUE}
-              >
-                {({ setFieldValue }: FormikProps<MessageFormValues>) => (
-                  <ClusterLayout space="0.5rem" alignItems="flex-start">
-                    <FormikFormControl
-                      formFieldName="content"
-                      className="w-full"
-                    >
-                      <FormControlTextarea
-                        className="resize-vertical min-h-10 p-3"
-                        placeholder={t("conversations.send.input.placeholder")}
-                      />
-                    </FormikFormControl>
-
-                    <Button type="button" onClick={openFileSelectionDialog}>
-                      <Icon size={18} color="var(--cv-light)" name={cilFile} />
-
-                      <input
-                        type="file"
-                        ref={fileInputRef}
-                        hidden
-                        onChange={(event) => {
-                          event.currentTarget.files &&
-                            setFieldValue("file", event.currentTarget.files[0]);
-                        }}
-                      />
-                    </Button>
-
-                    <FormSubmitButton color="primary" size="large">
-                      {t("conversations.send.button")}
-                    </FormSubmitButton>
-                  </ClusterLayout>
-                )}
-              </Form>
+              <MessageForm onSubmit={handleSendMessage} />
             </Show.When>
           </StackLayout>
 
@@ -295,39 +256,14 @@ export const Conversations: React.FC = () => {
         </Resizer.Section>
       </Resizer.Container>
 
-      <Modal
-        isOpen={openAccountSettings}
-        onClose={() => setOpenAccountSettings(false)}
-      >
-        <AccountSettings />
-      </Modal>
-
-      <Modal
-        isOpen={openChatCreationModal}
-        onClose={() => setOpenChatCreationModal(false)}
-      >
-        <StackLayout>
-          <section>
-            <p className="text-2xl font-semibold">
-              {t("conversations.buttons.create-conversation")}
-            </p>
-
-            <HorizontalDivider color="var(--cv-bg-secondary)" />
-          </section>
-
-          <ConversationForm />
-        </StackLayout>
-      </Modal>
-
-      <Modal
-        isOpen={Boolean(previewFile)}
-        onClose={() => toggleFileDialogVisibility()}
-      >
-        <FilePreview
-          messageFile={previewFile as MessageFile}
-          onClose={toggleFileDialogVisibility}
-        />
-      </Modal>
+      <ConversationModals
+        openAccountSettings={openAccountSettings}
+        setOpenAccountSettings={setOpenAccountSettings}
+        openChatCreationModal={openChatCreationModal}
+        setOpenChatCreationModal={setOpenChatCreationModal}
+        previewFile={previewFile}
+        toggleFileDialogVisibility={toggleFileDialogVisibility}
+      />
     </section>
   );
 };

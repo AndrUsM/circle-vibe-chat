@@ -1,4 +1,3 @@
-export * from './form';
 export * from './submit-button';
 export * from './section-header';
 export * from './topbar-logo';

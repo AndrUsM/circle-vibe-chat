@@ -29,7 +29,7 @@ import {
   useGetUserToInvite,
   useGenerateConversationInvite,
   useGetChatParticipants,
-} from "@features/conversation";
+} from "@api/conversations";
 import { useNotification } from "@core/hooks";
 
 interface ConversationMembersProps {

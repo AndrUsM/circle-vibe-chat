@@ -20,6 +20,7 @@ export default defineConfig({
       "@shared": resolve("./src/_shared"),
       "@core": resolve("./src/_core"),
       "@features": resolve("./src/features"),
+      "@api": resolve("./src/_api"),
     },
   },
 });

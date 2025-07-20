@@ -11,7 +11,7 @@ import {
   ACCEPT_INVITE_FORM_INITIAL_VALUES,
   ACCEPT_INVITE_FORM_SCHEMA_VALIDATION,
 } from "./constants";
-import { useHandleAcceptInvite } from "./hooks/use-handle-accept-invite";
+import { useHandleAcceptInvite } from "../../hooks/use-handle-accept-invite";
 
 export const AccountSettings: ExtendedReactFunctionalComponent = () => {
   const onAcceptInvite = useHandleAcceptInvite();

@@ -1,6 +1,6 @@
 import { useCallback } from "react";
 
-import { Chat, ChatParticipant, UserChatRole } from "@circle-vibe/shared";
+import { ChatParticipant, UserChatRole } from "@circle-vibe/shared";
 
 import { request } from "@core/request";
 

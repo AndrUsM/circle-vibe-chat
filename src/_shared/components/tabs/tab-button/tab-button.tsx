@@ -1,4 +1,6 @@
-import { ExtendedReactFunctionalComponent } from '@circle-vibe/shared';
+
+import classNames from 'classnames';
+import { Button, ExtendedReactFunctionalComponent } from '@circle-vibe/components';
 
 import '_shared/component/styles/buttons.scss';
 
@@ -8,6 +10,11 @@ interface TabsButtonProps extends React.ButtonHTMLAttributes<HTMLButtonElement> 
 
 export const TabsButton: ExtendedReactFunctionalComponent<TabsButtonProps> = ({ children, disabled, active }) => {
   return (
-    <button className={`base-button button_color-white button-style-emphasized ${disabled ? 'button_state_disabled' : ''} ${active ? 'button_state-active' : ''}`}>{children}</button>
+    <Button classNames={
+      classNames({
+        'button_state_disabled': disabled,
+        'button_state-active': active
+      })
+    }>{children}</Button>
   )
 }

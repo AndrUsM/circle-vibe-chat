@@ -1,6 +1,6 @@
 import { Link } from "react-router-dom";
 
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/shared";
+import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
 
 // @ts-ignore
 import logoSrc from "../../../../public/logo.png";

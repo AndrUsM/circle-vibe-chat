@@ -6,7 +6,6 @@ import {
   getUserFullName,
   composeAvatarFallback,
   MessageFile,
-  MessageFileEntityType,
 } from "@circle-vibe/shared";
 import {
   Button,
@@ -24,7 +23,7 @@ import {
 } from "@circle-vibe/components";
 import { useSortedByTypeFiles } from "@features/messages";
 
-import { UserAvatar } from "../../../../_shared/components/user-avatar/user-avatar";
+import { UserAvatar } from "@shared/components/user-avatar/user-avatar";
 
 import "./message.scss";
 
@@ -115,9 +114,9 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
                   onOpenFile(sortedByTypeFiles.videos[0]);
                 }}
               >
-                {sortedByTypeFiles.videos?.map(({ description, url, id }) => (
+                {sortedByTypeFiles.videos?.map(({ description, id, optimizedUrl }) => (
                   <React.Fragment key={id}>
-                    <source src={url} type={VIDEO_MIME_TYPE} />
+                    <source src={optimizedUrl} type={VIDEO_MIME_TYPE} />
 
                     <Show.When isTrue={Boolean(description)}>
                       <span className="white-space-pre-wrap message-description">

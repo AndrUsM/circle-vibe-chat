@@ -1,11 +1,18 @@
+import { ChatSocketCommand } from "@circle-vibe/shared";
+
 import { useSendFile } from "../use-send-file/use-send-file";
 import { useSocket } from "@core/hooks";
-import { ChatSocketCommand } from "@circle-vibe/shared";
+
 import {
   composeCreateMessageFileParams,
   getFileType,
   UseSendMessageInput,
 } from "@features/messages/utils";
+
+interface IFileUrl {
+  filePath: string;
+  optimisedFilePath?: string
+}
 
 export const useSendFileMessage = () => {
   const { uploadFile, uploadImage } = useSendFile();
@@ -14,14 +21,14 @@ export const useSendFileMessage = () => {
   return async (file: File, messageInputDto: UseSendMessageInput) => {
     const fileType = getFileType(file);
 
-    const fileUrl = await (fileType === "IMAGE"
+    const fileUrl: IFileUrl = await (fileType === "IMAGE"
       ? uploadImage(file)
       : uploadFile(file));
+
     const payload = composeCreateMessageFileParams(
       messageInputDto,
-      fileUrl.filePath,
-      // @ts-ignore
-      fileUrl.optimisedFilePath,
+      fileUrl?.filePath,
+      fileUrl?.optimisedFilePath ?? fileUrl?.filePath,
       file
     );
 

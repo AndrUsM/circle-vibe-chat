@@ -114,7 +114,8 @@
     "paths": {
       "@shared/*": ["_shared/*"],
       "@core/*": ["_core/*"],
-      "@features/*": ["features/*"]
+      "@features/*": ["features/*"],
+      "@api/*": ["_api/*"]
     }
   }
 }

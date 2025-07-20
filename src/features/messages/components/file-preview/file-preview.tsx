@@ -17,7 +17,7 @@ interface FilePreviewProps {
 export const FilePreview: ExtendedReactFunctionalComponent<
   FilePreviewProps
 > = ({ messageFile, onClose }) => {
-  const { entityType, fileName, url, description, type } = messageFile;
+  const { entityType, fileName, url, description } = messageFile;
   if (entityType == MessageFileEntityType.IMAGE) {
     return (
       <>

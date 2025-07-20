@@ -1,5 +1,4 @@
-import { ExtendedReactFunctionalComponent } from '@circle-vibe/shared';
-
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
 import './styles/tabs.scss';
 
 export const Tabs: ExtendedReactFunctionalComponent = ({ children }) => {

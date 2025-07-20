@@ -16,7 +16,7 @@ import {
   ConversationMembers,
   useActiveConversation,
 } from "@features/conversation";
-import { useUpdateConversationParticipant } from "@features/conversation-participants";
+import { useUpdateConversationParticipant } from "@api/conversation-participants";
 
 // import { cookiesService, localStorageService } from "@core/services";
 // import { useNavigate } from "react-router-dom";
