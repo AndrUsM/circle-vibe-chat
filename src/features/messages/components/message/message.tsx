@@ -33,13 +33,13 @@ import {
 } from "@features/messages";
 
 import { UserAvatar } from "@shared/components";
-import { VIDEO_MIME_TYPE } from "@shared/constants";
 
 import "./message.scss";
-import { BASE_FILE_SERVER_API_URL } from "@core/constants";
+import { VideoPreview } from "./video-preview";
 
 interface MessageProps {
   message: MessageModel;
+  isMuted?: boolean;
   chatParticipantId: number;
   isSavedMessages?: boolean;
   onDeleteMessage: (messageId: number) => void;
@@ -53,6 +53,7 @@ interface MessageProps {
 
 export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   message,
+  isMuted = false,
   chatParticipantId,
   isSavedMessages = false,
   onDeleteMessage,
@@ -94,7 +95,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
     const updatedLimit =
       contentSplitNumber === messageFileLimit
         ? content.length
-        : messageFileLimit;
+      : messageFileLimit;
     setContentSplitNumber(updatedLimit);
   }, [contentSplitNumber, messageFileLimit, content.length]);
   const onOpenFileForPreview = useCallback((messageFile: MessageFile) => {
@@ -125,30 +126,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
           <StackLayout>
             <Show.When isTrue={messageType === MessageType.VIDEO}>
               <div className="mx-auto">
-                <video
-                  width={320}
-                  height={240}
-                  controls
-                  muted
-                  onClick={(e) => {
-                    e.preventDefault();
-                    onOpenFile(sortedByTypeFiles.videos[0]);
-                  }}
-                >
-                  {sortedByTypeFiles.videos?.map(
-                    ({ description, id, optimizedUrl }) => (
-                      <React.Fragment key={id}>
-                        <source src={optimizedUrl} type={VIDEO_MIME_TYPE} />
-
-                        <Show.When isTrue={Boolean(description)}>
-                          <span className="white-space-pre-wrap message-description">
-                            {description}
-                          </span>
-                        </Show.When>
-                      </React.Fragment>
-                    )
-                  )}
-                </video>
+                <VideoPreview videos={sortedByTypeFiles.videos} onOpenFile={onOpenFile} />
               </div>
             </Show.When>
 

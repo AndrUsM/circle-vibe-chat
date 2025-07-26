@@ -239,6 +239,7 @@ export const Conversations: React.FC = () => {
                 <Suspense key={message.id} fallback={<LoadingOverlay />}>
                   <Message
                     message={message}
+                    isMuted={Boolean(chatParticipant?.isMuted)}
                     chatParticipantId={Number(chatParticipant?.id)}
                     isSavedMessages={isSavedMessagesChat}
                     onDeleteMessage={onDeleteMessage}
