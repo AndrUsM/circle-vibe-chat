@@ -1,3 +1,5 @@
+import { useEffect } from "react";
+
 import {
   Chat,
   ChatParticipant,
@@ -5,10 +7,9 @@ import {
   PaginatedResponse,
   Message,
 } from "@circle-vibe/shared";
+
 import { useSocket } from "@core/hooks";
 import { cookiesService } from "@core/services";
-import { useEffect } from "react";
-// import { Message } from "yup";
 
 interface UseChatSocketLogicInitializationOptions {
   socketListenerNotifyNewMessage: VoidFunction;

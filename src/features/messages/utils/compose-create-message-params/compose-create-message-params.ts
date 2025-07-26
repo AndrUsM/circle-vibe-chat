@@ -14,7 +14,7 @@ export const composeCreateMessageParams = (
     content: encodeBase64(formValues.content ?? ''),
     chatId: selectedChatId,
     senderId: chatParticipant?.id,
-    threadId: undefined,
+    threadId: formValues?.threadId,
     hidden: false,
     messageType,
   };

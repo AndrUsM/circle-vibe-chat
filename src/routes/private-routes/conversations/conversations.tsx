@@ -1,8 +1,8 @@
 import { Suspense, useCallback, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
 import { Link } from "react-router-dom";
-import { useDebouncedCallback } from "use-debounce";
 import * as Resizer from "@column-resizer/react";
+import { useDebouncedCallback } from "use-debounce";
 
 import { composeAvatarFallback } from "@circle-vibe/shared";
 import {
@@ -29,10 +29,7 @@ import {
   PaginationControls,
   PaginationScrollButton,
 } from "@shared/components";
-import {
-  useConfirmation,
-  useScrollToBlockPosition,
-} from "@shared/hooks";
+import { useConfirmation, useScrollToBlockPosition } from "@shared/hooks";
 
 import {
   usePreviewFileState,
@@ -40,6 +37,7 @@ import {
   useUpdateMessageState,
   MessageUpdateDialog,
   MessageUpdateFormValues,
+  MessageForm,
 } from "@features/messages";
 import {
   useConversationGateway,
@@ -49,7 +47,6 @@ import {
 
 import { TopbarActions } from "./topbar-actions";
 import { ConversationModals } from "./conversation-modals";
-import { MessageForm } from "./message-form";
 
 import "./conversation.scss";
 
@@ -100,6 +97,7 @@ export const Conversations: React.FC = () => {
     selectedChatId,
     user,
     handleRefreshMessages,
+    handleSendMessageWithThread,
     onChatSelect,
     triggerGetPaginatedMessages,
     triggerGetPaginatedChats,
@@ -127,12 +125,15 @@ export const Conversations: React.FC = () => {
     },
     [selectedChatId, messagesPage]
   );
-  const onUpdateMessage = useCallback((messageId: number) => {
-    onOpenMessageUpdateDialog({
-      chatId: Number(selectedChatId),
-      messageId,
-    });
-  }, [selectedChatId]);
+  const onUpdateMessage = useCallback(
+    (messageId: number) => {
+      onOpenMessageUpdateDialog({
+        chatId: Number(selectedChatId),
+        messageId,
+      });
+    },
+    [selectedChatId]
+  );
 
   useInitialChatSelection(
     chats?.data ?? [],
@@ -243,6 +244,7 @@ export const Conversations: React.FC = () => {
                     onDeleteMessage={onDeleteMessage}
                     onUpdateMessage={onUpdateMessage}
                     onOpenFile={toggleFileDialogVisibility}
+                    onReplyMessage={handleSendMessageWithThread}
                   />
                 </Suspense>
               ))}
@@ -288,7 +290,9 @@ export const Conversations: React.FC = () => {
         <MessageUpdateDialog
           chatId={Number(messageUpdateDialogState?.chatId)}
           messageId={Number(messageUpdateDialogState?.messageId)}
-          initialValues={messageUpdateDialogState?.initialValues as MessageUpdateFormValues}
+          initialValues={
+            messageUpdateDialogState?.initialValues as MessageUpdateFormValues
+          }
           onSuccess={() => {
             handleRefreshMessages();
             onCloseMessageUpdateDialog();

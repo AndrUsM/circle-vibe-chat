@@ -33,11 +33,5 @@ export const useConversationGatewayState = () => {
     chatsPage,
     chats,
     messages,
-    setChatsLoading,
-    setMessagesLoading,
-    setMessagesPage,
-    setChatsPage,
-    setChats,
-    setMessages,
   ]);
 };

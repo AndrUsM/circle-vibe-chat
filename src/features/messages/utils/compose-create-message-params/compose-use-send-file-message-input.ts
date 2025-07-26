@@ -21,7 +21,7 @@ export const composeUseSendMessageInput = (
   return {
     chatId: selectedChatId,
     senderId: chatParticipant,
-    threadId: undefined,
+    threadId: formValues?.threadId,
     hidden: false,
     content: formValues.content ?? '',
     messageType,

@@ -15,12 +15,8 @@ import { cookiesService } from "@core/services";
 
 interface ISocketContext {
   socket: Socket;
-  /**
-   * @deprecated video socket is deprecated feature and will be removed
-   * in the future releases
-   */
-  videoSocket: Socket | null;
-  createVideoSocketConnection(): Promise<Socket<any, any> | undefined>;
+  fileSocket: Socket | null;
+  createFileSocketConnection(): Promise<Socket<any, any> | undefined>;
   connectToChatSocket: VoidFunction;
 }
 
@@ -39,15 +35,15 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
       personalToken: user?.privateToken,
     },
   });
-  const [videoSocket, setVideoSocket] = useState<Socket | null>(null);
+  const [fileSocket, setFileSocket] = useState<Socket | null>(null);
 
-  const createVideoSocketConnection = useCallback(async () => {
-    if (videoSocket && videoSocket.connected) {
+  const createFileSocketConnection = useCallback(async () => {
+    if (fileSocket && fileSocket.connected) {
       return;
     }
 
-    const videoSocketConnection = io(
-      `http://localhost:3005/${GatewayNamespaces.VIDEO_UPLOAD}`,
+    const fileSocketConnection = io(
+      `http://localhost:3005/${GatewayNamespaces.FILE_UPLOAD}`,
       {
         transports: ["websocket"],
         autoConnect: true,
@@ -58,9 +54,9 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
       }
     );
 
-    setVideoSocket(videoSocketConnection);
+    setFileSocket(fileSocketConnection);
 
-    return videoSocketConnection;
+    return fileSocketConnection;
   }, []);
 
   const connectToChatSocket = useCallback(() => {
@@ -82,8 +78,8 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
   }, [user, socket?.disconnected]);
 
   const value = useMemo(
-    () => ({ socket, videoSocket, createVideoSocketConnection, connectToChatSocket }),
-    [socket, videoSocket, createVideoSocketConnection, connectToChatSocket]
+    () => ({ socket, fileSocket, createFileSocketConnection, connectToChatSocket }),
+    [socket, fileSocket, createFileSocketConnection, connectToChatSocket]
   );
 
   return (

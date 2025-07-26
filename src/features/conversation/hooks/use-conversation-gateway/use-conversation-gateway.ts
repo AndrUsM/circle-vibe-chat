@@ -1,3 +1,4 @@
+import { FormikHelpers } from "formik";
 import { useCallback, useContext, useMemo } from "react";
 
 import {
@@ -11,12 +12,16 @@ import {
   DEFAULT_PAGINATION_PAGE_SIZE,
 } from "@circle-vibe/shared";
 import { useSendMessage } from "@api/messages";
+import { useCreateThread } from "@api/threads";
 
 import { useCurrentUser, useNotification, useSocket } from "@core/hooks";
 
 import { composePaginationResponse } from "@shared/utils";
 
-import { ConversationContext } from "@features/conversation";
+import {
+  ConversationContext,
+} from "@features/conversation";
+import { MessageFormValues } from "@features/messages";
 
 import { useConversationGatewayState } from "./use-conversation-gateway-state";
 import { useChatSocketLogicInitialization } from "./use-conversation-socket-intialization";
@@ -53,6 +58,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     messages,
     setMessages,
   } = useConversationGatewayState();
+  const createThread = useCreateThread();
   const {
     currentConversationParticipant: chatParticipant,
     setCurrentConversationParticipant: setChatParticipant,
@@ -88,6 +94,30 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     setMessagesLoading
   );
 
+  const handleSendMessageWithThread = useCallback(
+    async (
+      formValues: MessageFormValues,
+      formikUtils: FormikHelpers<MessageFormValues>
+    ) => {
+      if (!formValues.threadId) {
+        const { parentMessageId } = formValues;
+        const thread = await createThread({
+          chatId: Number(selectedChatId),
+          parentMessageId: Number(parentMessageId),
+        });
+        const payload: MessageFormValues = {
+          ...formValues,
+          threadId: thread?.id,
+        };
+
+        return handleSendMessage(payload, formikUtils);
+      }
+
+      return handleSendMessage(formValues, formikUtils);
+    },
+    [selectedChatId, chatParticipant]
+  );
+
   const handleRefreshMessages = useCallback(() => {
     if (!selectedChatId) {
       return;
@@ -105,9 +135,9 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   };
 
   const socketListenerReceiveMessages = (
-    messages: PaginatedResponse<Message>
+    updatedMessages: PaginatedResponse<Message>
   ) => {
-    setMessages(composePaginationResponse(messages));
+    setMessages(composePaginationResponse(updatedMessages));
     setMessagesLoading(false);
 
     socket.emit(ChatSocketCommand.RECEIVE_CHATS, chatParticipant?.chatId);
@@ -133,26 +163,33 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     });
   };
 
-  const triggerGetPaginatedMessages = (page: number, options?: {
-    force?: boolean
-  }) => {
-    const isSamePage = options?.force ? false : page === messagesPage;
+  const triggerGetPaginatedMessages = useCallback(
+    (
+      page: number,
+      options?: {
+        force?: boolean;
+      }
+    ) => {
+      const isSamePage = options?.force ? false : page === messagesPage;
 
-    if (!selectedChatId || isSamePage) {
-      return;
-    }
+      if (!selectedChatId || isSamePage) {
+        return;
+      }
 
-    setMessagesPage(page);
+      setMessagesPage(page);
 
-    const params: RequestMessagesWithPaginationChatSocketParams = {
-      chatId: selectedChatId,
-      page,
-      pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
-    };
+      const params: RequestMessagesWithPaginationChatSocketParams = {
+        chatId: selectedChatId,
+        page,
+        threadId: undefined,
+        pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
+      };
 
-    setMessagesLoading(true);
-    socket.emit(ChatSocketCommand.REQUEST_MESSAGES_WITH_PAGINATION, params);
-  };
+      setMessagesLoading(true);
+      socket.emit(ChatSocketCommand.REQUEST_MESSAGES_WITH_PAGINATION, params);
+    },
+    [selectedChatId, messagesPage]
+  );
 
   const triggerGetPaginatedChats = (
     page: number,
@@ -200,6 +237,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       messagesLoading,
       selectedChatId,
       user,
+      handleSendMessageWithThread,
       handleRefreshMessages,
       onChatSelect,
       triggerGetPaginatedChats,
@@ -219,6 +257,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       messagesLoading,
       selectedChatId,
       user,
+      handleSendMessageWithThread,
       onChatSelect,
       triggerGetPaginatedChats,
       triggerSearchChatsByName,

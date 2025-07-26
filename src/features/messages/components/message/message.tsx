@@ -1,4 +1,5 @@
 import React, { Suspense, useCallback, useMemo } from "react";
+import { FormikHelpers } from "formik";
 
 import {
   MessageType,
@@ -7,25 +8,35 @@ import {
   composeAvatarFallback,
   MessageFile,
 } from "@circle-vibe/shared";
+
 import {
-  Button,
   CenteredVertialLayout,
+  Button,
   ClusterLayout,
   ExtendedReactFunctionalComponent,
   FormatDateTime,
   Icon,
   LoadingOverlay,
+  noop,
   Show,
   StackLayout,
   Tooltip,
+  useBoolean,
   useFormatDatetime,
   useIcons,
 } from "@circle-vibe/components";
-import { useSortedByTypeFiles } from "@features/messages";
 
-import { UserAvatar } from "@shared/components/user-avatar/user-avatar";
+import {
+  MessageForm,
+  MessageFormValues,
+  useSortedByTypeFiles,
+} from "@features/messages";
+
+import { UserAvatar } from "@shared/components";
+import { VIDEO_MIME_TYPE } from "@shared/constants";
 
 import "./message.scss";
+import { BASE_FILE_SERVER_API_URL } from "@core/constants";
 
 interface MessageProps {
   message: MessageModel;
@@ -34,6 +45,10 @@ interface MessageProps {
   onDeleteMessage: (messageId: number) => void;
   onUpdateMessage: (messageId: number) => void;
   onOpenFile: (file: MessageFile) => void;
+  onReplyMessage?: (
+    fileMessage: MessageFormValues,
+    formikUtils: FormikHelpers<MessageFormValues>
+  ) => void;
 }
 
 export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
@@ -43,7 +58,10 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   onDeleteMessage,
   onUpdateMessage,
   onOpenFile,
+  onReplyMessage = noop,
 }) => {
+  const [isReplyMessageEnabled, toggleIsReplyMessageEnabled] =
+    useBoolean(false);
   const messageFileLimit = 500;
   const [contentSplitNumber, setContentSplitNumber] =
     React.useState(messageFileLimit);
@@ -53,7 +71,6 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   const formatDateTime = useFormatDatetime();
   const senderFullName = getUserFullName(sender?.user);
   const imageFallback = composeAvatarFallback(sender?.user);
-  const VIDEO_MIME_TYPE = "video/mp4";
 
   const isContentTooLong = useMemo(
     () => content.length > messageFileLimit,
@@ -85,161 +102,224 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   }, []);
 
   return (
-    <StackLayout space="0.5rem" className="bg-tertiary rounded-1 p-2 rounded-2">
-      <Show.When isTrue={Boolean(content) && !files?.length}>
-        <StackLayout space="0.5rem" justifyContent="space-between">
-          <div className="bg-light p-2 rounded-2 white-space-pre-wrap">
-            {messageContent}
-          </div>
+    <StackLayout space="0.5rem">
+      <StackLayout
+        space="0.5rem"
+        className="bg-tertiary rounded-1 p-2 rounded-2"
+      >
+        <Show.When isTrue={Boolean(content) && !files?.length}>
+          <StackLayout space="0.5rem" justifyContent="space-between">
+            <div className="bg-light p-2 rounded-2 white-space-pre-wrap">
+              {messageContent}
+            </div>
 
-          <Show.When isTrue={isContentTooLong}>
-            <Button color="primary" onClick={toggleOfTooLongMessage}>
-              <Icon name={toggleIconIcon} size={16} color="white" />
-            </Button>
-          </Show.When>
-        </StackLayout>
-      </Show.When>
+            <Show.When isTrue={isContentTooLong}>
+              <Button color="primary" onClick={toggleOfTooLongMessage}>
+                <Icon name={toggleIconIcon} size={16} color="white" />
+              </Button>
+            </Show.When>
+          </StackLayout>
+        </Show.When>
 
-      <Show.When isTrue={Boolean(files?.length)}>
-        <StackLayout>
-          <Show.When isTrue={messageType === MessageType.VIDEO}>
-            <div className="mx-auto">
-              <video
-                width={320}
-                height={240}
-                controls
-                muted
-                onClick={(e) => {
-                  e.preventDefault();
-                  onOpenFile(sortedByTypeFiles.videos[0]);
-                }}
-              >
-                {sortedByTypeFiles.videos?.map(({ description, id, optimizedUrl }) => (
+        <Show.When isTrue={Boolean(files?.length)}>
+          <StackLayout>
+            <Show.When isTrue={messageType === MessageType.VIDEO}>
+              <div className="mx-auto">
+                <video
+                  width={320}
+                  height={240}
+                  controls
+                  muted
+                  onClick={(e) => {
+                    e.preventDefault();
+                    onOpenFile(sortedByTypeFiles.videos[0]);
+                  }}
+                >
+                  {sortedByTypeFiles.videos?.map(
+                    ({ description, id, optimizedUrl }) => (
+                      <React.Fragment key={id}>
+                        <source src={optimizedUrl} type={VIDEO_MIME_TYPE} />
+
+                        <Show.When isTrue={Boolean(description)}>
+                          <span className="white-space-pre-wrap message-description">
+                            {description}
+                          </span>
+                        </Show.When>
+                      </React.Fragment>
+                    )
+                  )}
+                </video>
+              </div>
+            </Show.When>
+
+            <Show.When isTrue={messageType === MessageType.IMAGE}>
+              {sortedByTypeFiles.images?.map(
+                (
+                  { description, optimizedUrl, fileName, id },
+                  messageFileIndex
+                ) => (
                   <React.Fragment key={id}>
-                    <source src={optimizedUrl} type={VIDEO_MIME_TYPE} />
+                    <div className="mx-auto">
+                      <Suspense fallback={<LoadingOverlay />}>
+                        <img
+                          className="image-responsive message-image rounded-2"
+                          src={optimizedUrl}
+                          key={fileName}
+                          alt={description}
+                          loading="lazy"
+                          onClick={() =>
+                            onOpenFile(
+                              sortedByTypeFiles.images[messageFileIndex]
+                            )
+                          }
+                        />
+                      </Suspense>
+                    </div>
+
+                    <Show.When isTrue={Boolean(description)}>
+                      <span className="white-space-pre-wrap message-description bg-light italic">
+                        {description}
+                      </span>
+                    </Show.When>
+                  </React.Fragment>
+                )
+              )}
+            </Show.When>
+
+            <Show.When isTrue={messageType === MessageType.FILE}>
+              {sortedByTypeFiles.files?.map(
+                ({ description, url, fileName }, fileTypeIndex) => (
+                  <CenteredVertialLayout
+                    key={fileName}
+                    space="2rem"
+                    justifyContent="space-between"
+                    className="w-full"
+                  >
+                    <Tooltip title={"Open file"}>
+                      <span
+                        onClick={() =>
+                          onOpenFileForPreview(
+                            sortedByTypeFiles.files[fileTypeIndex]
+                          )
+                        }
+                        className="text-link"
+                      >
+                        {fileName}
+                      </span>
+                    </Tooltip>
 
                     <Show.When isTrue={Boolean(description)}>
                       <span className="white-space-pre-wrap message-description">
                         {description}
                       </span>
                     </Show.When>
-                  </React.Fragment>
-                ))}
-              </video>
-            </div>
-          </Show.When>
 
-          <Show.When isTrue={messageType === MessageType.IMAGE}>
-            {sortedByTypeFiles.images?.map(
-              (
-                { description, optimizedUrl, fileName, id },
-                messageFileIndex
-              ) => (
-                <React.Fragment key={id}>
-                  <div className="mx-auto">
-                    <Suspense fallback={<LoadingOverlay />}>
-                      <img
-                        className="image-responsive message-image rounded-2"
-                        src={optimizedUrl}
-                        key={fileName}
-                        alt={description}
-                        loading="lazy"
-                        onClick={() =>
-                          onOpenFile(sortedByTypeFiles.images[messageFileIndex])
-                        }
-                      />
-                    </Suspense>
-                  </div>
+                    <a href={url} target="_blank" key={fileName} rel="noopener">
+                      <Button color="secondary" size="small">
+                        <Icon
+                          name={icons.cilCloudUpload}
+                          color="var(--cv-light)"
+                          size={14}
+                        />
+                      </Button>
+                    </a>
+                  </CenteredVertialLayout>
+                )
+              )}
+            </Show.When>
+          </StackLayout>
+        </Show.When>
 
-                  <Show.When isTrue={Boolean(description)}>
-                    <span className="white-space-pre-wrap message-description bg-light italic">
-                      {description}
-                    </span>
-                  </Show.When>
-                </React.Fragment>
-              )
-            )}
-          </Show.When>
+        <ClusterLayout
+          space="0.5rem"
+          alignItems="center"
+          justifyContent="space-between"
+          className="flex-wrap"
+        >
+          <ClusterLayout space="0.5rem" alignItems="center">
+            <Show.When isTrue={Boolean(sender) && !isSavedMessages}>
+              <UserAvatar
+                url={avatarUrl ?? undefined}
+                fallback={imageFallback}
+              />
 
-          <Show.When isTrue={messageType === MessageType.FILE}>
-            {sortedByTypeFiles.files?.map(
-              ({ description, url, fileName }, fileTypeIndex) => (
-                <CenteredVertialLayout
-                  key={fileName}
-                  space="2rem"
-                  justifyContent="space-between"
-                  className="w-full"
-                >
-                  <Tooltip title={"Open file"}>
-                    <span
-                      onClick={() =>
-                        onOpenFileForPreview(sortedByTypeFiles.files[fileTypeIndex])
-                      }
-                      className="text-link"
-                    >
-                      {fileName}
-                    </span>
-                  </Tooltip>
+              <div className="italic">{senderFullName}</div>
+            </Show.When>
+            <div>{formatDateTime(updatedAt, FormatDateTime.DATE_TIME)}</div>
+          </ClusterLayout>
 
-                  <Show.When isTrue={Boolean(description)}>
-                    <span className="white-space-pre-wrap message-description">
-                      {description}
-                    </span>
-                  </Show.When>
-
-                  <a href={url} target="_blank" key={fileName} rel="noopener">
-                    <Button color="secondary" size="small">
-                      <Icon
-                        name={icons.cilCloudUpload}
-                        color="var(--cv-light)"
-                        size={14}
-                      />
-                    </Button>
-                  </a>
-                </CenteredVertialLayout>
-              )
-            )}
-          </Show.When>
-        </StackLayout>
-      </Show.When>
-
-      <ClusterLayout
-        space="0.5rem"
-        alignItems="center"
-        justifyContent="space-between"
-        className="flex-wrap"
-      >
-        <ClusterLayout space="0.5rem" alignItems="center">
-          <Show.When isTrue={Boolean(sender) && !isSavedMessages}>
-            <UserAvatar url={avatarUrl ?? undefined} fallback={imageFallback} />
-
-            <div className="italic">{senderFullName}</div>
-          </Show.When>
-          <div>{formatDateTime(updatedAt, FormatDateTime.DATE_TIME)}</div>
-        </ClusterLayout>
-
-        <Show.When isTrue={isSavedMessages || sender.id === chatParticipantId}>
           <ClusterLayout space="0.5rem">
-            <Show.When isTrue={message.messageType === MessageType.TEXT}>
+            <Show.When
+              isTrue={!isSavedMessages && sender.id !== chatParticipantId && !message?.threadId}
+            >
               <Button
-                color="secondary"
+                color={message?.childThreadId ? "primary" : "secondary"}
                 size="small"
-                onClick={() => onUpdateMessage(message.id)}
+                onClick={toggleIsReplyMessageEnabled}
               >
-                <Icon color="var(--cv-light)" name={icons.cilPen} size={14} />
+                <Icon
+                  color="var(--cv-light)"
+                  name={icons.cilChatBubble}
+                  size={14}
+                />
               </Button>
             </Show.When>
 
-            <Button
-              color="secondary"
-              size="small"
-              onClick={() => onDeleteMessage(message.id)}
+            <Show.When
+              isTrue={isSavedMessages || sender.id === chatParticipantId}
             >
-              <Icon color="var(--cv-light)" name={icons.cilDelete} size={14} />
-            </Button>
+              <Show.When isTrue={message.messageType === MessageType.TEXT}>
+                <Button
+                  color="secondary"
+                  size="small"
+                  onClick={() => onUpdateMessage(message.id)}
+                >
+                  <Icon color="var(--cv-light)" name={icons.cilPen} size={14} />
+                </Button>
+              </Show.When>
+
+              <Button
+                color="secondary"
+                size="small"
+                onClick={() => onDeleteMessage(message.id)}
+              >
+                <Icon
+                  color="var(--cv-light)"
+                  name={icons.cilDelete}
+                  size={14}
+                />
+              </Button>
+            </Show.When>
           </ClusterLayout>
-        </Show.When>
-      </ClusterLayout>
+        </ClusterLayout>
+      </StackLayout>
+
+      <Show.When isTrue={isReplyMessageEnabled}>
+        <StackLayout className="pl-6">
+          <Show.When isTrue={Boolean(message.childThreadId)}>
+            {message.threads?.map((childMessage: MessageModel) => (
+              <Message
+                key={childMessage.id}
+                message={childMessage}
+                chatParticipantId={chatParticipantId}
+                onOpenFile={onOpenFile}
+                onUpdateMessage={onUpdateMessage}
+                onDeleteMessage={onDeleteMessage}
+              />
+            ))}
+          </Show.When>
+
+          <Show.When isTrue={message.sender?.id !== chatParticipantId}>
+            <MessageForm
+              initialValues={{
+                parentMessageId: message.id,
+                threadId: message.childThreadId,
+              }}
+              onSubmit={onReplyMessage}
+            />
+          </Show.When>
+        </StackLayout>
+      </Show.When>
     </StackLayout>
   );
 };

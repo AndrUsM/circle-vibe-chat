@@ -30,7 +30,7 @@ export const useSendMessage = (
   return useCallback(
     async (
       formValues: MessageFormValues,
-      { resetForm, setFieldValue }: FormikHelpers<MessageFormValues>
+      { resetForm }: FormikHelpers<MessageFormValues>
     ) => {
       setMessagesLoading(true);
 
@@ -53,7 +53,7 @@ export const useSendMessage = (
               composeCreateMessageParams(
                 chatParticipant,
                 selectedChatId,
-                formValues
+                formValues,
               );
 
             await sendVideo(formValues.file, messageInputDto);

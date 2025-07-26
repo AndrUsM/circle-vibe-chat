@@ -5,7 +5,7 @@ import {
   SendMessageChatSocketParams,
 } from "@circle-vibe/shared";
 import { useNotification, useSocket } from "@core/hooks";
-import { composeSendVideoFileMessageParams } from "../use-send-video/utils";
+import { composeSendVideoFileMessageParams } from "../use-save-file-as-chunk/utils";
 
 export const useSendVideoAsBuffer = () => {
   const { socket } = useSocket();

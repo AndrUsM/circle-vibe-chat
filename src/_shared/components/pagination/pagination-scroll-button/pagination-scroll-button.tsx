@@ -1,8 +1,6 @@
 import {
-  SyntheticEvent,
   useCallback,
   useEffect,
-  useMemo,
   useState,
 } from "react";
 
