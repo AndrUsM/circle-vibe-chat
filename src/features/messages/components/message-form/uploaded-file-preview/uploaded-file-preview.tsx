@@ -30,7 +30,7 @@ export const UploadedFilePreview: React.FC<UploadedFilePreviewProps> = ({
       </Button>
 
       <Show.When isTrue={entityType === MessageFileEntityType.IMAGE}>
-        <img className="rounded-2 w-full max-w-40 min-h-16" src={fileSource} />
+        <img className="rounded-2 w-full max-w-40 min-h-16 image-rendering-pixelated" src={fileSource} />
       </Show.When>
 
       <Show.When isTrue={entityType === MessageFileEntityType.VIDEO}>

@@ -1,0 +1,25 @@
+.image-rendering {
+  &-pixelated {
+    image-rendering: pixelated;
+  }
+
+  &-auto {
+    image-rendering: auto;
+  }
+
+  &-crisp-edges {
+    image-rendering: crisp-edges;
+  }
+
+  &-optimize-contrast {
+    image-rendering: optimize-contrast;
+  }
+
+  &-optimize-quality {
+    image-rendering: optimize-quality;
+  }
+
+  &-optimize-speed {
+    image-rendering: optimize-speed;
+  }
+}

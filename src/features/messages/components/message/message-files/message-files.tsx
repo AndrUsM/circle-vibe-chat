@@ -52,7 +52,7 @@ export const MessageFiles: React.FC<MessageFilesProps> = ({
               <div className="mx-auto">
                 <Suspense fallback={<LoadingOverlay />}>
                   <img
-                    className="image-responsive message-image rounded-2"
+                    className="image-responsive image-rendering-pixelated message-image rounded-2"
                     src={optimizedUrl}
                     key={fileName}
                     alt={description}
