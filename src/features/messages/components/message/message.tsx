@@ -1,4 +1,3 @@
-import React, { Suspense, useCallback, useMemo } from "react";
 import { FormikHelpers } from "formik";
 
 import {
@@ -16,11 +15,9 @@ import {
   ExtendedReactFunctionalComponent,
   FormatDateTime,
   Icon,
-  LoadingOverlay,
   noop,
   Show,
   StackLayout,
-  Tooltip,
   useBoolean,
   useFormatDatetime,
   useIcons,
@@ -29,17 +26,18 @@ import {
 import {
   MessageForm,
   MessageFormValues,
-  useSortedByTypeFiles,
+  useSplitMessageContent,
+  useThreadParticipants,
 } from "@features/messages";
 
 import { UserAvatar } from "@shared/components";
 
+import { MessageFiles } from "./message-files/message-files";
+
 import "./message.scss";
-import { VideoPreview } from "./video-preview";
 
 interface MessageProps {
   message: MessageModel;
-  isMuted?: boolean;
   chatParticipantId: number;
   isSavedMessages?: boolean;
   onDeleteMessage: (messageId: number) => void;
@@ -48,12 +46,11 @@ interface MessageProps {
   onReplyMessage?: (
     fileMessage: MessageFormValues,
     formikUtils: FormikHelpers<MessageFormValues>
-  ) => void;
+  ) => Promise<void>;
 }
 
 export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   message,
-  isMuted = false,
   chatParticipantId,
   isSavedMessages = false,
   onDeleteMessage,
@@ -61,46 +58,24 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   onOpenFile,
   onReplyMessage = noop,
 }) => {
-  const [isReplyMessageEnabled, toggleIsReplyMessageEnabled] =
-    useBoolean(false);
-  const messageFileLimit = 500;
-  const [contentSplitNumber, setContentSplitNumber] =
-    React.useState(messageFileLimit);
-  const { content, files, messageType, sender, updatedAt } = message;
-  const avatarUrl = sender?.user?.avatarUrl;
   const icons = useIcons();
   const formatDateTime = useFormatDatetime();
+  const [isReplyMessageEnabled, toggleIsReplyMessageEnabled] =
+    useBoolean(false);
+
+  const { content, files, messageType, sender, updatedAt } = message;
+
+  const {
+    messageContent,
+    isContentTooLong,
+    toggleOfTooLongMessage,
+    toggleIconIcon,
+  } = useSplitMessageContent(content);
   const senderFullName = getUserFullName(sender?.user);
   const imageFallback = composeAvatarFallback(sender?.user);
+  const threadParticipants = useThreadParticipants(message?.threads);
 
-  const isContentTooLong = useMemo(
-    () => content.length > messageFileLimit,
-    [content, contentSplitNumber]
-  );
-  const messageContent = useMemo(() => {
-    return content.length < contentSplitNumber
-      ? content
-      : `${content.slice(0, contentSplitNumber)}...`;
-  }, [content, contentSplitNumber]);
-
-  const sortedByTypeFiles = useSortedByTypeFiles(files);
-  const toggleIconIcon = useMemo(
-    () =>
-      contentSplitNumber === messageFileLimit
-        ? icons.cilExpandDown
-        : icons.cilExpandUp,
-    [contentSplitNumber, icons.cilExpandDown, icons.cilExpandUp]
-  );
-  const toggleOfTooLongMessage = useCallback(() => {
-    const updatedLimit =
-      contentSplitNumber === messageFileLimit
-        ? content.length
-      : messageFileLimit;
-    setContentSplitNumber(updatedLimit);
-  }, [contentSplitNumber, messageFileLimit, content.length]);
-  const onOpenFileForPreview = useCallback((messageFile: MessageFile) => {
-    window.open(messageFile.url, "_blank");
-  }, []);
+  const avatarUrl = sender?.user?.avatarUrl;
 
   return (
     <StackLayout space="0.5rem">
@@ -123,89 +98,11 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
         </Show.When>
 
         <Show.When isTrue={Boolean(files?.length)}>
-          <StackLayout>
-            <Show.When isTrue={messageType === MessageType.VIDEO}>
-              <div className="mx-auto">
-                <VideoPreview videos={sortedByTypeFiles.videos} onOpenFile={onOpenFile} />
-              </div>
-            </Show.When>
-
-            <Show.When isTrue={messageType === MessageType.IMAGE}>
-              {sortedByTypeFiles.images?.map(
-                (
-                  { description, optimizedUrl, fileName, id },
-                  messageFileIndex
-                ) => (
-                  <React.Fragment key={id}>
-                    <div className="mx-auto">
-                      <Suspense fallback={<LoadingOverlay />}>
-                        <img
-                          className="image-responsive message-image rounded-2"
-                          src={optimizedUrl}
-                          key={fileName}
-                          alt={description}
-                          loading="lazy"
-                          onClick={() =>
-                            onOpenFile(
-                              sortedByTypeFiles.images[messageFileIndex]
-                            )
-                          }
-                        />
-                      </Suspense>
-                    </div>
-
-                    <Show.When isTrue={Boolean(description)}>
-                      <span className="white-space-pre-wrap message-description bg-light italic">
-                        {description}
-                      </span>
-                    </Show.When>
-                  </React.Fragment>
-                )
-              )}
-            </Show.When>
-
-            <Show.When isTrue={messageType === MessageType.FILE}>
-              {sortedByTypeFiles.files?.map(
-                ({ description, url, fileName }, fileTypeIndex) => (
-                  <CenteredVertialLayout
-                    key={fileName}
-                    space="2rem"
-                    justifyContent="space-between"
-                    className="w-full"
-                  >
-                    <Tooltip title={"Open file"}>
-                      <span
-                        onClick={() =>
-                          onOpenFileForPreview(
-                            sortedByTypeFiles.files[fileTypeIndex]
-                          )
-                        }
-                        className="text-link"
-                      >
-                        {fileName}
-                      </span>
-                    </Tooltip>
-
-                    <Show.When isTrue={Boolean(description)}>
-                      <span className="white-space-pre-wrap message-description">
-                        {description}
-                      </span>
-                    </Show.When>
-
-                    <a href={url} target="_blank" key={fileName} rel="noopener">
-                      <Button color="secondary" size="small">
-                        <Icon
-                          name={icons.cilCloudUpload}
-                          color="var(--cv-light)"
-                          size={14}
-                        />
-                      </Button>
-                    </a>
-                  </CenteredVertialLayout>
-                )
-              )}
-            </Show.When>
-          </StackLayout>
+          <MessageFiles
+            files={files}
+            messageType={messageType}
+            onOpenFile={onOpenFile}
+          />
         </Show.When>
 
         <ClusterLayout
@@ -214,6 +111,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
           justifyContent="space-between"
           className="flex-wrap"
         >
+          {/* SENDER, TIMESTAMP */}
           <ClusterLayout space="0.5rem" alignItems="center">
             <Show.When isTrue={Boolean(sender) && !isSavedMessages}>
               <UserAvatar
@@ -223,26 +121,68 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
 
               <div className="italic">{senderFullName}</div>
             </Show.When>
+
             <div>{formatDateTime(updatedAt, FormatDateTime.DATE_TIME)}</div>
           </ClusterLayout>
 
-          <ClusterLayout space="0.5rem">
+          {/* THREAD INFORMATION, ACTIONS */}
+          <ClusterLayout space="0.5rem" alignItems="center">
             <Show.When
-              isTrue={!isSavedMessages && sender.id !== chatParticipantId && !message?.threadId}
+              isTrue={
+                !isSavedMessages &&
+                sender.id !== chatParticipantId &&
+                !message?.threadId
+              }
             >
+              {/* THREAD PARTICIPANTS */}
+              <Show.When isTrue={Boolean(message?.threads?.length)}>
+                <CenteredVertialLayout space="0.5rem">
+                  {threadParticipants.slice(0, 2)?.map((threadParticipant) => (
+                    <UserAvatar
+                      url={sender?.user?.avatarUrl}
+                      fallback={composeAvatarFallback(threadParticipant)}
+                      key={`${message.id}_thread_${threadParticipant.id}`}
+                    />
+                  ))}
+
+                  <Show.When isTrue={threadParticipants?.length > 2}>
+                    <CenteredVertialLayout space="0.15rem">
+                      <Icon
+                        name={icons.cilPlus}
+                        color="var(--cv-dark)"
+                        size={10}
+                      />
+
+                      <span className="text-sm italic">
+                        {threadParticipants.slice(2).length} more
+                      </span>
+                    </CenteredVertialLayout>
+                  </Show.When>
+                </CenteredVertialLayout>
+              </Show.When>
+
               <Button
                 color={message?.childThreadId ? "primary" : "secondary"}
                 size="small"
                 onClick={toggleIsReplyMessageEnabled}
               >
-                <Icon
-                  color="var(--cv-light)"
-                  name={icons.cilChatBubble}
-                  size={14}
-                />
+                <CenteredVertialLayout space="0.25rem">
+                  <Icon
+                    color="var(--cv-light)"
+                    name={icons.cilChatBubble}
+                    size={14}
+                  />
+
+                  <Show.When isTrue={Boolean(message?.threads?.length)}>
+                    <span className="font-medium text-sm">
+                      {message?.threads?.length}
+                    </span>
+                  </Show.When>
+                </CenteredVertialLayout>
               </Button>
             </Show.When>
 
+            {/* DELETE, UPDATE ACTIONS */}
             <Show.When
               isTrue={isSavedMessages || sender.id === chatParticipantId}
             >
@@ -272,6 +212,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
         </ClusterLayout>
       </StackLayout>
 
+      {/*THREADS  */}
       <Show.When isTrue={isReplyMessageEnabled}>
         <StackLayout className="pl-6">
           <Show.When isTrue={Boolean(message.childThreadId)}>
@@ -287,13 +228,14 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
             ))}
           </Show.When>
 
+          {/* SEND MESSAGE FORM */}
           <Show.When isTrue={message.sender?.id !== chatParticipantId}>
             <MessageForm
               initialValues={{
                 parentMessageId: message.id,
                 threadId: message.childThreadId,
               }}
-              onSubmit={onReplyMessage}
+              onCreateMessage={onReplyMessage}
             />
           </Show.When>
         </StackLayout>

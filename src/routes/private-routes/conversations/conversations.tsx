@@ -239,7 +239,6 @@ export const Conversations: React.FC = () => {
                 <Suspense key={message.id} fallback={<LoadingOverlay />}>
                   <Message
                     message={message}
-                    isMuted={Boolean(chatParticipant?.isMuted)}
                     chatParticipantId={Number(chatParticipant?.id)}
                     isSavedMessages={isSavedMessagesChat}
                     onDeleteMessage={onDeleteMessage}
@@ -265,7 +264,7 @@ export const Conversations: React.FC = () => {
             </CenteredVertialLayout>
 
             <Show.When isTrue={isAnyChatSelected}>
-              <MessageForm onSubmit={handleSendMessage} />
+              <MessageForm onCreateMessage={handleSendMessage} />
             </Show.When>
           </StackLayout>
 

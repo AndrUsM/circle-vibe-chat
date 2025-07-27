@@ -28,3 +28,15 @@ $widths: (
 .max-w-full {
   max-width: 100%;
 }
+.size-fit {
+  width: fit-content;
+  height: fit-content;
+}
+
+.w-fit {
+  width: fit-content;
+}
+
+.h-fit {
+  height: fit-content;
+}

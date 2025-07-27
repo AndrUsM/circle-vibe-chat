@@ -1,0 +1,11 @@
+.close-button {
+  top: 0;
+  right: 0;
+  z-index: 1;
+}
+
+.file-name-badge {
+  max-width: 30ch;
+  min-width: 15ch;
+  background-color: var(--cv-bg-secondary);
+}

@@ -11,17 +11,27 @@ import {
   FormikFormControl,
   FormSubmitButton,
   Icon,
+  LoadingOverlay,
+  Show,
+  StackLayout,
   useIcons,
 } from "@circle-vibe/components";
+
 import {
   MESSAGE_FORM_INITIAL_VALUE,
   MESSAGE_FORM_VALIDATION_SCHEMA,
   MessageFormValues,
+  useFileEntityType,
+  useHandleFileUpload,
 } from "@features/messages";
+import { MessageFileEntityType } from "@circle-vibe/shared";
+import { UploadedFilePreview } from "./uploaded-file-preview";
+
+import "./message-form.scss";
 
 interface MessageFormProps {
   initialValues?: Partial<MessageFormValues>;
-  onSubmit: (
+  onCreateMessage: (
     values: MessageFormValues,
     options: FormikHelpers<MessageFormValues>
   ) => void;
@@ -29,12 +39,30 @@ interface MessageFormProps {
 
 export const MessageForm: ExtendedReactFunctionalComponent<
   MessageFormProps
-> = ({ initialValues = MESSAGE_FORM_INITIAL_VALUE, onSubmit }) => {
+> = ({ initialValues = MESSAGE_FORM_INITIAL_VALUE, onCreateMessage }) => {
+  const { cilFile } = useIcons();
   const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const { cilFile } = useIcons();
-  const openFileSelectionDialog = useCallback((e: React.SyntheticEvent) => {
-    fileInputRef?.current?.click();
+  const fileMimeType = useFileEntityType(fileInputRef);
+  const {
+    fileLoadingForPreview,
+    fileSource,
+    readFileProgress,
+    totalReadedMb,
+    totalFileSize,
+
+    abortReadFile,
+    handleFileChange,
+    setFileSource,
+    setFileLoadingForPreview,
+  } = useHandleFileUpload();
+
+  const openFileSelectionDialog = () => fileInputRef?.current?.click();
+  const onSubmit = useCallback((values: MessageFormValues, options: FormikHelpers<MessageFormValues>) => {
+    setFileLoadingForPreview(false);
+    setFileSource(undefined);
+
+    onCreateMessage(values, options);
   }, []);
 
   return (
@@ -47,33 +75,81 @@ export const MessageForm: ExtendedReactFunctionalComponent<
         ...MESSAGE_FORM_INITIAL_VALUE,
       }}
     >
-      {({ setFieldValue }: FormikProps<MessageFormValues>) => (
-        <ClusterLayout space="0.5rem" alignItems="flex-start">
-          <FormikFormControl formFieldName="content" className="w-full">
-            <FormControlTextarea
-              className="resize-vertical min-h-10 p-3"
-              placeholder={t("conversations.send.input.placeholder")}
-            />
-          </FormikFormControl>
+      {({ values, setFieldValue }: FormikProps<MessageFormValues>) => (
+        <StackLayout space="1rem">
+          <Show.When isTrue={fileLoadingForPreview}>
+            <StackLayout space="0.25rem" className="w-fit relative">
+              <Button
+                color="primary"
+                size="small"
+                onClick={() => {
+                  abortReadFile();
+                  setFileLoadingForPreview(false);
+                  if (fileInputRef.current) {
+                    setFieldValue("file", null);
+                  }
+                }}
+              >
+                {t("button.actions.cancel")}
+              </Button>
 
-          <Button type="button" onClick={openFileSelectionDialog}>
-            <Icon size={18} color="var(--cv-light)" name={cilFile} />
+              <div className="relative overflow-hidden file-empty-block bg-light rounded-2">
+                <LoadingOverlay />
+              </div>
 
-            <input
-              type="file"
-              ref={fileInputRef}
-              hidden
-              onChange={(event) => {
-                event.currentTarget.files &&
-                  setFieldValue("file", event.currentTarget.files[0]);
+              <span className="text-xs italic bg-tertiary rounded-2 p-2 text-center">
+                {readFileProgress}%, {totalReadedMb}/{totalFileSize} MB
+              </span>
+            </StackLayout>
+          </Show.When>
+
+          <Show.When isTrue={Boolean(fileSource) && !fileLoadingForPreview}>
+            <UploadedFilePreview
+              fileSource={String(fileSource)}
+              entityType={fileMimeType as MessageFileEntityType}
+              fileName={String(fileInputRef.current?.files?.[0]?.name)}
+              onClear={() => {
+                setFileSource(undefined);
+                setFieldValue("file", undefined);
               }}
             />
-          </Button>
+          </Show.When>
 
-          <FormSubmitButton color="primary" size="large">
-            {t("conversations.send.button")}
-          </FormSubmitButton>
-        </ClusterLayout>
+          <ClusterLayout space="0.5rem" alignItems="flex-start">
+            <FormikFormControl formFieldName="content" className="w-full">
+              <FormControlTextarea
+                className="resize-vertical min-h-10 p-3"
+                placeholder={t("conversations.send.input.placeholder")}
+              />
+            </FormikFormControl>
+
+            <Button
+              disabled={Boolean(values.file?.name)}
+              type="button"
+              onClick={openFileSelectionDialog}
+            >
+              <Icon size={18} color="var(--cv-light)" name={cilFile} />
+
+              <input
+                type="file"
+                ref={fileInputRef}
+                hidden
+                onChange={(event) => {
+                  setFileLoadingForPreview(true);
+                  handleFileChange(event, setFieldValue);
+                }}
+              />
+            </Button>
+
+            <FormSubmitButton
+              disabled={!values.file?.name && !values.content.length}
+              color="primary"
+              size="large"
+            >
+              {t("conversations.send.button")}
+            </FormSubmitButton>
+          </ClusterLayout>
+        </StackLayout>
       )}
     </Form>
   );
