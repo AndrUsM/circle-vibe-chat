@@ -4,21 +4,17 @@ import {
   Tooltip,
 } from "@circle-vibe/components";
 import { MessageFile, MessageFileEntityType } from "@circle-vibe/shared";
+import { openFileForPreview } from "@features/messages";
 
 import "./file-preview.scss";
 
 interface FilePreviewProps {
   messageFile: MessageFile;
-  onClose: VoidFunction;
 }
 
 export const FilePreview: ExtendedReactFunctionalComponent<
   FilePreviewProps
-> = ({ messageFile, onClose }) => {
-  const onOpenFileForPreview = (messageFile: MessageFile) => {
-    window.open(messageFile.url, "_blank");
-  };
-
+> = ({ messageFile }) => {
   const { entityType, fileName, url, description } = messageFile;
   if (entityType == MessageFileEntityType.IMAGE) {
     return (
@@ -33,7 +29,7 @@ export const FilePreview: ExtendedReactFunctionalComponent<
               className="block cursor-pointer max-w-full file-preview-image image-rendering-pixelated rounded-2 mx-auto"
               src={url}
               alt={description}
-              onClick={() => onOpenFileForPreview(messageFile)}
+              onClick={() => openFileForPreview(messageFile)}
             />
           </Tooltip>
         </section>

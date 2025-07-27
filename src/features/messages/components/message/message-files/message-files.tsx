@@ -12,7 +12,7 @@ import {
 } from "@circle-vibe/components";
 import { MessageFile, MessageType } from "@circle-vibe/shared";
 
-import { useSortedByTypeFiles } from "@features/messages/hooks";
+import { useSortedByTypeFiles, openFileForPreview } from "@features/messages";
 
 import { VideoPreview } from "../video-preview";
 
@@ -29,10 +29,6 @@ export const MessageFiles: React.FC<MessageFilesProps> = ({
 }) => {
   const icons = useIcons();
   const sortedByTypeFiles = useSortedByTypeFiles(files);
-
-  const onOpenFileForPreview = (messageFile: MessageFile) => {
-    window.open(messageFile.url, "_blank");
-  };
 
   return (
     <StackLayout>
@@ -86,7 +82,7 @@ export const MessageFiles: React.FC<MessageFilesProps> = ({
               <Tooltip title={"Open file"}>
                 <span
                   onClick={() =>
-                    onOpenFileForPreview(sortedByTypeFiles.files[fileTypeIndex])
+                    openFileForPreview(sortedByTypeFiles.files[fileTypeIndex])
                   }
                   className="text-link"
                 >
