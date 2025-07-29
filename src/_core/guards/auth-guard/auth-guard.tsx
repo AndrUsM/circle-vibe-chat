@@ -1,6 +1,6 @@
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
 import { cookiesService } from "@core/services";
-import { Navigate, Outlet, useLocation } from "react-router-dom";
 
 interface AuthGuardProps {
   isReverse?: boolean;

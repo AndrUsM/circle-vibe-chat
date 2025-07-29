@@ -1,9 +1,6 @@
 import { UserType } from "@circle-vibe/shared";
 
-interface DropdownOptions<T> {
-  key: T;
-  label: string;
-}
+import { DropdownOptions } from "@shared/types";
 
 export const USER_TYPE_DROPDOWN_OPTIONS: DropdownOptions<UserType>[] = [
   { key: UserType.PRIVATE, label: "user.user_type.private" },

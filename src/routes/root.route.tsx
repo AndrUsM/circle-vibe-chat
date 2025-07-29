@@ -8,7 +8,7 @@ import {
 
 import { SocketProvider } from "@core/context/socket/socket.provider";
 
-import { AuthGuard } from "@shared/components/guards";
+import { AuthGuard } from "@core/guards";
 
 import { PrivateRouter } from "./private-routes";
 import { PublicRouter } from "./public-routes";
