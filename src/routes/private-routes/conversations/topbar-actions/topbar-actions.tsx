@@ -1,3 +1,6 @@
+import { useCallback } from "react";
+import { useNavigate } from "react-router-dom";
+
 import {
   ExtendedReactFunctionalComponent,
   Menu,
@@ -5,9 +8,8 @@ import {
   Icon,
   Button,
 } from "@circle-vibe/components";
+
 import { cookiesService, localStorageService } from "@core/services";
-import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
 
 export const TopbarActions: ExtendedReactFunctionalComponent = () => {
   const icons = useIcons();

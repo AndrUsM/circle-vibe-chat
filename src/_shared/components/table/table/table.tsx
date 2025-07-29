@@ -3,9 +3,10 @@ import {
   noop,
 } from "@circle-vibe/components";
 
-import { TableProvier } from "../context";
+import { TableProvider } from "../context";
+import classNames from "classnames";
 
-interface TableProps {
+export interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
   children: React.ReactNode;
   onSort?: (sortingKey: string) => void;
   sortingKey?: string;
@@ -15,10 +16,14 @@ export const Table: ExtendedReactFunctionalComponent<TableProps> = ({
   children,
   onSort = noop,
   sortingKey = null,
+  className,
+  ...rest
 }) => {
   return (
-    <TableProvier onSort={onSort} sortingKey={sortingKey}>
-      <table>{children}</table>
-    </TableProvier>
+    <TableProvider onSort={onSort} sortingKey={sortingKey}>
+      <table className={classNames("text-center", className)} {...rest}>
+        {children}
+      </table>
+    </TableProvider>
   );
 };

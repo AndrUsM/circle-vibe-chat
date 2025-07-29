@@ -1,4 +1,5 @@
 import { SyntheticEvent, useContext } from "react";
+import classNames from "classnames";
 
 import { SortDirection } from "@circle-vibe/shared";
 import {
@@ -10,16 +11,17 @@ import {
   useIcons,
 } from "@circle-vibe/components";
 
-import { TableContext } from "../context/table.context";
+import { TableContext } from "../context/table";
 
-interface TableSortCellProps {
+export interface TableSortCellProps
+  extends React.HTMLAttributes<HTMLTableCellElement> {
   children: React.ReactNode;
   sortingKey: string;
 }
 
 export const TableSortCell: ExtendedReactFunctionalComponent<
   TableSortCellProps
-> = ({ children, sortingKey }) => {
+> = ({ children, sortingKey, className, ...rest }) => {
   const { cilSortDescending, cilSortAscending } = useIcons();
   const {
     onSort,
@@ -32,7 +34,11 @@ export const TableSortCell: ExtendedReactFunctionalComponent<
     onSort(sortingKey);
   };
   return (
-    <th onClick={handleSort}>
+    <th
+      onClick={handleSort}
+      className={classNames("cursor-pointer", className)}
+      {...rest}
+    >
       <CenteredVertialLayout>
         {children}
 

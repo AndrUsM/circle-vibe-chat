@@ -10,7 +10,7 @@ interface TableProvierProps {
   sortingKey: string | null;
 }
 
-export const TableProvier: ExtendedReactFunctionalComponent<
+export const TableProvider: ExtendedReactFunctionalComponent<
   TableProvierProps
 > = ({ children, onSort }) => {
   const [sortingKey, setSortingKey] = useState<string | null>(null);

@@ -1,11 +1,12 @@
 import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
 
-interface TableRowProps {
+export interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   children: React.ReactNode;
 }
 
 export const TableRow: ExtendedReactFunctionalComponent<TableRowProps> = ({
   children,
+  ...rest
 }) => {
-  return <tr>{children}</tr>;
+  return <tr {...rest}>{children}</tr>;
 };

@@ -4,3 +4,4 @@ export * from './topbar-logo';
 export * from './user-avatar';
 export * from './pagination';
 export * from './table';
+export * from './icon-layout';

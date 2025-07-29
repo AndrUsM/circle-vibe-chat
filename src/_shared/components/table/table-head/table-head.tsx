@@ -1,11 +1,18 @@
 import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import { CellGroupProvider } from "../context";
 
-interface TableHeadProps {
-  children: React.ReactNode;
+export interface TableHeadProps
+  extends React.HTMLAttributes<HTMLTableSectionElement> {
+  children?: React.ReactNode;
 }
 
 export const TableHead: ExtendedReactFunctionalComponent<TableHeadProps> = ({
   children,
+  ...rest
 }) => {
-  return <thead>{children}</thead>;
+  return (
+    <CellGroupProvider>
+      <thead {...rest}>{children}</thead>
+    </CellGroupProvider>
+  );
 };

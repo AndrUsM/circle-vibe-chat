@@ -1,17 +1,35 @@
+import { useContext } from "react";
+import classNames from "classnames";
+
 import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
 
-interface TableBodyProps {
-  children: React.ReactNode;
+import { CellGroupContext } from "../context";
+
+export interface TableCellProps
+  extends React.HTMLAttributes<HTMLTableCellElement> {
+  children?: React.ReactNode;
   head?: boolean;
 }
 
-export const TableCell: ExtendedReactFunctionalComponent<TableBodyProps> = ({
+export const TableCell: ExtendedReactFunctionalComponent<TableCellProps> = ({
   children,
   head = false,
+  className,
+  ...rest
 }) => {
-  if (head) {
-    return <th>{children}</th>;
+  const { isHead } = useContext(CellGroupContext);
+
+  if (isHead) {
+    return (
+      <th className={classNames("p-2", className)} {...rest}>
+        {children}
+      </th>
+    );
   }
 
-  return <td>{children}</td>;
+  return (
+    <td className={classNames("p-2", className)} {...rest}>
+      {children}
+    </td>
+  );
 };

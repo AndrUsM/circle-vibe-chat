@@ -30,7 +30,7 @@ import {
   useThreadParticipants,
 } from "@features/messages";
 
-import { UserAvatar } from "@shared/components";
+import { IconLayout, UserAvatar } from "@shared/components";
 
 import { MessageFiles } from "./message-files/message-files";
 
@@ -146,7 +146,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
                   ))}
 
                   <Show.When isTrue={threadParticipants?.length > 2}>
-                    <CenteredVertialLayout space="0.15rem">
+                    <IconLayout space="0.15rem">
                       <Icon
                         name={icons.cilPlus}
                         color="var(--cv-dark)"
@@ -156,7 +156,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
                       <span className="text-sm italic">
                         {threadParticipants.slice(2).length} more
                       </span>
-                    </CenteredVertialLayout>
+                    </IconLayout>
                   </Show.When>
                 </CenteredVertialLayout>
               </Show.When>
@@ -166,7 +166,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
                 size="small"
                 onClick={toggleIsReplyMessageEnabled}
               >
-                <CenteredVertialLayout space="0.25rem">
+                <IconLayout space="0.25rem">
                   <Icon
                     color="var(--cv-light)"
                     name={icons.cilChatBubble}
@@ -178,7 +178,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
                       {message?.threads?.length}
                     </span>
                   </Show.When>
-                </CenteredVertialLayout>
+                </IconLayout>
               </Button>
             </Show.When>
 

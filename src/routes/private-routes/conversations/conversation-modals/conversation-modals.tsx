@@ -64,7 +64,6 @@ export const ConversationModals: ExtendedReactFunctionalComponent<
       >
         <FilePreview
           messageFile={previewFile as MessageFile}
-          onClose={toggleFileDialogVisibility}
         />
       </Modal>
     </>

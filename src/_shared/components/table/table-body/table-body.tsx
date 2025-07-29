@@ -1,11 +1,12 @@
 import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
 
-interface TableBodyProps {
+export interface TableBodyProps {
   children: React.ReactNode;
 }
 
 export const TableBody: ExtendedReactFunctionalComponent<TableBodyProps> = ({
   children,
+  ...rest
 }) => {
-  return <tbody>{children}</tbody>;
+  return <tbody {...rest}>{children}</tbody>;
 };

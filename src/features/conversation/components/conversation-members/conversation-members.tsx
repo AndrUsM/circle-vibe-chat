@@ -10,7 +10,6 @@ import {
   Show,
   HorizontalDivider,
   FormControlTextarea,
-  GridLayout,
   useCopyToClickboard,
 } from "@circle-vibe/components";
 import {
@@ -19,7 +18,7 @@ import {
   getUserFullName,
   Chat,
 } from "@circle-vibe/shared";
-import { UserAvatar } from "@shared/components";
+import { Table, UserAvatar } from "@shared/components";
 import {
   MANAGE_CONVERSATION_PARTICIPANTS_INITIAL_FORM_VALUE,
   MANAGE_CONVERSATION_PARTICIPANTS_VALIDATION_SCHEMA,
@@ -97,25 +96,43 @@ export const ConversationMembers: ExtendedReactFunctionalComponent<
       <StackLayout>
         <div className="text-xl">Members:</div>
 
-        <GridLayout space="1rem" minWidth={"100%"}>
-          {chatParticipants.map(({ id, user, ...chatParticipant }) => (
-            <CenteredVertialLayout key={id} space="1rem">
-              <UserAvatar
-                url={user.avatarUrl}
-                className="cursor-pointer"
-                fallback={composeAvatarFallback(user)}
-              />
+        <Table>
+          <Table.Head>
+            <Table.Row>
+              <Table.Cell></Table.Cell>
+              <Table.Cell>User</Table.Cell>
+              <Table.Cell>Role</Table.Cell>
+              <Table.Cell>Notifications</Table.Cell>
+            </Table.Row>
+          </Table.Head>
 
-              {getUserFullName(user)}
+          <Table.Body>
+            {chatParticipants.map(({ id, user, ...chatParticipant }) => (
+              <Table.Row key={id}>
+                <Table.Cell>
+                  <UserAvatar
+                    url={user.avatarUrl}
+                    className="cursor-pointer"
+                    fallback={composeAvatarFallback(user)}
+                  />
+                </Table.Cell>
+                <Table.Cell>{getUserFullName(user)}</Table.Cell>
 
-              <span>{chatParticipant.chatRole}</span>
-              <span>
-                Notifications:{" "}
-                {chatParticipant.isMuted ? "Enabled" : "Disabled"}
-              </span>
-            </CenteredVertialLayout>
-          ))}
-        </GridLayout>
+                <Table.Cell>{chatParticipant.chatRole}</Table.Cell>
+
+                <Table.Cell>
+                  {chatParticipant.isMuted ? "Enabled" : "Disabled"}
+                </Table.Cell>
+              </Table.Row>
+            ))}
+
+            <Show.When isTrue={!chatParticipants?.length}>
+              <Table.EmptyCell colSpan={3}>
+                There are no chat members.
+              </Table.EmptyCell>
+            </Show.When>
+          </Table.Body>
+        </Table>
 
         <section>
           <div>
