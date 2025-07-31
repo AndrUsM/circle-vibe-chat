@@ -1,6 +1,8 @@
 import React, { ReactNode } from "react";
 import { Navigate, Route } from "react-router-dom";
 
+import { PublicPagesEnum } from "@core/navigation";
+
 const SignInFormLazy = React.lazy(() =>
   import("./sign-in").then(({ SignInForm }) => ({
     default: SignInForm,
@@ -15,10 +17,13 @@ const SignUpFormLazy = React.lazy(() =>
 
 export const PublicRouter: ReactNode = (
   <>
-    <Route path="sign-in" Component={SignInFormLazy} />
-    <Route path="sign-up" Component={SignUpFormLazy} />
+    <Route path={PublicPagesEnum.SIGN_IN} Component={SignInFormLazy} />
+    <Route path={PublicPagesEnum.SIGN_UP} Component={SignUpFormLazy} />
 
     {/* !DEFAULT ROUTE */}
-    <Route path="" element={<Navigate to="/auth/sign-in" replace />} />
+    <Route
+      path=""
+      element={<Navigate to={`/auth/${PublicPagesEnum.SIGN_IN}`} replace />}
+    />
   </>
 );

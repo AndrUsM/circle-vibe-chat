@@ -1,1 +1,1 @@
-export * from './conversations.parent';
+export * from './conversations';

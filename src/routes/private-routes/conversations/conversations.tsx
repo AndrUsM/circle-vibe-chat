@@ -59,11 +59,6 @@ export const Conversations: React.FC = () => {
   const messagesRef = useRef<HTMLDivElement>(null);
 
   const [
-    openAccountSettings,
-    toggleOpenAccountSettings,
-    setOpenAccountSettings,
-  ] = useBoolean(false);
-  const [
     openChatCreationModal,
     toggleOpenChatCreationModal,
     setOpenChatCreationModal,
@@ -142,34 +137,7 @@ export const Conversations: React.FC = () => {
   );
 
   return (
-    <section className="h-full">
-      <ClusterLayout
-        className="p-2"
-        alignItems="center"
-        justifyContent="space-between"
-        space="1rem"
-      >
-        <TopbarLogo />
-
-        <ClusterLayout space="1.15rem">
-          <Tooltip title={t("conversations.actions.account-settings")}>
-            <UserAvatar
-              className="cursor-pointer"
-              fallback={avatarFallback}
-              onClick={toggleOpenAccountSettings}
-            />
-          </Tooltip>
-
-          <Link to={"/settings"}>
-            <Tooltip title="Settings">
-              <Icon size={28} name={cilSettings} />
-            </Tooltip>
-          </Link>
-
-          <TopbarActions />
-        </ClusterLayout>
-      </ClusterLayout>
-
+    <>
       <HorizontalDivider height="5px" />
 
       <Resizer.Container className="conversations">
@@ -275,8 +243,6 @@ export const Conversations: React.FC = () => {
       </Resizer.Container>
 
       <ConversationModals
-        openAccountSettings={openAccountSettings}
-        setOpenAccountSettings={setOpenAccountSettings}
         openChatCreationModal={openChatCreationModal}
         setOpenChatCreationModal={setOpenChatCreationModal}
         previewFile={previewFile}
@@ -299,6 +265,6 @@ export const Conversations: React.FC = () => {
           }}
         />
       </Modal>
-    </section>
+    </>
   );
 };

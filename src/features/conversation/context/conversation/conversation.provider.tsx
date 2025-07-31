@@ -1,9 +1,9 @@
+import { useMemo, useState } from "react";
+
 import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import { ChatParticipant } from "@circle-vibe/shared";
 
 import { ConversationContext } from "./conversation.context";
-import { useMemo, useState } from "react";
-import { useCurrentUser } from "@core/hooks";
-import { ChatParticipant } from "@circle-vibe/shared";
 import { IConversationContext } from "./conversation.context-interface";
 
 export const ConversationProvider: ExtendedReactFunctionalComponent = ({

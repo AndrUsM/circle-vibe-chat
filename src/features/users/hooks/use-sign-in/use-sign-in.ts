@@ -27,7 +27,7 @@ export const useSignIn = () => {
       method: "POST",
     });
 
-    if (!response.data?.token) {
+    if (!response?.data?.token) {
       notification({
         type: "warning",
         content: t("login.wrong-credentials.message"),

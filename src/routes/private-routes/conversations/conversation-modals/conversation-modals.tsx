@@ -6,14 +6,12 @@ import {
 } from "@circle-vibe/components";
 import { MessageFile } from "@circle-vibe/shared";
 
-import { AccountSettings, ConversationForm } from "@features/conversation";
+import { ConversationForm } from "@features/conversation";
 import { FilePreview } from "@features/messages";
 
 import { useTranslation } from "react-i18next";
 
 interface ConversationModalsProps {
-  openAccountSettings: boolean;
-  setOpenAccountSettings: (value: boolean) => void;
   openChatCreationModal: boolean;
   setOpenChatCreationModal: (value: boolean) => void;
   previewFile: MessageFile | null;
@@ -23,8 +21,6 @@ interface ConversationModalsProps {
 export const ConversationModals: ExtendedReactFunctionalComponent<
   ConversationModalsProps
 > = ({
-  openAccountSettings,
-  setOpenAccountSettings,
   openChatCreationModal,
   setOpenChatCreationModal,
   previewFile,
@@ -34,13 +30,6 @@ export const ConversationModals: ExtendedReactFunctionalComponent<
 
   return (
     <>
-      <Modal
-        isOpen={openAccountSettings}
-        onClose={() => setOpenAccountSettings(false)}
-      >
-        <AccountSettings />
-      </Modal>
-
       <Modal
         isOpen={openChatCreationModal}
         onClose={() => setOpenChatCreationModal(false)}
@@ -60,6 +49,7 @@ export const ConversationModals: ExtendedReactFunctionalComponent<
 
       <Modal
         isOpen={Boolean(previewFile)}
+        minWidth="52vw"
         onClose={() => toggleFileDialogVisibility()}
       >
         <FilePreview
