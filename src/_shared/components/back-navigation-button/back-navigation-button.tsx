@@ -1,6 +1,10 @@
-import { Button, Icon, noop, useIcons } from "@circle-vibe/components";
-
-import { IconLayout } from "../icon-layout";
+import {
+  Button,
+  Icon,
+  noop,
+  useIcons,
+  IconLayout,
+} from "@circle-vibe/components";
 
 interface BackNavigationButtonProps {
   onClick?: VoidFunction;

@@ -6,7 +6,7 @@ export const ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA = object<AccountSettingsFor
   username: string(),
   firstname: string(),
   surname: string(),
-  birthDate: date(),
+  birthDate: date().notRequired(),
   isHiddenContactInfo: boolean(),
   isAllowedToSearch: boolean(),
   city: string(),

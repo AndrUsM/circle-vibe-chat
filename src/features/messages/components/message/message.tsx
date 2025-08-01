@@ -21,6 +21,7 @@ import {
   useBoolean,
   useFormatDatetime,
   useIcons,
+  IconLayout,
 } from "@circle-vibe/components";
 
 import {
@@ -30,7 +31,7 @@ import {
   useThreadParticipants,
 } from "@features/messages";
 
-import { IconLayout, UserAvatar } from "@shared/components";
+import { UserAvatar } from "@shared/components";
 
 import { MessageFiles } from "./message-files/message-files";
 

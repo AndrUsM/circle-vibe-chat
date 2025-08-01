@@ -1,4 +1,4 @@
-import { CountryCode, UserChatStatus, UserType } from "@circle-vibe/shared";
+import { CountryCode, UserType } from "@circle-vibe/shared";
 
 export interface AccountSettingsFormValues {
   username?: string;

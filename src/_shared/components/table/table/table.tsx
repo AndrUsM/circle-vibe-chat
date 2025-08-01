@@ -2,9 +2,9 @@ import {
   ExtendedReactFunctionalComponent,
   noop,
 } from "@circle-vibe/components";
+import classNames from "classnames";
 
 import { TableProvider } from "../context";
-import classNames from "classnames";
 
 export interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
   children: React.ReactNode;

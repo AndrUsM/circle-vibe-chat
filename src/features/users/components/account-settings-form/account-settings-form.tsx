@@ -2,7 +2,6 @@ import { SectionHeader, SectionContent } from "@shared/components";
 
 import {
   Button,
-  ClusterLayout,
   Form,
   FormControlCheckbox,
   FormControlError,
@@ -11,12 +10,11 @@ import {
   FormGroup,
   FormikFormControl,
   FormSubmitButton,
-  HorizontalDivider,
   Icon,
   StackLayout,
-  SubmitButton,
   useCopyToClickboard,
   useIcons,
+  Textarea,
 } from "@circle-vibe/components";
 import { UserType } from "@circle-vibe/shared";
 
@@ -25,16 +23,22 @@ import { useCurrentUser } from "@core/hooks";
 
 import { composeAccountSettingsFormValues } from "./utils";
 import { ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA } from "./constants";
+import { useCallback } from "react";
+import { AccountSettingsFormValues } from "./types";
 
 export const AccountSettingsForm: React.FC = () => {
   const { user } = useCurrentUser();
   const { cilCopy } = useIcons();
-  const onSubmit = useUpdateUserSettings();
+  const updateUserSettings = useUpdateUserSettings();
+  const onSubmit = useCallback((values: AccountSettingsFormValues) => {
+    return updateUserSettings(user.id, values);
+  }, [user?.id]);
   const copyToClickboard = useCopyToClickboard();
   const initialValues = composeAccountSettingsFormValues(user);
 
   return (
     <Form
+      enableReinitialize={true}
       initialValues={initialValues}
       validationSchema={ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA}
       onSubmit={onSubmit}
@@ -57,7 +61,7 @@ export const AccountSettingsForm: React.FC = () => {
             </FormGroup>
 
             <FormGroup label="Birth Date" formFieldName="birthDate">
-              <FormControlInput />
+              <FormControlInput type="date" />
             </FormGroup>
           </SectionContent>
         </StackLayout>
@@ -143,7 +147,7 @@ export const AccountSettingsForm: React.FC = () => {
                 <Icon color="var(--cv-light)" name={cilCopy} size={14} />
               </Button>
 
-              <textarea value={user.privateToken} readOnly />
+              <Textarea value={user.privateToken} readOnly />
             </StackLayout>
           </SectionContent>
         </StackLayout>

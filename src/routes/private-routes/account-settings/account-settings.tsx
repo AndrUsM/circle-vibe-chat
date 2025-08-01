@@ -1,14 +1,9 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Show, Tabs } from "@circle-vibe/components";
 
-import { Show } from "@circle-vibe/components";
-
-import { PrivatePagesEnum } from "@core/navigation";
 import {
   BackNavigationButton,
   PageContent,
-  Tabs,
-  TabsButton,
 } from "@shared/components";
 
 import {
@@ -16,30 +11,37 @@ import {
   InviteAccountSettingsForm,
   AccountSettingsTabs,
 } from "@features/users";
+import { useNavigate } from "react-router-dom";
+import { PrivatePagesEnum } from "@core/navigation";
 
 export const AccountSettings: React.FC = () => {
+  const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState<AccountSettingsTabs>(
     AccountSettingsTabs.GENERAL
   );
-  const navigate = useNavigate();
+
+  const goToConversatios = () => {
+    navigate(`/app/${PrivatePagesEnum.CONVERSATIONS}`);
+  };
 
   return (
     <PageContent>
       <Tabs className="mb-1">
-        <BackNavigationButton />
+        <BackNavigationButton onClick={goToConversatios} />
 
-        <TabsButton
+        <Tabs.Button
           active={currentTab === AccountSettingsTabs.GENERAL}
           onClick={() => setCurrentTab(AccountSettingsTabs.GENERAL)}
         >
           General
-        </TabsButton>
-        <TabsButton
+        </Tabs.Button>
+
+        <Tabs.Button
           active={currentTab === AccountSettingsTabs.INVITES}
           onClick={() => setCurrentTab(AccountSettingsTabs.INVITES)}
         >
           Invites
-        </TabsButton>
+        </Tabs.Button>
       </Tabs>
 
       <Show.When isTrue={currentTab === AccountSettingsTabs.GENERAL}>
