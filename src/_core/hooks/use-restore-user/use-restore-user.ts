@@ -1,14 +1,15 @@
 import { useCallback, useEffect } from "react";
-import { cookiesService } from "@core/services";
+
 import { request } from "@core/request";
 import { User } from "@circle-vibe/shared";
+
+import { useCurrentSessionCredentials } from "../use-current-session-credentials";
 
 import { useCurrentUser } from "../use-current-user";
 
 export const useRestoreUser = () => {
-    const user = localStorage.getItem("user");
+  const { setCurrentUser, currentUser: user, token } = useCurrentSessionCredentials();
   const { setUser } = useCurrentUser();
-  const token = cookiesService.get("auth-token");
 
   useEffect(() => {
     if (user !== null) {
@@ -25,6 +26,7 @@ export const useRestoreUser = () => {
       method: "GET",
       url: `user/by-token/${token}`,
     }).then((response) => {
+      setCurrentUser(response.data);
       setUser(response.data);
     });
   }, [token]);

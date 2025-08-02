@@ -4,36 +4,43 @@ import {
   BrowserRouter,
   Routes,
   Navigate,
+  Outlet,
 } from "react-router-dom";
 
 import { SocketProvider } from "@core/context/socket/socket.provider";
-
-import { AuthGuard } from "@core/guards";
+import { PublicPagesEnum } from "@core/navigation";
 
 import { PrivateRouter } from "./private-routes";
 import { PublicRouter } from "./public-routes";
+import { AuthInterceptor } from "./auth-interceptor";
 
 export const RootRoute: React.FC = () => {
   return (
     <BrowserRouter>
-      <Routes>
-        <Route path="auth" children={PublicRouter} />
+      <AuthInterceptor>
+        <Routes>
+          <Route path="auth" children={PublicRouter} />
 
-        <Route
-          path="/app"
-          element={
-            <SocketProvider>
-              <AuthGuard />
-            </SocketProvider>
-          }
-        >
-          {PrivateRouter}
-        </Route>
+          <Route
+            path="/app"
+            element={
+              <SocketProvider>
+                <Outlet />
+              </SocketProvider>
+            }
+          >
+            {PrivateRouter}
+          </Route>
 
-        {/* !DEFAULT ROUTES */}
-        <Route path="" element={<Navigate to="/auth/sign-in" replace />} />
-        <Route path="*" element={<Navigate to="/auth/sign-in" replace />} />
-      </Routes>
+          {/* !DEFAULT ROUTES */}
+          <Route
+            path=""
+            element={
+              <Navigate to={`/auth/${PublicPagesEnum.SIGN_IN}`} replace />
+            }
+          />
+        </Routes>
+      </AuthInterceptor>
     </BrowserRouter>
   );
 };

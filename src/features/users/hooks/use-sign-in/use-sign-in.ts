@@ -6,8 +6,9 @@ import { User } from "@circle-vibe/shared";
 
 import { useCurrentUser, useNotification } from "@core/hooks";
 import { request } from "@core/request";
-import { cookiesService } from "@core/services";
 import { SignInFormInput } from "@features/users/components/sign-in-form/types";
+import { setAuthToken } from "@core/utils";
+import { PrivatePagesEnum } from "@core/navigation";
 
 interface Response {
   token: string;
@@ -38,7 +39,7 @@ export const useSignIn = () => {
 
     const { token, user } = response.data;
 
-    cookiesService.set("auth-token", String(token));
+    setAuthToken(String(token));
     setUser(user);
 
     notification({
@@ -46,6 +47,6 @@ export const useSignIn = () => {
       content: "Successfully signed in!",
     });
 
-    navigate("/app/conversations");
+    void navigate(`/app/${PrivatePagesEnum.CONVERSATIONS}`);
   }, []);
 };

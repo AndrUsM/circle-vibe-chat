@@ -26,6 +26,7 @@ import {
   SIGN_UP_FORM_INITIAL_VALUES,
   SignUpFormInput,
 } from "./constants";
+import { PublicPagesEnum } from "@core/navigation";
 
 export const SignUpForm: React.FC = () => {
   const { t } = useTranslation();
@@ -60,7 +61,12 @@ export const SignUpForm: React.FC = () => {
   }, []);
 
   const onNavigateToSignInPage = () => {
-    void navigate("/auth/sign-in");
+    void navigate(`/auth/${PublicPagesEnum.SIGN_IN}`);
+  };
+
+
+  const onNavigateToRestorePasswordPage = () => {
+    void navigate(`/auth/${PublicPagesEnum.RESET_PASSWORD}`);
   };
 
   return (
@@ -150,7 +156,7 @@ export const SignUpForm: React.FC = () => {
               Sign-in
             </Button>
 
-            <Button color="secondary">Restore Password</Button>
+            <Button color="secondary" onClick={onNavigateToRestorePasswordPage}>Restore Password</Button>
           </CenteredVertialLayout>
         </StackLayout>
       </StackLayout>

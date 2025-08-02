@@ -15,10 +15,17 @@ const SignUpFormLazy = React.lazy(() =>
   }))
 );
 
+const ResetPasswordLazy = React.lazy(() =>
+  import("./reset-password").then(({ ResetPassword }) => ({
+    default: ResetPassword,
+  }))
+);
+
 export const PublicRouter: ReactNode = (
   <>
     <Route path={PublicPagesEnum.SIGN_IN} Component={SignInFormLazy} />
     <Route path={PublicPagesEnum.SIGN_UP} Component={SignUpFormLazy} />
+    <Route path={PublicPagesEnum.RESET_PASSWORD} Component={ResetPasswordLazy} />
 
     {/* !DEFAULT ROUTE */}
     <Route

@@ -1,4 +1,4 @@
-import { SectionHeader, SectionContent } from "@shared/components";
+import { Section } from "@shared/components";
 
 import {
   Button,
@@ -44,10 +44,10 @@ export const AccountSettingsForm: React.FC = () => {
       onSubmit={onSubmit}
     >
       <StackLayout space="2rem" className="pt-6">
-        <StackLayout>
-          <SectionHeader>General Account Setting</SectionHeader>
+        <Section>
+          <Section.Header>General Account Setting</Section.Header>
 
-          <SectionContent>
+          <Section.Content>
             <FormGroup label="Firstname" formFieldName="firstname">
               <FormControlInput />
             </FormGroup>
@@ -63,13 +63,13 @@ export const AccountSettingsForm: React.FC = () => {
             <FormGroup label="Birth Date" formFieldName="birthDate">
               <FormControlInput type="date" />
             </FormGroup>
-          </SectionContent>
-        </StackLayout>
+          </Section.Content>
+        </Section>
 
-        <StackLayout>
-          <SectionHeader>Contact Information</SectionHeader>
+        <Section>
+          <Section.Header>Contact Information</Section.Header>
 
-          <SectionContent>
+          <Section.Content>
             <FormGroup label="Email" formFieldName="email">
               <FormControlInput type="email" />
             </FormGroup>
@@ -77,23 +77,16 @@ export const AccountSettingsForm: React.FC = () => {
             <FormGroup label="Phone" formFieldName="primaryPhone">
               <FormControlInput type="phone" />
             </FormGroup>
-          </SectionContent>
-        </StackLayout>
+          </Section.Content>
+        </Section>
 
-        <StackLayout>
-          <SectionHeader>Security</SectionHeader>
+        <Section>
+          <Section.Header>Security</Section.Header>
 
-          <SectionContent>
+          <Section.Content>
             <StackLayout space="1rem">
               <StackLayout space="0.5rem">
                 <FormGroup label="Password" formFieldName="password">
-                  <FormControlInput type="password" />
-                </FormGroup>
-
-                <FormGroup
-                  label="Password Confirmation"
-                  formFieldName="passwordConfirmation"
-                >
                   <FormControlInput type="password" />
                 </FormGroup>
 
@@ -117,13 +110,13 @@ export const AccountSettingsForm: React.FC = () => {
                 </FormikFormControl>
               </StackLayout>
             </StackLayout>
-          </SectionContent>
-        </StackLayout>
+          </Section.Content>
+        </Section>
 
-        <StackLayout>
-          <SectionHeader>Location Information</SectionHeader>
+        <Section>
+          <Section.Header>Location Information</Section.Header>
 
-          <SectionContent>
+          <Section.Content>
             <FormGroup label="Country" formFieldName="country">
               <FormControlInput />
             </FormGroup>
@@ -131,13 +124,13 @@ export const AccountSettingsForm: React.FC = () => {
             <FormGroup label="City" formFieldName="city">
               <FormControlInput />
             </FormGroup>
-          </SectionContent>
-        </StackLayout>
+          </Section.Content>
+        </Section>
 
-        <StackLayout>
-          <SectionHeader>Personal Key</SectionHeader>
+        <Section>
+          <Section.Header>Personal Key</Section.Header>
 
-          <SectionContent>
+          <Section.Content>
             <StackLayout>
               <Button
                 size="small"
@@ -149,8 +142,8 @@ export const AccountSettingsForm: React.FC = () => {
 
               <Textarea value={user.privateToken} readOnly />
             </StackLayout>
-          </SectionContent>
-        </StackLayout>
+          </Section.Content>
+        </Section>
 
         <FormSubmitButton>Save</FormSubmitButton>
       </StackLayout>

@@ -2,13 +2,13 @@ import { useCallback } from "react"
 
 import { useNotification } from "@core/hooks";
 import { request } from "@core/request";
-import { cookiesService } from "@core/services";
+import { getAuthToken, setAuthToken } from "@core/utils";
 
 export const useRefreshToken = () => {
   const notification = useNotification();
 
   return useCallback(async () => {
-    const token = cookiesService.get("auth-token");
+    const token = getAuthToken();
 
     const response = await request<{
       token: string;
@@ -21,7 +21,7 @@ export const useRefreshToken = () => {
     });
 
     if (response?.data?.token) {
-      cookiesService.set("auth-token", String(response.data.token));
+      setAuthToken(String(response.data.token));
 
       return response.data.token;
     }

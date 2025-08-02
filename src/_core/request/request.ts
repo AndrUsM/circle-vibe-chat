@@ -1,6 +1,7 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { BASE_API_URL, BASE_FILE_SERVER_API_URL } from "../constants/base-api-url";
 import { cookiesService } from "@core/services";
+import { getAuthToken, setAuthToken } from "@core/utils";
 
 
 const axiosInstance = axios.create({
@@ -16,14 +17,14 @@ axiosInstance.interceptors.response.use(
         url: "auth/refresh-token",
         method: "POST",
         data: {
-          token: cookiesService.get("auth-token"),
+          token: getAuthToken(),
         }
       });
 
       const updatedToken = String(refreshTokenResponse?.data?.token);
 
       if (updatedToken) {
-        cookiesService.set("auth-token", updatedToken);
+        setAuthToken(updatedToken);
         response.config.headers.Authorization = updatedToken;
 
         return response;
@@ -38,7 +39,7 @@ axiosInstance.interceptors.response.use(
 )
 
 export const request = <T = unknown>(options: AxiosRequestConfig) => {
-  const token = cookiesService.get("auth-token");
+  const token = getAuthToken();
 
   return axiosInstance<T>({
     ...options,

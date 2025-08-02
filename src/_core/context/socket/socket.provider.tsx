@@ -5,13 +5,15 @@ import {
   useMemo,
   useState,
 } from "react";
+
 import { Socket } from "socket.io-client";
 import io from "socket.io-client";
 
 import { GatewayNamespaces } from "@circle-vibe/shared";
 import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+
 import { useCurrentUser } from "@core/hooks";
-import { cookiesService } from "@core/services";
+import { getAuthToken } from "@core/utils";
 
 interface ISocketContext {
   socket: Socket;
@@ -31,7 +33,7 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
     autoConnect: false,
     reconnection: false,
     auth: {
-      token: cookiesService.get("auth-token"),
+      token: getAuthToken(),
       personalToken: user?.privateToken,
     },
   });
@@ -49,7 +51,7 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
         autoConnect: true,
         reconnection: false,
         auth: {
-          token: cookiesService.get("auth-token"),
+          token: getAuthToken(),
         },
       }
     );

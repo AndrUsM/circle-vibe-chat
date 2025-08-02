@@ -12,7 +12,7 @@ import {
   ACCEPT_INVITE_FORM_SCHEMA_VALIDATION,
 } from "./constants";
 import { useHandleAcceptInvite } from "../../hooks/use-handle-accept-invite";
-import { SectionContent, SectionDescription, SectionHeader } from "@shared/components";
+import { Section } from "@shared/components";
 
 export const InviteAccountSettingsForm: ExtendedReactFunctionalComponent =
   () => {
@@ -24,17 +24,17 @@ export const InviteAccountSettingsForm: ExtendedReactFunctionalComponent =
         validationSchema={ACCEPT_INVITE_FORM_SCHEMA_VALIDATION}
         onSubmit={onAcceptInvite}
       >
-        <StackLayout space="0.5rem" className="pt-6">
-          <SectionHeader>Accept Invite</SectionHeader>
+        <Section className="pt-6">
+          <Section.Header>Accept Invite</Section.Header>
 
-          <SectionDescription>
+          <Section.Description>
             Insert your token to accept invite and get access to conversation.
-          </SectionDescription>
+          </Section.Description>
 
           <FormGroup isRequired label="Token" formFieldName="token">
             <FormControlTextarea className="resize-vertical min-h-10 p-3" />
           </FormGroup>
-        </StackLayout>
+        </Section>
 
         <SubmitButton>Accept Invite</SubmitButton>
       </Form>

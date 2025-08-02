@@ -1,5 +1,6 @@
 import { CountryCode, User } from "@circle-vibe/shared"
 import { AccountSettingsFormValues } from "../../types"
+import { FormatDateTime, formatDateTime } from "@circle-vibe/components";
 
 export const composeAccountSettingsFormValues = (user: User): AccountSettingsFormValues => {
   return {
@@ -7,7 +8,7 @@ export const composeAccountSettingsFormValues = (user: User): AccountSettingsFor
     firstname: user.firstname,
     surname: user.surname,
     avatarUrl: user.avatarUrl,
-    birthDate: user.birthDate,
+    birthDate: user.birthDate ? formatDateTime(user.birthDate, FormatDateTime.DATE_INPUT) : undefined,
     password: "",
     passwordConfirmation: "",
     isHiddenContactInfo: user.isHiddenContactInfo,

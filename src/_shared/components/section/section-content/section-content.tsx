@@ -4,7 +4,7 @@ export const SectionContent: ExtendedReactFunctionalComponent = ({
   children
 }) => {
   return (
-    <section className="p-4 rounded-2">
+    <section className="rounded-2">
       {children}
     </section>
   )

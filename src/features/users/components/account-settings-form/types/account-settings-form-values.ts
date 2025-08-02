@@ -5,9 +5,8 @@ export interface AccountSettingsFormValues {
   firstname?: string;
   surname?: string;
   avatarUrl?: string;
-  birthDate?: Date;
+  birthDate?: string;
   password?: string;
-  passwordConfirmation?: string;
   isHiddenContactInfo?: boolean;
   isAllowedToSearch?: boolean;
   city?: string;

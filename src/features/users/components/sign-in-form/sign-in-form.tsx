@@ -18,6 +18,7 @@ import {
   AUTHORIZATION_FORM_SCHEMA,
   AUTHORIZATION_FORM_INITIAL_VALUES,
 } from "./constants";
+import { PublicPagesEnum } from "@core/navigation";
 
 export const AuthorizationForm: React.FC = () => {
   const { t } = useTranslation();
@@ -26,7 +27,11 @@ export const AuthorizationForm: React.FC = () => {
   const onSubmit = useSignIn();
 
   const onNavigateToSignUpPage = () => {
-    void navigate("/auth/sign-up");
+    void navigate(`/auth/${PublicPagesEnum.SIGN_UP}`);
+  };
+
+  const onNavigateToRestorePasswordPage = () => {
+    void navigate(`/auth/${PublicPagesEnum.RESET_PASSWORD}`);
   };
 
   return (
@@ -53,7 +58,7 @@ export const AuthorizationForm: React.FC = () => {
             {t("login.create-account.button")}
           </Button>
 
-          <Button color="secondary">
+          <Button color="secondary" onClick={onNavigateToRestorePasswordPage}>
             {t("login.restore-password.button")}
           </Button>
         </CenteredVertialLayout>

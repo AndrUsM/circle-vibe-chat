@@ -1,7 +1,9 @@
 import { createContext, useCallback, useMemo, useState } from "react";
+
 import { User } from "@circle-vibe/shared";
 import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
-import { localStorageService } from "@core/services";
+
+import { useCurrentSessionCredentials } from "@core/hooks";
 
 export interface CurrentUserContext {
   user: User;
@@ -16,17 +18,22 @@ export const CurrentUserContext = createContext<CurrentUserContext | undefined>(
 export const CurrentUserProvider: ExtendedReactFunctionalComponent = ({
   children,
 }) => {
+  const {
+    currentUser,
+    setCurrentUser,
+    setToken,
+  } = useCurrentSessionCredentials();
   const [user, setUser] = useState<User | null>(
-    localStorageService.get("user")
+    currentUser,
   );
 
   const clear = () => {
     setUser(null);
-    localStorageService.set("user", null);
+    setCurrentUser(null);
   };
 
   const saveUser = useCallback((user: User) => {
-    localStorageService.set("user", user);
+    setCurrentUser(user);
     setUser(user);
   }, []);
 

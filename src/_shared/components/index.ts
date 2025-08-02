@@ -1,6 +1,4 @@
-export * from './section-header';
-export * from './section-content';
-export * from './section-description';
+export * from './section';
 export * from './page-content';
 export * from './topbar-logo';
 export * from './user-avatar';

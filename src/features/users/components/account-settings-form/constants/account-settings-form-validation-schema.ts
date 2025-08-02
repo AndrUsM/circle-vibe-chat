@@ -1,5 +1,6 @@
 import { object, string, date, boolean, mixed } from "yup";
-import { CountryCode, UserType } from "@circle-vibe/shared";
+import { CountryCode, PASSWORD_REGEX, UserType } from "@circle-vibe/shared";
+
 import { AccountSettingsFormValues } from "../types";
 
 export const ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA = object<AccountSettingsFormValues>({
@@ -9,6 +10,7 @@ export const ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA = object<AccountSettingsFor
   birthDate: date().notRequired(),
   isHiddenContactInfo: boolean(),
   isAllowedToSearch: boolean(),
+  password: string().test("password", "Password must be at least 8 characters", (value) => value ? PASSWORD_REGEX.test(value) : true).notRequired(),
   city: string(),
   country: mixed<CountryCode>(),
   email: string().email(),

@@ -9,7 +9,7 @@ import {
 } from "@circle-vibe/shared";
 
 import { useSocket } from "@core/hooks";
-import { cookiesService } from "@core/services";
+import { setAuthToken } from "@core/utils";
 
 interface UseChatSocketLogicInitializationOptions {
   socketListenerNotifyNewMessage: VoidFunction;
@@ -33,7 +33,7 @@ export const useChatSocketLogicInitialization = ({
   const { socket } = useSocket();
 
   const socketListenerRefreshToken = (token: string) => {
-    cookiesService.set("auth-token", token);
+    setAuthToken(token);
   };
 
   const socketListenerScrollToEnd = () => {
