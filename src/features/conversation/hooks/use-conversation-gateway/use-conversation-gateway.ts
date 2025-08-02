@@ -57,6 +57,8 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     setChats,
     messages,
     setMessages,
+    isAnyoneTyping,
+    setIsAnyoneTyping: onSetTypingStatus,
   } = useConversationGatewayState();
   const createThread = useCreateThread();
   const {
@@ -215,6 +217,18 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     triggerGetPaginatedChats(1, { name });
   };
 
+  const triggerStartTypingNotification = useCallback(() => {
+    socket.emit(ChatSocketCommand.MESSAGE_TYPE_START_TYPING, {
+      chatId: selectedChatId,
+    });
+  }, [selectedChatId]);
+
+    const triggerStopTypingNotification = useCallback(() => {
+    socket.emit(ChatSocketCommand.MESSAGE_TYPE_STOP_TYPING, {
+      chatId: selectedChatId,
+    });
+  }, [selectedChatId]);
+
   useChatSocketLogicInitialization({
     socketListenerJoinChat,
     socketListenerNotifyNewMessage,
@@ -222,6 +236,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     socketListenerReceiveChats,
     triggerGetPaginatedChats,
     onScrollMessages,
+    onSetTypingStatus,
   });
 
   return useMemo(
@@ -237,6 +252,9 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       messagesLoading,
       selectedChatId,
       user,
+      isAnyoneTyping,
+      triggerStopTypingNotification,
+      triggerStartTypingNotification,
       handleSendMessageWithThread,
       handleRefreshMessages,
       onChatSelect,
@@ -256,6 +274,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       messagesPage,
       messagesLoading,
       selectedChatId,
+      isAnyoneTyping,
       user,
       handleSendMessageWithThread,
       onChatSelect,

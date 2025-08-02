@@ -31,6 +31,8 @@ import "./message-form.scss";
 
 interface MessageFormProps {
   initialValues?: Partial<MessageFormValues>;
+  onStartTyping: VoidFunction;
+  onStopTyping: VoidFunction;
   onCreateMessage: (
     values: MessageFormValues,
     options: FormikHelpers<MessageFormValues>
@@ -39,7 +41,7 @@ interface MessageFormProps {
 
 export const MessageForm: ExtendedReactFunctionalComponent<
   MessageFormProps
-> = ({ initialValues = MESSAGE_FORM_INITIAL_VALUE, onCreateMessage }) => {
+> = ({ initialValues = MESSAGE_FORM_INITIAL_VALUE, onCreateMessage, onStartTyping, onStopTyping }) => {
   const { cilFile } = useIcons();
   const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -118,6 +120,8 @@ export const MessageForm: ExtendedReactFunctionalComponent<
           <ClusterLayout space="0.5rem" alignItems="flex-start">
             <FormikFormControl formFieldName="content" className="w-full">
               <FormControlTextarea
+                onMouseLeave={onStopTyping}
+                onKeyDown={(values.content.length ? onStartTyping : onStopTyping)}
                 className="resize-vertical min-h-10 p-3"
                 placeholder={t("conversations.send.input.placeholder")}
               />

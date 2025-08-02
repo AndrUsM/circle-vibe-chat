@@ -1,15 +1,11 @@
 import { Suspense, useCallback, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
-import { Link } from "react-router-dom";
 import * as Resizer from "@column-resizer/react";
 import { useDebouncedCallback } from "use-debounce";
 
 import { composeAvatarFallback } from "@circle-vibe/shared";
 import {
-  ClusterLayout,
   StackLayout,
-  Tooltip,
-  Icon,
   HorizontalDivider,
   useIcons,
   FormControl,
@@ -20,15 +16,11 @@ import {
   Input,
   Modal,
   useBoolean,
+  Icon,
 } from "@circle-vibe/components";
 
 import { useDeleteMessage } from "@api/messages";
-import {
-  TopbarLogo,
-  UserAvatar,
-  PaginationControls,
-  PaginationScrollButton,
-} from "@shared/components";
+import { PaginationControls, PaginationScrollButton } from "@shared/components";
 import { useConfirmation, useScrollToBlockPosition } from "@shared/hooks";
 
 import {
@@ -45,7 +37,6 @@ import {
   Chat,
 } from "@features/conversation";
 
-import { TopbarActions } from "./topbar-actions";
 import { ConversationModals } from "./conversation-modals";
 
 import "./conversation.scss";
@@ -53,7 +44,7 @@ import "./conversation.scss";
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
   const confirm = useConfirmation();
-  const { cilSettings } = useIcons();
+  const { cilKeyboard } = useIcons();
   const onScrollToPosition = useScrollToBlockPosition();
   const deleteMessage = useDeleteMessage();
   const messagesRef = useRef<HTMLDivElement>(null);
@@ -91,6 +82,9 @@ export const Conversations: React.FC = () => {
     messagesLoading,
     selectedChatId,
     user,
+    isAnyoneTyping,
+    triggerStartTypingNotification,
+    triggerStopTypingNotification,
     handleRefreshMessages,
     handleSendMessageWithThread,
     onChatSelect,
@@ -207,8 +201,10 @@ export const Conversations: React.FC = () => {
                 <Suspense key={message.id} fallback={<LoadingOverlay />}>
                   <Message
                     message={message}
-                    chatParticipantId={Number(chatParticipant?.id)}
                     isSavedMessages={isSavedMessagesChat}
+                    onStopTyping={triggerStopTypingNotification}
+                    onStartTyping={triggerStartTypingNotification}
+                    chatParticipantId={Number(chatParticipant?.id)}
                     onDeleteMessage={onDeleteMessage}
                     onUpdateMessage={onUpdateMessage}
                     onOpenFile={toggleFileDialogVisibility}
@@ -228,11 +224,26 @@ export const Conversations: React.FC = () => {
                 onPageChange={triggerGetPaginatedMessages}
               />
 
-              <PaginationScrollButton messagesRef={messagesRef} />
+              <Show.When isTrue={isAnyoneTyping}>
+                <Icon
+                  className="typing-indicator"
+                  name={cilKeyboard}
+                  color="var(--cv-primary)"
+                  size={32}
+                />
+              </Show.When>
+
+              <div>
+                <PaginationScrollButton messagesRef={messagesRef} />
+              </div>
             </CenteredVertialLayout>
 
             <Show.When isTrue={isAnyChatSelected}>
-              <MessageForm onCreateMessage={handleSendMessage} />
+              <MessageForm
+                onStopTyping={triggerStopTypingNotification}
+                onStartTyping={triggerStartTypingNotification}
+                onCreateMessage={handleSendMessage}
+              />
             </Show.When>
           </StackLayout>
 

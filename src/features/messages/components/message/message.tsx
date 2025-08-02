@@ -41,6 +41,8 @@ interface MessageProps {
   message: MessageModel;
   chatParticipantId: number;
   isSavedMessages?: boolean;
+  onStartTyping: VoidFunction;
+  onStopTyping: VoidFunction;
   onDeleteMessage: (messageId: number) => void;
   onUpdateMessage: (messageId: number) => void;
   onOpenFile: (file: MessageFile) => void;

@@ -20,6 +20,7 @@ interface UseChatSocketLogicInitializationOptions {
   socketListenerReceiveMessages: (messages: PaginatedResponse<Message>) => void;
   triggerGetPaginatedChats: (page: number) => void;
   onScrollMessages: VoidFunction;
+  onSetTypingStatus: (status: boolean) => void;
 }
 
 export const useChatSocketLogicInitialization = ({
@@ -29,6 +30,7 @@ export const useChatSocketLogicInitialization = ({
   socketListenerReceiveChats,
   triggerGetPaginatedChats,
   onScrollMessages,
+  onSetTypingStatus,
 }: UseChatSocketLogicInitializationOptions) => {
   const { socket } = useSocket();
 
@@ -41,8 +43,17 @@ export const useChatSocketLogicInitialization = ({
       onScrollMessages();
     }, 500);
   };
+  const socketListenerStopTyping = () => {
+    onSetTypingStatus(false);
+  };
+
+  const socketListenerStartTyping = () => {
+    onSetTypingStatus(true);
+  };
 
   const subscribeToListeners = () => {
+    socket.on(ChatSocketCommand.MESSAGE_TYPE_START_TYPING, socketListenerStartTyping);
+    socket.on(ChatSocketCommand.MESSAGE_TYPE_STOP_TYPING, socketListenerStopTyping);
     socket.on(ChatSocketCommand.REFRESH_TOKEN, socketListenerRefreshToken);
     socket.on(ChatSocketCommand.RECEIVE_CHATS, socketListenerReceiveChats);
     socket.on(
@@ -65,6 +76,8 @@ export const useChatSocketLogicInitialization = ({
     subscribeToListeners();
 
     return () => {
+      socket.off(ChatSocketCommand.MESSAGE_TYPE_START_TYPING, socketListenerStartTyping);
+      socket.off(ChatSocketCommand.MESSAGE_TYPE_STOP_TYPING, socketListenerStopTyping);
       socket.off(ChatSocketCommand.REFRESH_TOKEN, socketListenerRefreshToken);
       socket.off(ChatSocketCommand.RECEIVE_CHATS, socketListenerReceiveChats);
       socket.off(

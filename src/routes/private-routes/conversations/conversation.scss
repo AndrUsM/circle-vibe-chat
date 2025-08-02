@@ -1,3 +1,7 @@
 .conversations {
   height: calc(100% - 3.5rem);
 }
+
+.typing-indicator {
+  animation: growUpDown 2s ease-in-out infinite;
+}
