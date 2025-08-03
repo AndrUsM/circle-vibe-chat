@@ -20,7 +20,7 @@ export const PrivateRoutesLayout: React.FC = () => {
   const navigate = useNavigate();
   const { user } = useCurrentUser();
   const { cilSettings } = useIcons();
-  const avatarFallback = composeAvatarFallback(user);
+  const avatarFallback = composeAvatarFallback(user ?? {});
 
   const goToAccountSettings = () => {
     void navigate(PrivatePagesEnum.ACCOUNT_SETTINGS);

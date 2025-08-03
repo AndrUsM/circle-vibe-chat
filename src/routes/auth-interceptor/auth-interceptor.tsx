@@ -15,12 +15,12 @@ export const AuthInterceptor: ExtendedReactFunctionalComponent = ({
   useEffect(() => {
     const token  = getAuthToken();
 
-    if (!token) {
-      navigate(`/auth/${PublicPagesEnum.SIGN_IN}`);
+    if (!token && !location.pathname.includes('auth')) {
+      navigate(`/auth/${PublicPagesEnum.SIGN_IN}`, { replace: true });
     }
 
     if (token && !location.pathname.includes('app')) {
-      navigate(`/app/${PrivatePagesEnum.CONVERSATIONS}`);
+      navigate(`/app/${PrivatePagesEnum.CONVERSATIONS}`, { replace: true });
     }
 
   }, [location.pathname]);

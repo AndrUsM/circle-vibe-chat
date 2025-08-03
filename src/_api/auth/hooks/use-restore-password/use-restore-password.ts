@@ -42,7 +42,7 @@ export const useRestorePassword = () => {
     setCurrentUser(user);
     setToken(token);
 
-    void navigate(`/app/${PrivatePagesEnum.CONVERSATIONS}`);
+    void navigate(`/app/${PrivatePagesEnum.CONVERSATIONS}`, { replace: true });
 
     notification({
       type: "success",

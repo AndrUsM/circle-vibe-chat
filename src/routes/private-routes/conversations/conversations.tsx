@@ -3,7 +3,6 @@ import { useTranslation } from "react-i18next";
 import * as Resizer from "@column-resizer/react";
 import { useDebouncedCallback } from "use-debounce";
 
-import { composeAvatarFallback } from "@circle-vibe/shared";
 import {
   StackLayout,
   HorizontalDivider,
@@ -97,8 +96,6 @@ export const Conversations: React.FC = () => {
   const debouncedChatSearch = useDebouncedCallback((value) => {
     triggerSearchChatsByName(value);
   }, 1000);
-
-  const avatarFallback = composeAvatarFallback(user);
 
   const isSavedMessagesChat = useMemo(() => {
     const selectedChat = chats?.data.find(({ id }) => id === selectedChatId);
