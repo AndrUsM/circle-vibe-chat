@@ -5,8 +5,7 @@ import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
 import { useCurrentUser } from "@core/hooks";
 import { PrivatePagesEnum, PublicPagesEnum } from "@core/navigation";
 
-// @ts-ignore
-import logoSrc from "../../../../public/logo.png";
+import logoSrc from '../../../../public/logo.png';
 
 export const TopbarLogo: ExtendedReactFunctionalComponent = () => {
   const { user } = useCurrentUser();
