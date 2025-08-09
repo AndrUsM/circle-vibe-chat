@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
 import { ChatParticipant } from "@circle-vibe/shared";
@@ -12,14 +12,16 @@ export const ConversationProvider: ExtendedReactFunctionalComponent = ({
   const [participant, setParticipant] = useState<ChatParticipant | null>(null);
   const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
 
-  const state = useMemo<IConversationContext>(() => ({
+  const state: IConversationContext = {
     selectedChatId,
     currentConversationParticipant: participant,
     setSelectedChatId: (chatId: number) => setSelectedChatId(chatId),
-    setCurrentConversationParticipant: (participant: ChatParticipant) => setParticipant(participant)
-  }), [selectedChatId, participant]);
+    setCurrentConversationParticipant: setParticipant,
+  };
 
   return (
-    <ConversationContext.Provider value={state}>{children}</ConversationContext.Provider>
+    <ConversationContext.Provider value={state}>
+      {children}
+    </ConversationContext.Provider>
   );
 };

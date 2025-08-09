@@ -36,15 +36,17 @@ export const useConfirmation = () => {
         };
 
         root.render(
-          <Modal isOpen={true} minWidth={minWidth ?? "300px"} onClose={onClose}>
-            <ConfirmationModalLayout
-              confirmButtonColor={confirmButtonColor}
-              onConfirm={onConfirm}
-              onClose={onClose}
-            >
-              {content}
-            </ConfirmationModalLayout>
-          </Modal>
+          <Modal.Root minWidth="20rem" isOpen={true} onClose={onClose}>
+            <Modal.Header onClose={onClose}>{content}</Modal.Header>
+
+            <Modal.Body>
+              <ConfirmationModalLayout
+                confirmButtonColor={confirmButtonColor}
+                onConfirm={onConfirm}
+                onClose={onClose}
+              />
+            </Modal.Body>
+          </Modal.Root>
         );
       });
     },

@@ -30,32 +30,29 @@ export const ConversationModals: ExtendedReactFunctionalComponent<
 
   return (
     <>
-      <Modal
+      <Modal.Root
         isOpen={openChatCreationModal}
         onClose={() => setOpenChatCreationModal(false)}
       >
-        <StackLayout>
-          <section>
-            <p className="text-2xl font-semibold">
-              {t("conversations.buttons.create-conversation")}
-            </p>
+        <Modal.Header onClose={() => setOpenChatCreationModal(false)}>
+          {t("conversations.buttons.create-conversation")}
+        </Modal.Header>
 
-            <HorizontalDivider color="var(--cv-bg-secondary)" />
-          </section>
-
+        <Modal.Body>
           <ConversationForm />
-        </StackLayout>
-      </Modal>
+        </Modal.Body>
+      </Modal.Root>
 
-      <Modal
+      <Modal.Root
         isOpen={Boolean(previewFile)}
         minWidth="52vw"
-        onClose={() => toggleFileDialogVisibility()}
+        showInlineCloseButton
+        onClose={toggleFileDialogVisibility}
       >
-        <FilePreview
-          messageFile={previewFile as MessageFile}
-        />
-      </Modal>
+        <Modal.Body className="mx-auto">
+          <FilePreview messageFile={previewFile as MessageFile} />
+        </Modal.Body>
+      </Modal.Root>
     </>
   );
 };

@@ -11,3 +11,33 @@
 .overflow-y-visible { overflow-y: visible; }
 .overflow-x-scroll  { overflow-x: scroll; }
 .overflow-y-scroll  { overflow-y: scroll; }
+
+.overflow-y-container {
+  overflow: hidden;
+  position: relative;
+  scrollbar-gutter: stable;
+
+  &:hover {
+    overflow-y: auto !important;
+  }
+}
+
+.overflow-x-container {
+  overflow: hidden;
+  position: relative;
+  scrollbar-gutter: stable;
+
+  &:hover {
+    overflow-x: auto !important;
+  }
+}
+
+.overflow-container {
+  overflow: hidden;
+  position: relative;
+  scrollbar-gutter: stable;
+
+  &:hover {
+    overflow: auto !important;
+  }
+}

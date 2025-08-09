@@ -40,9 +40,7 @@ export const ChatActions: ExtendedReactFunctionalComponent<
   const showConversationMembers = useCallback(() => {
     setIsConversationMembersModalOpen(true);
   }, []);
-  const deleteConversation = useCallback(() => {
-
-  }, []);
+  const deleteConversation = useCallback(() => {}, []);
   const leaveConversation = useCallback(() => {}, []);
   const toggleMuteConversationAlerts = useCallback(() => {
     updateConversationParticipant({
@@ -86,15 +84,19 @@ export const ChatActions: ExtendedReactFunctionalComponent<
         </StackLayout>
       </Menu>
 
-      <Modal
+      <Modal.Root
         isOpen={isConversationMembersModalOpen}
         onClose={() => setIsConversationMembersModalOpen(false)}
       >
-        <ConversationMembers
-          conversation={chat}
-          chatParticipantId={participantId}
-        />
-      </Modal>
+        <Modal.Header onClose={() => setIsConversationMembersModalOpen(false)} />
+
+        <Modal.Body>
+          <ConversationMembers
+            conversation={chat}
+            chatParticipantId={participantId}
+          />
+        </Modal.Body>
+      </Modal.Root>
     </>
   );
 };

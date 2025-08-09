@@ -1,5 +1,6 @@
 import { Suspense, useCallback, useMemo, useRef } from "react";
 import { useTranslation } from "react-i18next";
+
 import * as Resizer from "@column-resizer/react";
 import { useDebouncedCallback } from "use-debounce";
 
@@ -80,7 +81,6 @@ export const Conversations: React.FC = () => {
     messagesPage,
     messagesLoading,
     selectedChatId,
-    user,
     isAnyoneTyping,
     triggerStartTypingNotification,
     triggerStopTypingNotification,
@@ -235,7 +235,9 @@ export const Conversations: React.FC = () => {
               </div>
             </CenteredVertialLayout>
 
-            <Show.When isTrue={isAnyChatSelected}>
+            <Show.When
+              isTrue={isAnyChatSelected && Boolean(chatParticipant?.id)}
+            >
               <MessageForm
                 onStopTyping={triggerStopTypingNotification}
                 onStartTyping={triggerStartTypingNotification}
@@ -257,22 +259,26 @@ export const Conversations: React.FC = () => {
         toggleFileDialogVisibility={toggleFileDialogVisibility}
       />
 
-      <Modal
+      <Modal.Root
         isOpen={openMessageUpdateDialog}
         onClose={onCloseMessageUpdateDialog}
       >
-        <MessageUpdateDialog
-          chatId={Number(messageUpdateDialogState?.chatId)}
-          messageId={Number(messageUpdateDialogState?.messageId)}
-          initialValues={
-            messageUpdateDialogState?.initialValues as MessageUpdateFormValues
-          }
-          onSuccess={() => {
-            handleRefreshMessages();
-            onCloseMessageUpdateDialog();
-          }}
-        />
-      </Modal>
+        <Modal.Header onClose={onCloseMessageUpdateDialog}>Update Message</Modal.Header>
+
+        <Modal.Body>
+          <MessageUpdateDialog
+            chatId={Number(messageUpdateDialogState?.chatId)}
+            messageId={Number(messageUpdateDialogState?.messageId)}
+            initialValues={
+              messageUpdateDialogState?.initialValues as MessageUpdateFormValues
+            }
+            onSuccess={() => {
+              handleRefreshMessages();
+              onCloseMessageUpdateDialog();
+            }}
+          />
+        </Modal.Body>
+      </Modal.Root>
     </>
   );
 };

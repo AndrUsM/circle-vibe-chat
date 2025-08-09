@@ -7,7 +7,7 @@ import {
   MessageType,
   SendMessageChatSocketParams,
 } from "@circle-vibe/shared";
-import { useSocket } from "@core/hooks";
+import { useNotification, useSocket } from "@core/hooks";
 import { MessageFormValues } from "@features/messages/types";
 import {
   composeCreateMessageParams,
@@ -24,6 +24,7 @@ export const useSendMessage = (
   setMessagesLoading: (loading: boolean) => void
 ) => {
   const { socket } = useSocket();
+  const notification = useNotification();
   const sendVideo = useSendVideoAsBuffer();
   const sendFileMessage = useSendFileMessage();
 
@@ -32,17 +33,19 @@ export const useSendMessage = (
       formValues: MessageFormValues,
       { resetForm }: FormikHelpers<MessageFormValues>
     ) => {
-      setMessagesLoading(true);
-
+      debugger;
       const hasContent = Boolean(formValues.content || formValues.file);
 
-      if (!hasContent) {
+      if (!hasContent || !chatParticipant || !selectedChatId) {
+        notification({
+          type: "error",
+          content: "Failed to send message",
+        });
+
         return;
       }
 
-      if (!chatParticipant || !selectedChatId) {
-        return;
-      }
+      setMessagesLoading(true);
 
       if (formValues.file) {
         const messageType = getMessageType(formValues);
@@ -91,6 +94,6 @@ export const useSendMessage = (
       resetForm();
       setMessagesLoading(false);
     },
-    [socket, chatParticipant, selectedChatId]
+    [socket, JSON.stringify(chatParticipant), selectedChatId]
   );
 };

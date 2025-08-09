@@ -1,5 +1,5 @@
-import { ConversationContext } from "@features/conversation/context";
 import { useContext, useMemo } from "react";
+import { ConversationContext } from "@features/conversation/context";
 
 export const useActiveConversation = () => {
   const {
@@ -9,13 +9,10 @@ export const useActiveConversation = () => {
     setCurrentConversationParticipant,
   } = useContext(ConversationContext);
 
-  return useMemo(
-    () => ({
-      selectedChatId,
-      currentConversationParticipant,
-      setSelectedChatId,
-      setCurrentConversationParticipant,
-    }),
-    [currentConversationParticipant, selectedChatId]
-  );
+  return {
+    selectedChatId,
+    currentConversationParticipant,
+    setSelectedChatId,
+    setCurrentConversationParticipant,
+  };
 };

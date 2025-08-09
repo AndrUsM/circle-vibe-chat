@@ -1,20 +1,28 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+import { FormikProps } from "formik";
 
 import {
   Form,
-  FormControlTextarea,
   FormGroup,
   FormSubmitButton,
+  HorizontalDivider,
   StackLayout,
 } from "@circle-vibe/components";
+
+import MDEditor from "@uiw/react-md-editor";
+import { useUpdateMessage } from "@api/messages";
 
 import {
   MESSAGE_UPDATE_FORM_INITIAL_VALUE,
   MESSAGE_UPDATE_FORM_VALIDATION_SCHEMA,
 } from "@features/messages/constants";
-import { MessageUpdateFormValues } from "@features/messages/types";
-import { useUpdateMessage } from "@api/messages";
+import {
+  MessageFormValues,
+  MessageUpdateFormValues,
+} from "@features/messages/types";
+
+import { TextMessagePreview } from "../text-message-preview";
 
 interface MessageUpdateDialogProps {
   chatId: number;
@@ -34,35 +42,51 @@ export const MessageUpdateDialog: React.FC<MessageUpdateDialogProps> = ({
 
   const onSubmit = useCallback(async (values: MessageUpdateFormValues) => {
     const response = await updateMessage(chatId, messageId, values);
-
     if (response) {
       onSuccess();
     }
   }, []);
 
   return (
-    <StackLayout>
-      <div>Update Message</div>
-
       <Form
         enableReinitialize={true}
         onSubmit={onSubmit}
         initialValues={initialValues ?? MESSAGE_UPDATE_FORM_INITIAL_VALUE}
         validationSchema={MESSAGE_UPDATE_FORM_VALIDATION_SCHEMA}
       >
-        <StackLayout>
-          <FormGroup formFieldName="content">
-            <FormControlTextarea
-              className="resize-vertical min-h-60 p-3"
-              placeholder={t("conversations.send.input.placeholder")}
-            />
-          </FormGroup>
+        {({ values, setFieldValue }: FormikProps<MessageFormValues>) => (
+          <StackLayout data-color-mode="light">
+            <FormGroup formFieldName="content" className="min-h-60">
+              <StackLayout>
+                <MDEditor
+                  preview="edit"
+                  highlightEnable={false}
+                  fullscreen={false}
+                  hideToolbar={true}
+                  height={500}
+                  maxHeight={500}
+                  minHeight={500}
+                  enableScroll={false}
+                  textareaProps={{
+                    placeholder: t("conversations.send.input.placeholder"),
+                  }}
+                  value={values.content}
+                  onChange={(message) => {
+                    setFieldValue("content", message);
+                  }}
+                />
 
-          <FormSubmitButton color="primary" size="large">
-            {t("conversations.send.button")}
-          </FormSubmitButton>
-        </StackLayout>
+                <HorizontalDivider height="2px" />
+
+                <TextMessagePreview className="overflow-y-container">{values.content}</TextMessagePreview>
+              </StackLayout>
+            </FormGroup>
+
+            <FormSubmitButton color="primary" size="large">
+              {t("conversations.send.button")}
+            </FormSubmitButton>
+          </StackLayout>
+        )}
       </Form>
-    </StackLayout>
   );
 };

@@ -2,20 +2,25 @@ import { useCallback, useRef } from "react";
 import { FormikHelpers, FormikProps } from "formik";
 import { useTranslation } from "react-i18next";
 
+import MDEditor from "@uiw/react-md-editor";
+
 import {
   Button,
+  CenteredVertialLayout,
   ClusterLayout,
   ExtendedReactFunctionalComponent,
   Form,
-  FormControlTextarea,
   FormikFormControl,
   FormSubmitButton,
+  GridLayout,
   Icon,
   LoadingOverlay,
   Show,
   StackLayout,
+  Tooltip,
   useIcons,
 } from "@circle-vibe/components";
+import { MessageFileEntityType } from "@circle-vibe/shared";
 
 import {
   MESSAGE_FORM_INITIAL_VALUE,
@@ -24,7 +29,6 @@ import {
   useFileEntityType,
   useHandleFileUpload,
 } from "@features/messages";
-import { MessageFileEntityType } from "@circle-vibe/shared";
 import { UploadedFilePreview } from "./uploaded-file-preview";
 
 import "./message-form.scss";
@@ -41,8 +45,13 @@ interface MessageFormProps {
 
 export const MessageForm: ExtendedReactFunctionalComponent<
   MessageFormProps
-> = ({ initialValues = MESSAGE_FORM_INITIAL_VALUE, onCreateMessage, onStartTyping, onStopTyping }) => {
-  const { cilFile } = useIcons();
+> = ({
+  initialValues = MESSAGE_FORM_INITIAL_VALUE,
+  onCreateMessage,
+  onStartTyping,
+  onStopTyping,
+}) => {
+  const { cilFile, cilSend } = useIcons();
   const { t } = useTranslation();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fileMimeType = useFileEntityType(fileInputRef);
@@ -60,12 +69,15 @@ export const MessageForm: ExtendedReactFunctionalComponent<
   } = useHandleFileUpload();
 
   const openFileSelectionDialog = () => fileInputRef?.current?.click();
-  const onSubmit = useCallback((values: MessageFormValues, options: FormikHelpers<MessageFormValues>) => {
-    setFileLoadingForPreview(false);
-    setFileSource(undefined);
+  const onSubmit = useCallback(
+    (values: MessageFormValues, options: FormikHelpers<MessageFormValues>) => {
+      setFileLoadingForPreview(false);
+      setFileSource(undefined);
 
-    onCreateMessage(values, options);
-  }, []);
+      onCreateMessage(values, options);
+    },
+    []
+  );
 
   return (
     <Form
@@ -117,42 +129,66 @@ export const MessageForm: ExtendedReactFunctionalComponent<
             />
           </Show.When>
 
-          <ClusterLayout space="0.5rem" alignItems="flex-start">
+          <StackLayout
+            space="0.5rem"
+            alignItems="flex-start"
+            data-color-mode="light"
+          >
             <FormikFormControl formFieldName="content" className="w-full">
-              <FormControlTextarea
-                onMouseLeave={onStopTyping}
-                onKeyDown={(values.content.length ? onStartTyping : onStopTyping)}
-                className="resize-vertical min-h-10 p-3"
-                placeholder={t("conversations.send.input.placeholder")}
+              <MDEditor
+                preview="edit"
+                highlightEnable={false}
+                fullscreen={false}
+                hideToolbar={true}
+                enableScroll={false}
+                height={200}
+                minHeight={200}
+                maxHeight={200}
+                textareaProps={{
+                  placeholder: t("conversations.send.input.placeholder"),
+                  onKeyDown: values.content.length
+                    ? onStartTyping
+                    : onStopTyping,
+                  onMouseLeave: onStopTyping,
+                }}
+                value={values.content}
+                onChange={(message) => {
+                  setFieldValue("content", message);
+                }}
               />
             </FormikFormControl>
 
-            <Button
-              disabled={Boolean(values.file?.name)}
-              type="button"
-              onClick={openFileSelectionDialog}
-            >
-              <Icon size={18} color="var(--cv-light)" name={cilFile} />
+            <ClusterLayout justifyContent="flex-end" space="0.5rem">
+              <Button
+                disabled={Boolean(values.file?.name)}
+                type="button"
+                onClick={openFileSelectionDialog}
+              >
+                <Icon size={18} color="var(--cv-light)" name={cilFile} />
 
-              <input
-                type="file"
-                ref={fileInputRef}
-                hidden
-                onChange={(event) => {
-                  setFileLoadingForPreview(true);
-                  handleFileChange(event, setFieldValue);
-                }}
-              />
-            </Button>
+                <input
+                  type="file"
+                  ref={fileInputRef}
+                  hidden
+                  onChange={(event) => {
+                    setFileLoadingForPreview(true);
+                    handleFileChange(event, setFieldValue);
+                  }}
+                />
+              </Button>
 
-            <FormSubmitButton
-              disabled={!values.file?.name && !values.content.length}
-              color="primary"
-              size="large"
-            >
-              {t("conversations.send.button")}
-            </FormSubmitButton>
-          </ClusterLayout>
+              <FormSubmitButton
+                className="text-center"
+                disabled={!values.file?.name && !values.content.length}
+                color="primary"
+                size="large"
+              >
+                <Tooltip title={t("conversations.send.button")}>
+                  <Icon color="var(--cv-light)" size={18} name={cilSend} />
+                </Tooltip>
+              </FormSubmitButton>
+            </ClusterLayout>
+          </StackLayout>
         </StackLayout>
       )}
     </Form>

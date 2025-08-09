@@ -27,6 +27,7 @@ import {
 import {
   MessageForm,
   MessageFormValues,
+  TextMessagePreview,
   useSplitMessageContent,
   useThreadParticipants,
 } from "@features/messages";
@@ -41,8 +42,8 @@ interface MessageProps {
   message: MessageModel;
   chatParticipantId: number;
   isSavedMessages?: boolean;
-  onStartTyping: VoidFunction;
-  onStopTyping: VoidFunction;
+  onStopTyping?: VoidFunction;
+  onStartTyping?: VoidFunction;
   onDeleteMessage: (messageId: number) => void;
   onUpdateMessage: (messageId: number) => void;
   onOpenFile: (file: MessageFile) => void;
@@ -56,6 +57,8 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   message,
   chatParticipantId,
   isSavedMessages = false,
+  onStopTyping = noop,
+  onStartTyping = noop,
   onDeleteMessage,
   onUpdateMessage,
   onOpenFile,
@@ -87,10 +90,12 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
         className="bg-tertiary rounded-1 p-2 rounded-2"
       >
         <Show.When isTrue={Boolean(content) && !files?.length}>
-          <StackLayout space="0.5rem" justifyContent="space-between">
-            <div className="bg-light p-2 rounded-2 white-space-pre-wrap">
-              {messageContent}
-            </div>
+          <StackLayout
+            space="0.5rem"
+            justifyContent="space-between"
+            className="white-space-pre-wrap"
+          >
+            <TextMessagePreview>{messageContent}</TextMessagePreview>
 
             <Show.When isTrue={isContentTooLong}>
               <Button color="primary" onClick={toggleOfTooLongMessage}>
@@ -234,6 +239,8 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
           {/* SEND MESSAGE FORM */}
           <Show.When isTrue={message.sender?.id !== chatParticipantId}>
             <MessageForm
+              onStartTyping={onStartTyping}
+              onStopTyping={onStopTyping}
               initialValues={{
                 parentMessageId: message.id,
                 threadId: message.childThreadId,

@@ -1,6 +1,6 @@
+import React from "react";
 import {
   ClusterLayout,
-  ExtendedReactFunctionalComponent,
   Icon,
   Tooltip,
   useIcons,
@@ -13,7 +13,6 @@ import { useCurrentUser } from "@core/hooks";
 import { composeAvatarFallback } from "@circle-vibe/shared";
 import { PrivatePagesEnum } from "@core/navigation";
 import { ConversationProvider } from "@features/conversation";
-import React from "react";
 
 export const PrivateRoutesLayout: React.FC = () => {
   const { t } = useTranslation();

@@ -135,20 +135,24 @@ export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
         )}
       </Form>
 
-      <Modal
+      <Modal.Root
         isOpen={isConfirmationModalOpen}
         onClose={() => {
           setConfirmationModalOpen(false);
         }}
       >
-        <AccountConfirmationForm
-          email={email}
-          onClose={() => {
-            setConfirmationCodeAdded(true);
-            setConfirmationModalOpen(false);
-          }}
-        />
-      </Modal>
+        <Modal.Header>Account Confirmation</Modal.Header>
+
+        <Modal.Body>
+          <AccountConfirmationForm
+            email={email}
+            onClose={() => {
+              setConfirmationCodeAdded(true);
+              setConfirmationModalOpen(false);
+            }}
+          />
+        </Modal.Body>
+      </Modal.Root>
     </>
   );
 };

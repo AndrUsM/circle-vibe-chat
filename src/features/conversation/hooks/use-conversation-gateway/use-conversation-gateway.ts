@@ -1,5 +1,5 @@
 import { FormikHelpers } from "formik";
-import { useCallback, useContext, useMemo } from "react";
+import { useCallback, useMemo } from "react";
 
 import {
   Chat,
@@ -19,7 +19,7 @@ import { useCurrentUser, useNotification, useSocket } from "@core/hooks";
 import { composePaginationResponse } from "@shared/utils";
 
 import {
-  ConversationContext,
+  useActiveConversation,
 } from "@features/conversation";
 import { MessageFormValues } from "@features/messages";
 
@@ -66,7 +66,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     setCurrentConversationParticipant: setChatParticipant,
     selectedChatId,
     setSelectedChatId,
-  } = useContext(ConversationContext);
+  } = useActiveConversation();
   const { socket } = useSocket();
   const isAnyChatSelected = Boolean(selectedChatId);
   const allowToPreselectChat = useMemo<boolean>(
@@ -128,7 +128,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     triggerGetPaginatedMessages(messagesPage, {
       force: true,
     });
-  }, [messagesPage]);
+  }, [selectedChatId, messagesPage]);
 
   const socketListenerReceiveChats = (chats: PaginatedResponse<Chat>) => {
     setChatsPage(1);
@@ -145,14 +145,13 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     socket.emit(ChatSocketCommand.RECEIVE_CHATS, chatParticipant?.chatId);
   };
 
-  const socketListenerJoinChat = ({
-    chatParticipant,
-  }: {
-    chatParticipant: ChatParticipant;
-  }) => {
-    setMessagesPage(1);
-    setChatParticipant(chatParticipant);
-  };
+  const socketListenerJoinChat = useCallback(
+    ({ chatParticipant }: { chatParticipant: ChatParticipant }) => {
+      setMessagesPage(1);
+      setChatParticipant(chatParticipant);
+    },
+    [setChatParticipant]
+  );
 
   const socketListenerNotifyNewMessage = () => {
     if (chatParticipant?.isMuted) {
@@ -223,7 +222,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     });
   }, [selectedChatId]);
 
-    const triggerStopTypingNotification = useCallback(() => {
+  const triggerStopTypingNotification = useCallback(() => {
     socket.emit(ChatSocketCommand.MESSAGE_TYPE_STOP_TYPING, {
       chatId: selectedChatId,
     });
@@ -276,12 +275,6 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       selectedChatId,
       isAnyoneTyping,
       user,
-      handleSendMessageWithThread,
-      onChatSelect,
-      triggerGetPaginatedChats,
-      triggerSearchChatsByName,
-      triggerGetPaginatedMessages,
-      handleSendMessage,
     ]
   );
 };
