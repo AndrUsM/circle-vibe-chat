@@ -1,6 +1,8 @@
 import { useCallback } from "react";
 import { useTranslation } from "react-i18next";
+
 import { FormikProps } from "formik";
+import MDEditor from "@uiw/react-md-editor";
 
 import {
   Form,
@@ -10,7 +12,6 @@ import {
   StackLayout,
 } from "@circle-vibe/components";
 
-import MDEditor from "@uiw/react-md-editor";
 import { useUpdateMessage } from "@api/messages";
 
 import {
@@ -62,10 +63,9 @@ export const MessageUpdateDialog: React.FC<MessageUpdateDialogProps> = ({
                   preview="edit"
                   highlightEnable={false}
                   fullscreen={false}
+                  height={200}
+                  minHeight={200}
                   hideToolbar={true}
-                  height={500}
-                  maxHeight={500}
-                  minHeight={500}
                   enableScroll={false}
                   textareaProps={{
                     placeholder: t("conversations.send.input.placeholder"),

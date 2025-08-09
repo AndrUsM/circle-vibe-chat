@@ -6,13 +6,11 @@ import MDEditor from "@uiw/react-md-editor";
 
 import {
   Button,
-  CenteredVertialLayout,
   ClusterLayout,
   ExtendedReactFunctionalComponent,
   Form,
   FormikFormControl,
   FormSubmitButton,
-  GridLayout,
   Icon,
   LoadingOverlay,
   Show,
@@ -61,7 +59,6 @@ export const MessageForm: ExtendedReactFunctionalComponent<
     readFileProgress,
     totalReadedMb,
     totalFileSize,
-
     abortReadFile,
     handleFileChange,
     setFileSource,
@@ -141,9 +138,9 @@ export const MessageForm: ExtendedReactFunctionalComponent<
                 fullscreen={false}
                 hideToolbar={true}
                 enableScroll={false}
-                height={200}
-                minHeight={200}
-                maxHeight={200}
+                height={100}
+                minHeight={100}
+                maxHeight={500}
                 textareaProps={{
                   placeholder: t("conversations.send.input.placeholder"),
                   onKeyDown: values.content.length
