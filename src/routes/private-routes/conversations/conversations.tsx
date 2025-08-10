@@ -20,7 +20,11 @@ import {
 } from "@circle-vibe/components";
 
 import { useDeleteMessage } from "@api/messages";
-import { PaginationControls, PaginationScrollButton } from "@shared/components";
+import {
+  PaginationControls,
+  PaginationScrollButton,
+  Filters,
+} from "@shared/components";
 import { useConfirmation, useScrollToBlockPosition } from "@shared/hooks";
 
 import {
@@ -31,6 +35,8 @@ import {
   MessageUpdateFormValues,
   MessageForm,
   MessagesFilterBar,
+  MESSAGES_FILTER_BAR_FORM_INITIAL_VALUES,
+  MessagesFilterBarFormValues,
 } from "@features/messages";
 import {
   useConversationGateway,
@@ -138,7 +144,7 @@ export const Conversations: React.FC = () => {
           className="relative flex items-center justify-center w-full"
           minSize={100}
         >
-          <StackLayout className="w-full p-3 overflow-y-auto">
+          <StackLayout className="w-full p-3 overflow-y-container">
             <StackLayout
               space="1rem"
               justifyContent="justify-between"
@@ -195,91 +201,110 @@ export const Conversations: React.FC = () => {
           minSize={100}
         >
           <StackLayout justifyContent="end" className="w-full p-3">
-            <Show.When isTrue={isFiltersBarVisible && Boolean(selectedChatId)}>
-              <MessagesFilterBar
-                conversationId={Number(selectedChatId)}
-                onSubmit={(filter) => {
-                  triggerGetPaginatedMessages(
-                    chatsPage,
-                    { force: true },
-                    filter
-                  );
-                }}
-              />
+            <Filters initialValue={MESSAGES_FILTER_BAR_FORM_INITIAL_VALUES}>
+              {({ isActive, filters }) => (
+                <>
+                  <Show.When
+                    isTrue={isFiltersBarVisible && Boolean(selectedChatId)}
+                  >
+                    <MessagesFilterBar
+                      initialValues={filters as MessagesFilterBarFormValues}
+                      conversationId={Number(selectedChatId)}
+                      onClose={triggerFiltersBarVisibility}
+                      onSubmit={(filter) => {
+                        triggerGetPaginatedMessages(
+                          chatsPage,
+                          { force: true },
+                          filter
+                        );
+                      }}
+                    />
 
-              <HorizontalDivider color="var(--cv-bg-secondary)" height="0.2rem" />
-            </Show.When>
+                    <HorizontalDivider
+                      color="var(--cv-bg-secondary)"
+                      height="0.2rem"
+                    />
+                  </Show.When>
 
-            <StackLayout ref={messagesRef} className="overflow-y-auto">
-              {(messages?.data ?? [])?.map((message) => (
-                <Suspense key={message.id} fallback={<LoadingOverlay />}>
-                  <Message
-                    message={message}
-                    isSavedMessages={isSavedMessagesChat}
-                    onStopTyping={triggerStopTypingNotification}
-                    onStartTyping={triggerStartTypingNotification}
-                    chatParticipantId={Number(chatParticipant?.id)}
-                    onDeleteMessage={onDeleteMessage}
-                    onUpdateMessage={onUpdateMessage}
-                    onOpenFile={toggleFileDialogVisibility}
-                    onReplyMessage={handleSendMessageWithThread}
-                  />
-                </Suspense>
-              ))}
+                  <StackLayout ref={messagesRef} className="overflow-y-container">
+                    {(messages?.data ?? [])?.map((message) => (
+                      <Suspense key={message.id} fallback={<LoadingOverlay />}>
+                        <Message
+                          message={message}
+                          isSavedMessages={isSavedMessagesChat}
+                          onStopTyping={triggerStopTypingNotification}
+                          onStartTyping={triggerStartTypingNotification}
+                          chatParticipantId={Number(chatParticipant?.id)}
+                          onDeleteMessage={onDeleteMessage}
+                          onUpdateMessage={onUpdateMessage}
+                          onOpenFile={toggleFileDialogVisibility}
+                          onReplyMessage={handleSendMessageWithThread}
+                        />
+                      </Suspense>
+                    ))}
 
-              <Show.When isTrue={!messagesLoading && !messages?.totalItems}>
-                <span className="text-md text-truncate">
-                  {t("message.empty")}
-                </span>
-              </Show.When>
-            </StackLayout>
+                    <Show.When
+                      isTrue={!messagesLoading && !messages?.totalItems}
+                    >
+                      <span className="text-md text-truncate">
+                        {t("message.empty")}
+                      </span>
+                    </Show.When>
+                  </StackLayout>
 
-            <CenteredVertialLayout
-              space="0.5rem"
-              justifyContent="space-between"
-            >
-              <PaginationControls
-                paginatedResponse={messages}
-                currentPage={messagesPage}
-                onPageChange={triggerGetPaginatedMessages}
-              />
+                  <CenteredVertialLayout
+                    space="0.5rem"
+                    justifyContent="space-between"
+                  >
+                    <PaginationControls
+                      paginatedResponse={messages}
+                      currentPage={messagesPage}
+                      onPageChange={triggerGetPaginatedMessages}
+                    />
 
-              <Show>
-                <Show.When isTrue={isAnyoneTyping}>
-                  <Icon
-                    className="typing-indicator"
-                    name={cilKeyboard}
-                    color="var(--cv-primary)"
-                    size={32}
-                  />
-                </Show.When>
-                <Show.Else>
-                  <div></div>
-                </Show.Else>
-              </Show>
+                    <Show>
+                      <Show.When isTrue={isAnyoneTyping}>
+                        <Icon
+                          className="typing-indicator"
+                          name={cilKeyboard}
+                          color="var(--cv-primary)"
+                          size={32}
+                        />
+                      </Show.When>
+                      <Show.Else>
+                        <div></div>
+                      </Show.Else>
+                    </Show>
 
-              <CenteredVertialLayout space="0.5rem">
-                <Button
-                  className="messages-filter-button"
-                  color="secondary"
-                  onClick={triggerFiltersBarVisibility}
-                >
-                  <Icon color="var(--cv-light)" name={cilFilter} size={12} />
-                </Button>
+                    <CenteredVertialLayout space="0.5rem">
+                      <Button
+                        className="messages-filter-button"
+                        color={isActive ? "primary" : "secondary"}
+                        onClick={triggerFiltersBarVisibility}
+                      >
+                        <Icon
+                          color="var(--cv-light)"
+                          name={cilFilter}
+                          size={12}
+                        />
+                      </Button>
 
-                <PaginationScrollButton messagesRef={messagesRef} />
-              </CenteredVertialLayout>
-            </CenteredVertialLayout>
+                      <PaginationScrollButton messagesRef={messagesRef} />
+                    </CenteredVertialLayout>
+                  </CenteredVertialLayout>
 
-            <Show.When
-              isTrue={isAnyChatSelected && Boolean(chatParticipant?.id)}
-            >
-              <MessageForm
-                onStopTyping={triggerStopTypingNotification}
-                onStartTyping={triggerStartTypingNotification}
-                onCreateMessage={handleSendMessage}
-              />
-            </Show.When>
+                  <Show.When
+                    isTrue={isAnyChatSelected && Boolean(chatParticipant?.id)}
+                  >
+                    <MessageForm
+                      onStopTyping={triggerStopTypingNotification}
+                      onStartTyping={triggerStartTypingNotification}
+                      onCreateMessage={handleSendMessage}
+                    />
+                  </Show.When>
+                </>
+              )}
+            </Filters>
           </StackLayout>
 
           <Show.When isTrue={messagesLoading}>

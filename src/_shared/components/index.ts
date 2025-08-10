@@ -5,3 +5,4 @@ export * from './user-avatar';
 export * from './pagination';
 export * from './table';
 export * from './back-navigation-button';
+export * from './filters';
