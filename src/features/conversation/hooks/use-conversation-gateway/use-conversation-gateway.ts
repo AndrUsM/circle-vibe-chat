@@ -169,6 +169,10 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       page: number,
       options?: {
         force?: boolean;
+      },
+      filters?: {
+        content?: string;
+        senderIds?: number[];
       }
     ) => {
       const isSamePage = options?.force ? false : page === messagesPage;
@@ -183,6 +187,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
         chatId: selectedChatId,
         page,
         threadId: undefined,
+        ...(filters ?? {}),
         pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
       };
 

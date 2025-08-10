@@ -207,10 +207,10 @@
     formik "^2.4.6"
     js-cookie "^3.0.5"
 
-"@circle-vibe/shared@1.2.25":
-  version "1.2.25"
-  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.2.25.tgz#cae8499f8874d8c2dd1cc8c78b62f120ce8dcd18"
-  integrity sha512-/oG5JamSdiXbb0C0If8ACrznmd1BR+0J/29Qusqd3bOQDN1aQzO1UKrVpfbN0q6h0CyEsbnmC0MtDG6wgJhl7g==
+"@circle-vibe/shared@1.2.26":
+  version "1.2.26"
+  resolved "https://registry.yarnpkg.com/@circle-vibe/shared/-/shared-1.2.26.tgz#5735f4a7b323fbbe3079fb78e7621a5cde62571b"
+  integrity sha512-55sSiGcY4h1s2RONbqap6zFESRKzu9MfVT77ALLTi8jCpCTw1oJdri0190zIhhHDLNpjkaFlhSeeRzzTLypp4A==
 
 "@column-resizer/core@1.3.1":
   version "1.3.1"

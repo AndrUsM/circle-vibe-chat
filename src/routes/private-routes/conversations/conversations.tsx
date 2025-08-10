@@ -30,6 +30,7 @@ import {
   MessageUpdateDialog,
   MessageUpdateFormValues,
   MessageForm,
+  MessagesFilterBar,
 } from "@features/messages";
 import {
   useConversationGateway,
@@ -44,10 +45,11 @@ import "./conversation.scss";
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
   const confirm = useConfirmation();
-  const { cilKeyboard } = useIcons();
+  const { cilKeyboard, cilFilter } = useIcons();
   const onScrollToPosition = useScrollToBlockPosition();
   const deleteMessage = useDeleteMessage();
   const messagesRef = useRef<HTMLDivElement>(null);
+  const [isFiltersBarVisible, triggerFiltersBarVisibility] = useBoolean(false);
 
   const [
     openChatCreationModal,
@@ -193,6 +195,21 @@ export const Conversations: React.FC = () => {
           minSize={100}
         >
           <StackLayout justifyContent="end" className="w-full p-3">
+            <Show.When isTrue={isFiltersBarVisible && Boolean(selectedChatId)}>
+              <MessagesFilterBar
+                conversationId={Number(selectedChatId)}
+                onSubmit={(filter) => {
+                  triggerGetPaginatedMessages(
+                    chatsPage,
+                    { force: true },
+                    filter
+                  );
+                }}
+              />
+
+              <HorizontalDivider color="var(--cv-bg-secondary)" height="0.2rem" />
+            </Show.When>
+
             <StackLayout ref={messagesRef} className="overflow-y-auto">
               {(messages?.data ?? [])?.map((message) => (
                 <Suspense key={message.id} fallback={<LoadingOverlay />}>
@@ -209,6 +226,12 @@ export const Conversations: React.FC = () => {
                   />
                 </Suspense>
               ))}
+
+              <Show.When isTrue={!messagesLoading && !messages?.totalItems}>
+                <span className="text-md text-truncate">
+                  {t("message.empty")}
+                </span>
+              </Show.When>
             </StackLayout>
 
             <CenteredVertialLayout
@@ -221,18 +244,31 @@ export const Conversations: React.FC = () => {
                 onPageChange={triggerGetPaginatedMessages}
               />
 
-              <Show.When isTrue={isAnyoneTyping}>
-                <Icon
-                  className="typing-indicator"
-                  name={cilKeyboard}
-                  color="var(--cv-primary)"
-                  size={32}
-                />
-              </Show.When>
+              <Show>
+                <Show.When isTrue={isAnyoneTyping}>
+                  <Icon
+                    className="typing-indicator"
+                    name={cilKeyboard}
+                    color="var(--cv-primary)"
+                    size={32}
+                  />
+                </Show.When>
+                <Show.Else>
+                  <div></div>
+                </Show.Else>
+              </Show>
 
-              <div>
+              <CenteredVertialLayout space="0.5rem">
+                <Button
+                  className="messages-filter-button"
+                  color="secondary"
+                  onClick={triggerFiltersBarVisibility}
+                >
+                  <Icon color="var(--cv-light)" name={cilFilter} size={12} />
+                </Button>
+
                 <PaginationScrollButton messagesRef={messagesRef} />
-              </div>
+              </CenteredVertialLayout>
             </CenteredVertialLayout>
 
             <Show.When
@@ -263,7 +299,9 @@ export const Conversations: React.FC = () => {
         isOpen={openMessageUpdateDialog}
         onClose={onCloseMessageUpdateDialog}
       >
-        <Modal.Header onClose={onCloseMessageUpdateDialog}>Update Message</Modal.Header>
+        <Modal.Header onClose={onCloseMessageUpdateDialog}>
+          Update Message
+        </Modal.Header>
 
         <Modal.Body>
           <MessageUpdateDialog
