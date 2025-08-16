@@ -3,6 +3,7 @@ import {
   UploadImageOutputDto,
   UploadVideoOutputDto,
 } from "@circle-vibe/shared";
+import { CONVERSATION_BUCKET_NAME } from "@core/constants";
 import { fileServerRequest } from "@core/request";
 
 export const useSendFile = () => {
@@ -14,6 +15,9 @@ export const useSendFile = () => {
       method: "POST",
       url: "/files/upload",
       data,
+      params: {
+        bucket: CONVERSATION_BUCKET_NAME,
+      }
     });
 
     return response.data as UploadFileOutputDto;
@@ -27,6 +31,9 @@ export const useSendFile = () => {
       method: "POST",
       url: "/images/upload",
       data,
+      params: {
+        bucket: CONVERSATION_BUCKET_NAME,
+      }
     });
 
     return response.data as UploadImageOutputDto;
@@ -40,6 +47,9 @@ export const useSendFile = () => {
       method: "POST",
       url: "/videos/upload",
       data,
+      params: {
+        bucket: CONVERSATION_BUCKET_NAME,
+      }
     });
 
     return response.data as UploadVideoOutputDto;

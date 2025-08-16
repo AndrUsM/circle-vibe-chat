@@ -1,6 +1,5 @@
 import axios, { AxiosRequestConfig } from "axios";
 import { BASE_API_URL, BASE_FILE_SERVER_API_URL } from "../constants/base-api-url";
-import { cookiesService } from "@core/services";
 import { getAuthToken, setAuthToken } from "@core/utils";
 
 
