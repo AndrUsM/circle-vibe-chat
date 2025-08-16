@@ -33,7 +33,6 @@ export const useSendMessage = (
       formValues: MessageFormValues,
       { resetForm }: FormikHelpers<MessageFormValues>
     ) => {
-      debugger;
       const hasContent = Boolean(formValues.content || formValues.file);
 
       if (!hasContent || !chatParticipant || !selectedChatId) {
