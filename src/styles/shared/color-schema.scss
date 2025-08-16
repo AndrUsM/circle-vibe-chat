@@ -1,0 +1,20 @@
+.color-scheme {
+  &-normal {
+    color-scheme: normal;
+  }
+  &-dark {
+    color-scheme: dark;
+  }
+  &-light {
+    color-scheme: light;
+  }
+  &-light-dark {
+    color-scheme: light dark;
+  }
+  &-only-dark {
+    color-scheme: only dark;
+  }
+  &-only-light {
+    color-scheme: only light;
+  }
+}

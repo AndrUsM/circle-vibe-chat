@@ -1,5 +1,6 @@
 @use "./shared/variables.scss";
 
+@use "./shared/color-schema.scss";
 @use "./shared/background.scss";
 @use "./shared/border-radius.scss";
 @use "./shared/color.scss";
@@ -18,12 +19,13 @@
 @use "./shared/animations.scss";
 @use "./shared/image.scss";
 
-@use './shared/button.scss';
-@use './shared/form.scss';
-@use './shared/resize.scss';
-@use './shared/uiw-md-editor.scss';
+@use "./shared/button.scss";
+@use "./shared/form.scss";
+@use "./shared/resize.scss";
+@use "./shared/uiw-md-editor.scss";
 
-body, html {
+body,
+html {
   border: none;
   outline: none;
   margin: 0;
@@ -36,4 +38,5 @@ body, html {
   height: 100%;
   width: 100%;
   background: #fff;
+  color-scheme: light;
 }

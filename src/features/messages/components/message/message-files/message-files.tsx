@@ -12,7 +12,11 @@ import {
 } from "@circle-vibe/components";
 import { MessageFile, MessageType } from "@circle-vibe/shared";
 
-import { useSortedByTypeFiles, openFileForPreview } from "@features/messages";
+import {
+  useSortedByTypeFiles,
+  openFileForPreview,
+  NATIVE_BROWSER_EXTENSIONS_REGEXP,
+} from "@features/messages";
 
 import { VideoPreview } from "../video-preview";
 
@@ -29,6 +33,11 @@ export const MessageFiles: React.FC<MessageFilesProps> = ({
 }) => {
   const icons = useIcons();
   const sortedByTypeFiles = useSortedByTypeFiles(files);
+  const isNativeBrowserPreview = (file: string) => {
+    const extension = file.split(".").pop();
+
+    return extension ? NATIVE_BROWSER_EXTENSIONS_REGEXP.test(extension) : false;
+  };
 
   return (
     <StackLayout>
@@ -81,9 +90,16 @@ export const MessageFiles: React.FC<MessageFilesProps> = ({
             >
               <Tooltip title={"Open file"}>
                 <span
-                  onClick={() =>
-                    openFileForPreview(sortedByTypeFiles.files[fileTypeIndex])
-                  }
+                  onClick={() => {
+                    if (!isNativeBrowserPreview(fileName)) {
+                      openFileForPreview(
+                        sortedByTypeFiles.files[fileTypeIndex]
+                      );
+                      return;
+                    }
+
+                    onOpenFile(sortedByTypeFiles.files[fileTypeIndex]);
+                  }}
                   className="text-link"
                 >
                   {fileName}

@@ -6,6 +6,9 @@
   }
 
   &-documents {
-    min-height: 10rem;
+    min-width: 50vw;
+    min-height: 80vh;
+    object-fit: contain;
+    border-color: transparent;
   }
 }

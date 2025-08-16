@@ -16,6 +16,7 @@ export const FilePreview: ExtendedReactFunctionalComponent<
   FilePreviewProps
 > = ({ messageFile }) => {
   const { entityType, fileName, url, description } = messageFile;
+
   if (entityType == MessageFileEntityType.IMAGE) {
     return (
       <>
@@ -54,6 +55,20 @@ export const FilePreview: ExtendedReactFunctionalComponent<
             src={url}
             controls
           />
+        </section>
+      </>
+    );
+  }
+
+  if (entityType == MessageFileEntityType.FILE) {
+    return (
+      <>
+        <Show.When isTrue={Boolean(fileName)}>
+          <div className="italic text-sm text-center">{fileName}</div>
+        </Show.When>
+
+        <section className="px-1 pb-1 pt-1 relative">
+          <iframe src={url} className="block max-w-full file-preview-documents rounded-2" />
         </section>
       </>
     );
