@@ -9,3 +9,15 @@
 .messages-filter-button {
   padding: 0.4rem 0.5rem !important;
 }
+
+.messages-resizer-section {
+  container-type: inline-size;
+  container-name: messageResizerSection;
+}
+
+@container messageResizerSection (max-width: 250px) {
+  .chat-actions-menu {
+    display: none;
+    width: 0;
+  }
+}

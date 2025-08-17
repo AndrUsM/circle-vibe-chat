@@ -31,12 +31,14 @@ export const MessageShortPreview: ExtendedReactFunctionalComponent<
         <StackLayout space="0.25rem" className="w-full">
           <Show.When isTrue={Boolean(files?.length)}>
             <span className="text-sm truncate white-space-nowrap">
-              {files?.length} {files?.length === 1 ? "file" : "files"} {content?.length ? 'with text message' : ''}
+              {files?.length}
+              {files?.length === 1 ? "file" : "files"}
+              {content?.length ? 'with text message' : ''}
             </span>
           </Show.When>
 
           <Show.Else>
-            <span className="block truncate line-clamp line-clamp-1 italic">
+            <span className="block truncate line-clamp line-clamp-1 italic word-break white-space-pre-wrap">
               {content}
             </span>
           </Show.Else>

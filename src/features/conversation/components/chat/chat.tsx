@@ -52,7 +52,7 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
       justifyContent="space-between"
       alignItems="center"
       className={classNames(
-        "relative overflow-hidden chat p-2 rounded-2 cursor-pointer max-w-full",
+        "relative overflow-hidden chat p-2 rounded-2 cursor-pointer",
         {
           selected: selected,
           "bg-warning": hasUnreadMessages,
@@ -62,9 +62,9 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
       onClick={onClick}
     >
       <StackLayout space="0.15rem" className="text-sm max-w-full">
-        <span className="block font-bold">{chatName}</span>
+        <span className="block font-bold truncate">{chatName}</span>
 
-        <span>Last seen: {format(updatedAt)}</span>
+        <span className="truncate">Last seen: {format(updatedAt)}</span>
 
         <Show.When isTrue={Boolean(lastMessage)}>
           <div className="p-1">

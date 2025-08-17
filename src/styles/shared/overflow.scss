@@ -16,6 +16,7 @@
   overflow: hidden;
   position: relative;
   scrollbar-gutter: stable;
+  scrollbar-width: thin;
 
   &:hover {
     overflow-y: auto !important;
@@ -26,6 +27,7 @@
   overflow: hidden;
   position: relative;
   scrollbar-gutter: stable;
+  scrollbar-width: thin;
 
   &:hover {
     overflow-x: auto !important;
@@ -36,6 +38,7 @@
   overflow: hidden;
   position: relative;
   scrollbar-gutter: stable;
+  scrollbar-width: thin;
 
   &:hover {
     overflow: auto !important;

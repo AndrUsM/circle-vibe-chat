@@ -141,14 +141,14 @@ export const Conversations: React.FC = () => {
 
       <Resizer.Container className="conversations">
         <Resizer.Section
-          className="relative flex items-center justify-center w-full"
-          minSize={100}
+          className="relative flex items-center justify-center w-full messages-resizer-section"
+          minSize={250}
         >
-          <StackLayout className="w-full p-3 overflow-y-container">
+          <StackLayout className="w-full py-3 pl-3">
             <StackLayout
               space="1rem"
               justifyContent="justify-between"
-              className="flex-wrap"
+              className="flex-wrap pr-3"
             >
               <FormControl className="w-full">
                 <Input
@@ -169,15 +169,17 @@ export const Conversations: React.FC = () => {
               </Button>
             </StackLayout>
 
-            {chats?.data.map((chat) => (
-              <Chat
-                key={chat.id}
-                chat={chat}
-                chatParticipant={chatParticipant}
-                selected={selectedChatId === chat.id}
-                onClick={() => onChatSelect(chat.id)}
-              />
-            ))}
+            <StackLayout className="overflow-y-container">
+              {chats?.data.map((chat) => (
+                <Chat
+                  key={chat.id}
+                  chat={chat}
+                  chatParticipant={chatParticipant}
+                  selected={selectedChatId === chat.id}
+                  onClick={() => onChatSelect(chat.id)}
+                />
+              ))}
+            </StackLayout>
 
             <PaginationControls
               paginatedResponse={chats}
@@ -226,7 +228,10 @@ export const Conversations: React.FC = () => {
                     />
                   </Show.When>
 
-                  <StackLayout ref={messagesRef} className="overflow-y-container">
+                  <StackLayout
+                    ref={messagesRef}
+                    className="overflow-y-container"
+                  >
                     {(messages?.data ?? [])?.map((message) => (
                       <Suspense key={message.id} fallback={<LoadingOverlay />}>
                         <Message

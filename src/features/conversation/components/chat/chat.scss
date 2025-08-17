@@ -1,4 +1,6 @@
 .chat {
+  min-height: 5rem;
+
   &.selected {
     &:before {
       content: '';

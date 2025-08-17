@@ -12,11 +12,12 @@ import {
   Show,
   Modal,
 } from "@circle-vibe/components";
+
+import { useUpdateConversationParticipant } from "@api/conversation-participants";
 import {
   ConversationMembers,
   useActiveConversation,
 } from "@features/conversation";
-import { useUpdateConversationParticipant } from "@api/conversation-participants";
 
 interface ChatActionsProps {
   chat: Chat;
@@ -25,7 +26,6 @@ interface ChatActionsProps {
 export const ChatActions: ExtendedReactFunctionalComponent<
   ChatActionsProps
 > = ({ chat }) => {
-  // const navigate = useNavigate();
   const icons = useIcons();
   const { currentConversationParticipant, setCurrentConversationParticipant } =
     useActiveConversation();
@@ -57,6 +57,7 @@ export const ChatActions: ExtendedReactFunctionalComponent<
       <Menu
         zIndex={10}
         button={() => <Icon name={icons.cilOptions} size={24} />}
+        className="chat-actions-menu"
       >
         <StackLayout>
           <div className="text-lg font-medium">Chat Actions:</div>
