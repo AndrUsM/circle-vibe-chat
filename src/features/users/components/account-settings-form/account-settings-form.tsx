@@ -140,7 +140,7 @@ export const AccountSettingsForm: React.FC = () => {
                 <Icon color="var(--cv-light)" name={cilCopy} size={14} />
               </Button>
 
-              <Textarea value={user.privateToken} readOnly />
+              <Textarea minRows={3} disabled className="resize-vertical min-h-15" value={user.privateToken} readOnly />
             </StackLayout>
           </Section.Content>
         </Section>
