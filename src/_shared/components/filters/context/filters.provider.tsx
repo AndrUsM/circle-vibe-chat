@@ -1,4 +1,4 @@
-import {
+import React, {
   JSXElementConstructor,
   ReactElement,
   ReactPortal,
@@ -7,12 +7,11 @@ import {
   useState,
 } from "react";
 import {
-  ExtendedReactFunctionalComponent,
   noop,
 } from "@circle-vibe/components";
 
 import { FiltersContext } from "./filters.context";
-import { IFiltersContext } from "./filters.context-type";
+import { IFiltersContext } from "@shared/components";
 
 type ReactNode =
   | string

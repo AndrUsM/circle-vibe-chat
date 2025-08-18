@@ -20,6 +20,7 @@ import { composePaginationResponse } from "@shared/utils";
 
 import {
   useActiveConversation,
+  useIsSavedMessagesChat,
 } from "@features/conversation";
 import { MessageFormValues } from "@features/messages";
 
@@ -95,6 +96,8 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     selectedChatId,
     setMessagesLoading
   );
+  
+  const isSavedMessagesChat = useIsSavedMessagesChat(chats, selectedChatId);
 
   const handleSendMessageWithThread = useCallback(
     async (
@@ -261,6 +264,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       triggerStartTypingNotification,
       handleSendMessageWithThread,
       handleRefreshMessages,
+      isSavedMessagesChat,
       onChatSelect,
       triggerGetPaginatedChats,
       triggerSearchChatsByName,
@@ -280,6 +284,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       selectedChatId,
       isAnyoneTyping,
       user,
+      isSavedMessagesChat,
     ]
   );
 };

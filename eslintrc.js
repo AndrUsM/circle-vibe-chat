@@ -1,10 +1,5 @@
 module.exports = {
   plugins: ["import"],
-  rules: {
-    "import/no-unresolved": "error",
-    "import/named": "error",
-    "import/no-unused-modules": [1, { unusedExports: true }],
-  },
   settings: {
     "import/resolver": {
       node: {
@@ -12,9 +7,10 @@ module.exports = {
       },
     },
   },
-  plugins: ["import"],
   rules: {
     "import/no-unresolved": "error",
+    "import/named": "error",
+    "import/no-unused-modules": [1, { unusedExports: true }],
     "import/order": [
       "error",
       {

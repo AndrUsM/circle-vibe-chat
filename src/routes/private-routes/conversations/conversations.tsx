@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useMemo, useRef } from "react";
+import React, { Suspense, useCallback, useRef } from "react";
 import { useTranslation } from "react-i18next";
 
 import * as Resizer from "@column-resizer/react";
@@ -7,16 +7,16 @@ import { useDebouncedCallback } from "use-debounce";
 import {
   StackLayout,
   HorizontalDivider,
-  useIcons,
   FormControl,
-  Show,
   Button,
   CenteredVertialLayout,
-  LoadingOverlay,
   Input,
   Modal,
-  useBoolean,
   Icon,
+  Show,
+  LoadingOverlay,
+  useIcons,
+  useBoolean,
 } from "@circle-vibe/components";
 
 import { useDeleteMessage } from "@api/messages";
@@ -50,19 +50,19 @@ import "./conversation.scss";
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
-  const confirm = useConfirmation();
   const { cilKeyboard, cilFilter } = useIcons();
+  const confirm = useConfirmation();
   const onScrollToPosition = useScrollToBlockPosition();
   const deleteMessage = useDeleteMessage();
-  const messagesRef = useRef<HTMLDivElement>(null);
   const [isFiltersBarVisible, triggerFiltersBarVisibility] = useBoolean(false);
+  const messagesRef = useRef<HTMLDivElement>(null);
+  const { toggleFileDialogVisibility, previewFile } = usePreviewFileState();
 
   const [
     openChatCreationModal,
     toggleOpenChatCreationModal,
     setOpenChatCreationModal,
   ] = useBoolean(false);
-  const { toggleFileDialogVisibility, previewFile } = usePreviewFileState();
   const {
     openMessageUpdateDialog,
     onCloseMessageUpdateDialog,
@@ -94,27 +94,19 @@ export const Conversations: React.FC = () => {
     triggerStopTypingNotification,
     handleRefreshMessages,
     handleSendMessageWithThread,
-    onChatSelect,
     triggerGetPaginatedMessages,
+    handleSendMessage,
+    isSavedMessagesChat,
+    onChatSelect,
     triggerGetPaginatedChats,
     triggerSearchChatsByName,
-    handleSendMessage,
   } = useConversationGateway(onScrollMessages);
-
-  const debouncedChatSearch = useDebouncedCallback((value) => {
-    triggerSearchChatsByName(value);
-  }, 1000);
-
-  const isSavedMessagesChat = useMemo(() => {
-    const selectedChat = chats?.data.find(({ id }) => id === selectedChatId);
-
-    return Boolean(selectedChat?.isSavedMessages);
-  }, [chats, selectedChatId]);
+  
+  const debouncedChatSearch = useDebouncedCallback(triggerSearchChatsByName, 1000);
 
   const onDeleteMessage = useCallback(
     async (messageId: number) => {
       await confirm("Are your sure you want to delete this message?", "danger");
-
       deleteMessage(Number(selectedChatId), messageId, messagesPage);
     },
     [selectedChatId, messagesPage]

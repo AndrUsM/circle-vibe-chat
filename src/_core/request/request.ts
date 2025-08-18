@@ -1,7 +1,9 @@
 import axios, { AxiosRequestConfig } from "axios";
-import { BASE_API_URL, BASE_FILE_SERVER_API_URL } from "../constants/base-api-url";
-import { getAuthToken, setAuthToken } from "@core/utils";
+import i18n from "i18next";
 
+import { BASE_API_URL, BASE_FILE_SERVER_API_URL } from "@core/constants";
+import { getAuthToken, setAuthToken } from "@core/utils";
+import { notificationFunction } from "@core/hooks";
 
 const axiosInstance = axios.create({
   timeout: 10000,
@@ -29,6 +31,15 @@ axiosInstance.interceptors.response.use(
         return response;
       }
     }
+    
+    if (response?.status >= 500) {
+      notificationFunction({
+        type: "error",
+        content: i18n.t("http-request.general-internal-server-error.message"),
+      })
+
+      return new Promise<any>(() => {});
+    }
 
     return response;
   },
@@ -46,7 +57,6 @@ export const request = <T = unknown>(options: AxiosRequestConfig) => {
     headers: {
       Authorization: token
     },
-
   });
 };
 

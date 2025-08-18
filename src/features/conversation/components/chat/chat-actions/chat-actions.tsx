@@ -26,31 +26,26 @@ interface ChatActionsProps {
 export const ChatActions: ExtendedReactFunctionalComponent<
   ChatActionsProps
 > = ({ chat }) => {
-  const icons = useIcons();
-  const { currentConversationParticipant, setCurrentConversationParticipant } =
-    useActiveConversation();
-  const updateConversationParticipant = useUpdateConversationParticipant();
   const { id: chatId } = chat;
-  const { isMuted, id: participantId } =
-    currentConversationParticipant as ChatParticipant;
-  const [isConversationMembersModalOpen, setIsConversationMembersModalOpen] =
-    useState(false);
+  const icons = useIcons();
+  const { currentConversationParticipant, setCurrentConversationParticipant } = useActiveConversation();
+  const updateConversationParticipant = useUpdateConversationParticipant();
+  const { isMuted, id: participantId } = currentConversationParticipant as ChatParticipant;
+  const [isConversationMembersModalOpen, setIsConversationMembersModalOpen] = useState(false);
 
+  const showConversationMembers = () => setIsConversationMembersModalOpen(true);
   const openConversationSettings = useCallback(() => {}, []);
-  const showConversationMembers = useCallback(() => {
-    setIsConversationMembersModalOpen(true);
-  }, []);
   const deleteConversation = useCallback(() => {}, []);
   const leaveConversation = useCallback(() => {}, []);
-  const toggleMuteConversationAlerts = useCallback(() => {
-    updateConversationParticipant({
+  const toggleMuteConversationAlerts = useCallback(async () => {
+    const updatedChatParticipant = await updateConversationParticipant({
       chatId,
       participantId,
       isMuted: !isMuted,
-    }).then((updatedChatParticipant) => {
-      setCurrentConversationParticipant(updatedChatParticipant);
-    });
-  }, [isMuted]);
+    })
+    
+    setCurrentConversationParticipant(updatedChatParticipant);
+  }, [isMuted, chatId, participantId]);
 
   return (
     <>
