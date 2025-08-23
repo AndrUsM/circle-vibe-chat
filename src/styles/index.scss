@@ -1,5 +1,6 @@
 @use "./shared/variables.scss";
 
+// TW V4 LIKE STYLES
 @use "./shared/color-schema.scss";
 @use "./shared/background.scss";
 @use "./shared/border-radius.scss";
@@ -19,7 +20,9 @@
 @use "./shared/animations.scss";
 @use "./shared/image.scss";
 
-@use "./shared/button.scss";
+// SPECIFIC STYLES
+@use "./shared/element";
+@use "./shared/form-control";
 @use "./shared/form.scss";
 @use "./shared/resize.scss";
 @use "./shared/uiw-md-editor.scss";

@@ -54,7 +54,8 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
       className={classNames(
         "relative overflow-hidden chat p-2 rounded-2 cursor-pointer",
         {
-          selected: selected,
+          "selected": selected,
+          "element_effect-hover-reverse": !selected,
           "bg-warning": hasUnreadMessages,
           "bg-tertiary": !hasUnreadMessages,
         }

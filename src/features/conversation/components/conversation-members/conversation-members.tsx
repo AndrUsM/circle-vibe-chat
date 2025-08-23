@@ -42,14 +42,15 @@ export const ConversationMembers: ExtendedReactFunctionalComponent<
     []
   );
   const notification = useNotification();
-  const copyToClickboard = useCopyToClickboard();
+  const copyToClipboard = useCopyToClickboard();
   const [chatInvitation, setChatInvitation] = useState<string | null>(null);
   const getChatParticipants = useGetChatParticipants();
   const { getUserToInvite, loading: isChatParticipantsToInviteLoading } =
     useGetUserToInvite();
   const generateConversationInvite = useGenerateConversationInvite();
-  const handleCopyOfInvite = useCallback(() => {
-    copyToClickboard(chatInvitation ?? "");
+  const handleCopyOfInvite = useCallback(async () => {
+    await copyToClipboard(chatInvitation ?? "");
+
     notification({
       type: "success",
       content: "Invite link successfully copied!",

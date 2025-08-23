@@ -6,7 +6,9 @@ import {
   useIcons,
 } from "@circle-vibe/components";
 import { TopbarLogo, UserAvatar } from "@shared/components";
-import { TopbarActions } from "../conversations/topbar-actions";
+import {
+  TopBarActions,
+} from "../conversations/topbar-actions";
 import { Outlet, useNavigate } from "react-router-dom";
 import { useTranslation } from "react-i18next";
 import { useCurrentUser } from "@core/hooks";
@@ -53,7 +55,7 @@ export const PrivateRoutesLayout: React.FC = () => {
                 onClick={goToAccountSettings}
               />
             </Tooltip>
-            <TopbarActions />
+            <TopBarActions />
           </ClusterLayout>
         </ClusterLayout>
 

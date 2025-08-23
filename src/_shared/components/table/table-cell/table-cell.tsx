@@ -1,4 +1,4 @@
-import { useContext } from "react";
+import React, { useContext } from "react";
 import classNames from "classnames";
 
 import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
@@ -21,14 +21,14 @@ export const TableCell: ExtendedReactFunctionalComponent<TableCellProps> = ({
 
   if (isHead) {
     return (
-      <th className={classNames("p-2", className)} {...rest}>
+      <th className={classNames("p-2 element_effect-hover", className)} {...rest}>
         {children}
       </th>
     );
   }
 
   return (
-    <td className={classNames("p-2", className)} {...rest}>
+    <td className={classNames("p-2 element_effect-hover", className)} {...rest}>
       {children}
     </td>
   );

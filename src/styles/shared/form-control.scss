@@ -1,0 +1,11 @@
+.form-control {
+  &_effect {
+    opacity: var(--cv-inactive-opacity);
+
+    &-hover {
+      &:hover, &:focus, &:active {
+        opacity: var(--cv-default-opacity);
+      }
+    }
+  }
+}

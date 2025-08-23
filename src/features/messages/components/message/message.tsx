@@ -12,16 +12,16 @@ import {
   CenteredVertialLayout,
   Button,
   ClusterLayout,
+  StackLayout,
+  IconLayout,
   ExtendedReactFunctionalComponent,
-  FormatDateTime,
   Icon,
   noop,
   Show,
-  StackLayout,
   useBoolean,
   useFormatDatetime,
   useIcons,
-  IconLayout,
+  FormatDateTime,
 } from "@circle-vibe/components";
 
 import {
@@ -84,7 +84,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   const avatarUrl = sender?.user?.avatarUrl;
 
   return (
-    <StackLayout space="0.5rem">
+    <StackLayout space="0.5rem" className="element_effect-hover-reverse">
       <StackLayout
         space="0.5rem"
         className="bg-tertiary rounded-1 p-2 rounded-2"

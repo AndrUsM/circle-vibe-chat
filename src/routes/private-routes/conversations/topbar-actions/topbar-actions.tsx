@@ -11,7 +11,7 @@ import {
 
 import { cookiesService, localStorageService } from "@core/services";
 
-export const TopbarActions: ExtendedReactFunctionalComponent = () => {
+export const TopBarActions: ExtendedReactFunctionalComponent = () => {
   const icons = useIcons();
   const navigate = useNavigate();
 

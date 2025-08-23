@@ -23,7 +23,7 @@ export const FilePreview: ExtendedReactFunctionalComponent<
         <Show.When isTrue={Boolean(fileName)}>
           <div className="italic text-sm text-center">{fileName}</div>
         </Show.When>
-
+        
         <section className="px-1 pb-1 pt-1 relative">
           <Tooltip title={"Click to open in new tab"}>
             <img
@@ -34,10 +34,9 @@ export const FilePreview: ExtendedReactFunctionalComponent<
             />
           </Tooltip>
         </section>
-      </>
-    );
+      </>);
   }
-
+  
   if (entityType == MessageFileEntityType.VIDEO) {
     return (
       <>

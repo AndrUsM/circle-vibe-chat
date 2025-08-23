@@ -1,30 +1,12 @@
 import React, {
-  JSXElementConstructor,
-  ReactElement,
-  ReactPortal,
   useEffect,
   useMemo,
   useState,
 } from "react";
-import {
-  noop,
-} from "@circle-vibe/components";
+import { noop } from "@circle-vibe/components";
 
 import { FiltersContext } from "./filters.context";
 import { IFiltersContext } from "@shared/components";
-
-type ReactNode =
-  | string
-  | number
-  | bigint
-  | boolean
-  | ReactElement<unknown, string | JSXElementConstructor<any>>
-  | Iterable<ReactNode>
-  | ReactPortal
-  | Promise<any>
-  | ((state: IFiltersContext<unknown>) => ReactNode)
-  | null
-  | undefined;
 
 interface FiltersProviderProps<T = unknown> {
   initialValue: T;

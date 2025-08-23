@@ -1,3 +1,4 @@
+import React from "react";
 import classNames from "classnames";
 
 export interface TableEmptyRowProps
@@ -12,7 +13,7 @@ export const EmptyTableRow: React.FC<TableEmptyRowProps> = ({
   ...rest
 }) => {
   return (
-    <tr className={classNames("w-full p-2", className)} {...rest}>
+    <tr className={classNames("w-full p-2 element_effect-hover", className)} {...rest}>
       <td colSpan={colSpan} />
     </tr>
   );

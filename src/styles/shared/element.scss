@@ -1,0 +1,41 @@
+.element {
+  &_effect {
+    &-hover {
+      opacity: var(--cv-default-opacity);
+
+      &:hover {
+        opacity: var(--cv-inactive-opacity);
+      }
+    }
+
+    &-hover-reverse {
+      opacity: var(--cv-inactive-opacity);
+
+      &:hover {
+        opacity: var(--cv-default-opacity);
+      }
+    }
+  }
+
+  &_style {
+
+    &-border {
+      border: 1px solid #222222;
+    }
+
+    &-emphasized {
+      border-bottom: 1px solid #222222;
+    }
+  }
+
+  &_state {
+    &-disabled {
+      pointer-events: none;
+      opacity: var(--cv-disabled-opacity);
+    }
+
+    &-active {
+      opacity: var(--cv-default-opacity);
+    }
+  }
+}

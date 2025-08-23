@@ -36,7 +36,7 @@ export const TableSortCell: ExtendedReactFunctionalComponent<
   return (
     <th
       onClick={handleSort}
-      className={classNames("cursor-pointer", className)}
+      className={classNames("element_effect-hover cursor-pointer", className)}
       {...rest}
     >
       <CenteredVertialLayout>

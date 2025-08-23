@@ -1,4 +1,6 @@
+import React from "react";
 import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+
 import { CellGroupProvider } from "../context";
 
 export interface TableHeadProps

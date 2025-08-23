@@ -1,3 +1,5 @@
+import React from "react";
+
 import { TableProps } from "../table";
 import { TableBodyProps } from "../table-body";
 import { TableCellProps } from "../table-cell";
