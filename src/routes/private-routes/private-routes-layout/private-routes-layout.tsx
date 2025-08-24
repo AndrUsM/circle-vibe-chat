@@ -5,7 +5,7 @@ import {
   Tooltip,
   useIcons,
 } from "@circle-vibe/components";
-import { TopbarLogo, UserAvatar } from "@shared/components";
+import { TopBarLogo, UserAvatar } from "@shared/components";
 import {
   TopBarActions,
 } from "../conversations/topbar-actions";
@@ -36,7 +36,7 @@ export const PrivateRoutesLayout: React.FC = () => {
           justifyContent="space-between"
           space="1rem"
         >
-          <TopbarLogo />
+          <TopBarLogo />
 
           <ClusterLayout space="1.15rem">
             <Tooltip title={t("conversations.actions.account-settings")}>

@@ -5,9 +5,9 @@ import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
 import { useCurrentUser } from "@core/hooks";
 import { PrivatePagesEnum, PublicPagesEnum } from "@core/navigation";
 
-import logoSrc from '../../../../public/logo.png';
+import logoSrc from '../../../../public/logo.svg';
 
-export const TopbarLogo: ExtendedReactFunctionalComponent = () => {
+export const TopBarLogo: ExtendedReactFunctionalComponent = () => {
   const { user } = useCurrentUser();
 
   return (
@@ -19,7 +19,7 @@ export const TopbarLogo: ExtendedReactFunctionalComponent = () => {
       }
       className="cursor-pointer"
     >
-      <img src={logoSrc} height="28px" />
+      <img src={logoSrc} alt="Circle Vibe Chat logo" height="28px" />
     </Link>
   );
 };
