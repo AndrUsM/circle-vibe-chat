@@ -1,8 +1,8 @@
-import React, { useCallback, useMemo } from "react";
+import React, { useCallback, useMemo } from 'react';
 
-import { useIcons } from "@circle-vibe/components";
+import { useIcons } from '@circle-vibe/components';
 
-import { MESSAGE_CONTENT_LIMIT } from "@features/messages/constants";
+import { MESSAGE_CONTENT_LIMIT } from '@features/messages/constants';
 
 export const useSplitMessageContent = (content: string) => {
   const icons = useIcons();
@@ -10,7 +10,7 @@ export const useSplitMessageContent = (content: string) => {
 
   const isContentTooLong = useMemo(
     () => content.length > MESSAGE_CONTENT_LIMIT,
-    [content, contentSplitNumber]
+    [content, contentSplitNumber],
   );
 
   const messageContent = useMemo(() => {
@@ -20,26 +20,20 @@ export const useSplitMessageContent = (content: string) => {
   }, [content, contentSplitNumber]);
 
   const toggleIconIcon = useMemo(
-    () =>
-      contentSplitNumber === MESSAGE_CONTENT_LIMIT
-        ? icons.cilExpandDown
-        : icons.cilExpandUp,
-    [contentSplitNumber, icons.cilExpandDown, icons.cilExpandUp]
+    () => (contentSplitNumber === MESSAGE_CONTENT_LIMIT ? icons.cilExpandDown : icons.cilExpandUp),
+    [contentSplitNumber, icons.cilExpandDown, icons.cilExpandUp],
   );
 
   const toggleOfTooLongMessage = useCallback(() => {
     const updatedLimit =
-      contentSplitNumber === MESSAGE_CONTENT_LIMIT
-        ? content.length
-        : MESSAGE_CONTENT_LIMIT;
+      contentSplitNumber === MESSAGE_CONTENT_LIMIT ? content.length : MESSAGE_CONTENT_LIMIT;
     setContentSplitNumber(updatedLimit);
   }, [contentSplitNumber, MESSAGE_CONTENT_LIMIT, content.length]);
-
 
   return {
     isContentTooLong,
     messageContent,
     toggleIconIcon,
-    toggleOfTooLongMessage
-  }
+    toggleOfTooLongMessage,
+  };
 };

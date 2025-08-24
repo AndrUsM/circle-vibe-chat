@@ -1,10 +1,12 @@
-import { useCallback } from "react";
-import { User } from "@circle-vibe/shared";
+import { useCallback } from 'react';
 
-import { useCurrentSessionCredentials, useNotification } from "@core/hooks";
-import { request } from "@core/request";
-import { useNavigate } from "react-router-dom";
-import { PrivatePagesEnum } from "@core/navigation";
+import { User } from '@circle-vibe/shared';
+
+import { useNavigate } from 'react-router-dom';
+
+import { useCurrentSessionCredentials, useNotification } from '@core/hooks';
+import { PrivatePagesEnum } from '@core/navigation';
+import { request } from '@core/request';
 
 interface RestorePasswordInput {
   email: string;
@@ -23,15 +25,15 @@ export const useRestorePassword = () => {
 
   return useCallback(async (data: RestorePasswordInput) => {
     const response = await request<RestorePasswordOutput>({
-      url: "auth/restore-password",
-      method: "PUT",
+      url: 'auth/restore-password',
+      method: 'PUT',
       data,
     });
 
     if (!response?.data) {
       notification({
-        type: "error",
-        content: "Failed to restore password",
+        type: 'error',
+        content: 'Failed to restore password',
       });
 
       return;
@@ -45,8 +47,8 @@ export const useRestorePassword = () => {
     void navigate(`/app/${PrivatePagesEnum.CONVERSATIONS}`, { replace: true });
 
     notification({
-      type: "success",
-      content: "Password has been restored",
+      type: 'success',
+      content: 'Password has been restored',
     });
   }, []);
 };

@@ -1,10 +1,8 @@
-import {
-  ExtendedReactFunctionalComponent,
-  noop,
-} from "@circle-vibe/components";
-import classNames from "classnames";
+import { ExtendedReactFunctionalComponent, noop } from '@circle-vibe/components';
 
-import { TableProvider } from "../context";
+import classNames from 'classnames';
+
+import { TableProvider } from '../context';
 
 export interface TableProps extends React.HTMLAttributes<HTMLTableElement> {
   children: React.ReactNode;
@@ -21,7 +19,7 @@ export const Table: ExtendedReactFunctionalComponent<TableProps> = ({
 }) => {
   return (
     <TableProvider onSort={onSort} sortingKey={sortingKey}>
-      <table className={classNames("text-center", className)} {...rest}>
+      <table className={classNames('text-center', className)} {...rest}>
         {children}
       </table>
     </TableProvider>

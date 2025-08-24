@@ -1,10 +1,10 @@
-import React from "react";
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import React from 'react';
 
-import { CellGroupProvider } from "../context";
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
 
-export interface TableHeadProps
-  extends React.HTMLAttributes<HTMLTableSectionElement> {
+import { CellGroupProvider } from '../context';
+
+export interface TableHeadProps extends React.HTMLAttributes<HTMLTableSectionElement> {
   children?: React.ReactNode;
 }
 

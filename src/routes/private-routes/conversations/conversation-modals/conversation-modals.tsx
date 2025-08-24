@@ -1,15 +1,11 @@
-import {
-  ExtendedReactFunctionalComponent,
-  HorizontalDivider,
-  StackLayout,
-  Modal,
-} from "@circle-vibe/components";
-import { MessageFile } from "@circle-vibe/shared";
+import { MessageFile } from '@circle-vibe/shared';
 
-import { ConversationForm } from "@features/conversation";
-import { FilePreview } from "@features/messages";
+import { ExtendedReactFunctionalComponent, Modal } from '@circle-vibe/components';
 
-import { useTranslation } from "react-i18next";
+import { useTranslation } from 'react-i18next';
+
+import { ConversationForm } from '@features/conversation';
+import { FilePreview } from '@features/messages';
 
 interface ConversationModalsProps {
   openChatCreationModal: boolean;
@@ -18,9 +14,7 @@ interface ConversationModalsProps {
   toggleFileDialogVisibility: () => void;
 }
 
-export const ConversationModals: ExtendedReactFunctionalComponent<
-  ConversationModalsProps
-> = ({
+export const ConversationModals: ExtendedReactFunctionalComponent<ConversationModalsProps> = ({
   openChatCreationModal,
   setOpenChatCreationModal,
   previewFile,
@@ -30,12 +24,9 @@ export const ConversationModals: ExtendedReactFunctionalComponent<
 
   return (
     <>
-      <Modal.Root
-        isOpen={openChatCreationModal}
-        onClose={() => setOpenChatCreationModal(false)}
-      >
+      <Modal.Root isOpen={openChatCreationModal} onClose={() => setOpenChatCreationModal(false)}>
         <Modal.Header onClose={() => setOpenChatCreationModal(false)}>
-          {t("conversations.buttons.create-conversation")}
+          {t('conversations.buttons.create-conversation')}
         </Modal.Header>
 
         <Modal.Body>
@@ -45,11 +36,11 @@ export const ConversationModals: ExtendedReactFunctionalComponent<
 
       <Modal.Root
         isOpen={Boolean(previewFile)}
-        minWidth="52vw"
+        minWidth='52vw'
         showInlineCloseButton
         onClose={toggleFileDialogVisibility}
       >
-        <Modal.Body className="mx-auto">
+        <Modal.Body className='mx-auto'>
           <FilePreview messageFile={previewFile as MessageFile} />
         </Modal.Body>
       </Modal.Root>

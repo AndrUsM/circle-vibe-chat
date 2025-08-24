@@ -1,11 +1,11 @@
-import { useCallback, useEffect } from "react";
+import { useCallback, useEffect } from 'react';
 
-import { request } from "@core/request";
-import { User } from "@circle-vibe/shared";
+import { User } from '@circle-vibe/shared';
 
-import { useCurrentSessionCredentials } from "../use-current-session-credentials";
+import { request } from '@core/request';
 
-import { useCurrentUser } from "../use-current-user";
+import { useCurrentSessionCredentials } from '../use-current-session-credentials';
+import { useCurrentUser } from '../use-current-user';
 
 export const useRestoreUser = () => {
   const { setCurrentUser, currentUser: user, token } = useCurrentSessionCredentials();
@@ -23,11 +23,11 @@ export const useRestoreUser = () => {
 
   const loadUser = useCallback(() => {
     request<User>({
-      method: "GET",
+      method: 'GET',
       url: `user/by-token/${token}`,
     }).then((response) => {
       setCurrentUser(response.data);
       setUser(response.data);
     });
   }, [token]);
-}
+};

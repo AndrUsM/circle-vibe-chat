@@ -1,9 +1,10 @@
-import { useState } from "react";
-import classNames from "classnames";
+import React, { useState } from 'react';
 
-import { ExtendedReactFunctionalComponent, Show } from "@circle-vibe/components";
+import { ExtendedReactFunctionalComponent, Show } from '@circle-vibe/components';
 
-import "./user-avatar.scss";
+import classNames from 'classnames';
+
+import './user-avatar.scss';
 
 interface UserAvatarProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   url?: string;
@@ -22,7 +23,7 @@ export const UserAvatar: ExtendedReactFunctionalComponent<UserAvatarProps> = ({
     <Show>
       <Show.When isTrue={Boolean(url) && isImageLoaded}>
         <img
-          className={classNames("user-avatar", className)}
+          className={classNames('user-avatar', className)}
           src={url}
           onError={() => setIsImageLoaded(false)}
           {...rest}
@@ -30,7 +31,9 @@ export const UserAvatar: ExtendedReactFunctionalComponent<UserAvatarProps> = ({
       </Show.When>
 
       <Show.Else>
-        <div className={classNames("user-avatar text-xs", className)} {...rest}>{fallback}</div>
+        <div className={classNames('user-avatar text-xs', className)} {...rest}>
+          {fallback}
+        </div>
       </Show.Else>
     </Show>
   );

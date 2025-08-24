@@ -1,12 +1,10 @@
-import React, {
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
-import { noop } from "@circle-vibe/components";
+import React, { useEffect, useMemo, useState } from 'react';
 
-import { FiltersContext } from "./filters.context";
-import { IFiltersContext } from "@shared/components";
+import { noop } from '@circle-vibe/components';
+
+import { IFiltersContext } from '@shared/components';
+
+import { FiltersContext } from './filters.context';
 
 interface FiltersProviderProps<T = unknown> {
   initialValue: T;
@@ -40,7 +38,7 @@ export const Filters: React.FC<FiltersProviderProps> = ({
       resetFilters: () => setValue(initialValue),
       isActive: JSON.stringify(value) !== JSON.stringify(initialValue),
     }),
-    [value]
+    [value],
   );
 
   useEffect(() => {
@@ -49,7 +47,7 @@ export const Filters: React.FC<FiltersProviderProps> = ({
 
   return (
     <FiltersContext.Provider value={state}>
-      {typeof children === "function" ? children(state) : children}
+      {typeof children === 'function' ? children(state) : children}
     </FiltersContext.Provider>
   );
 };

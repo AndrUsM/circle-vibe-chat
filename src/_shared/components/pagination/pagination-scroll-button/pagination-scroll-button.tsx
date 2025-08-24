@@ -1,15 +1,6 @@
-import {
-  useCallback,
-  useEffect,
-  useState,
-} from "react";
+import { useCallback, useEffect, useState } from 'react';
 
-import {
-  Button,
-  ExtendedReactFunctionalComponent,
-  Icon,
-  useIcons,
-} from "@circle-vibe/components";
+import { Button, ExtendedReactFunctionalComponent, Icon, useIcons } from '@circle-vibe/components';
 
 interface PaginationScrollButtonProps {
   messagesRef: React.RefObject<HTMLDivElement | null>;
@@ -19,9 +10,7 @@ export const PaginationScrollButton: ExtendedReactFunctionalComponent<
   PaginationScrollButtonProps
 > = ({ messagesRef }) => {
   const icons = useIcons();
-  const [dropdownPosition, setDropdownPosition] = useState<
-    "top" | "bottom" | null
-  >(null);
+  const [dropdownPosition, setDropdownPosition] = useState<'top' | 'bottom' | null>(null);
 
   useEffect(() => {
     if (!messagesRef?.current) {
@@ -38,15 +27,15 @@ export const PaginationScrollButton: ExtendedReactFunctionalComponent<
       }
 
       if (target.scrollTop < scrollLimit / 2) {
-        setDropdownPosition("top");
+        setDropdownPosition('top');
 
         return;
       }
 
-      setDropdownPosition("bottom");
+      setDropdownPosition('bottom');
     };
 
-    messagesRef.current.addEventListener("scroll", onScroll);
+    messagesRef.current.addEventListener('scroll', onScroll);
   }, []);
 
   const onScroll = useCallback(() => {
@@ -54,16 +43,16 @@ export const PaginationScrollButton: ExtendedReactFunctionalComponent<
       return;
     }
 
-    if (dropdownPosition === "bottom") {
+    if (dropdownPosition === 'bottom') {
       messagesRef.current.firstElementChild?.scrollIntoView({
-        behavior: "smooth",
+        behavior: 'smooth',
       });
 
       return;
     }
 
     messagesRef.current.lastElementChild?.scrollIntoView({
-      behavior: "smooth",
+      behavior: 'smooth',
     });
   }, [dropdownPosition]);
 
@@ -72,20 +61,11 @@ export const PaginationScrollButton: ExtendedReactFunctionalComponent<
   }
 
   return (
-    <Button
-      size="small"
-      color="secondary"
-      className="pagination-scroll-button"
-      onClick={onScroll}
-    >
+    <Button size='small' color='secondary' className='pagination-scroll-button' onClick={onScroll}>
       <Icon
-        name={
-          dropdownPosition === "bottom"
-            ? icons.cilArrowTop
-            : icons.cilArrowBottom
-        }
+        name={dropdownPosition === 'bottom' ? icons.cilArrowTop : icons.cilArrowBottom}
         size={12}
-        color="var(--fui-light)"
+        color='var(--fui-light)'
       />
     </Button>
   );

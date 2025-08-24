@@ -1,9 +1,11 @@
-import { MessageType } from "@circle-vibe/shared";
-import { MessageFormValues } from "@features/messages/types";
-import { getMessageType } from "./get-message-type";
+import { MessageType } from '@circle-vibe/shared';
+
+import { MessageFormValues } from '@features/messages/types';
+
+import { getMessageType } from './get-message-type';
 
 export interface UseSendMessageInput {
-  chatId: number,
+  chatId: number;
   senderId: number;
   threadId?: number;
   hidden: boolean;
@@ -14,7 +16,7 @@ export interface UseSendMessageInput {
 export const composeUseSendMessageInput = (
   chatParticipant: number,
   selectedChatId: number,
-  formValues: MessageFormValues
+  formValues: MessageFormValues,
 ): UseSendMessageInput => {
   const messageType = getMessageType(formValues);
 
@@ -25,5 +27,5 @@ export const composeUseSendMessageInput = (
     hidden: false,
     content: formValues.content ?? '',
     messageType,
-  }
+  };
 };

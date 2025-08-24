@@ -1,11 +1,12 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import { User } from "@circle-vibe/shared";
-import { request } from "@core/request";
+import { User } from '@circle-vibe/shared';
 
-import { useRefreshToken } from "../use-refresh-token";
-import { cookiesService, localStorageService } from "@core/services";
-import { useCurrentSessionCredentials } from "@core/hooks";
+import { useCurrentSessionCredentials } from '@core/hooks';
+import { request } from '@core/request';
+import { cookiesService, localStorageService } from '@core/services';
+
+import { useRefreshToken } from '../use-refresh-token';
 
 export const useGetCurrentUserByToken = () => {
   const refreshToken = useRefreshToken();
@@ -13,8 +14,8 @@ export const useGetCurrentUserByToken = () => {
 
   return useCallback(async () => {
     request<User>({
-      url: "auth/current",
-      method: "GET",
+      url: 'auth/current',
+      method: 'GET',
     })
       .then((response) => {
         if (response?.data?.id) {

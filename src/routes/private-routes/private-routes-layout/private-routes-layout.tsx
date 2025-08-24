@@ -1,20 +1,20 @@
-import React from "react";
-import {
-  ClusterLayout,
-  Icon,
-  Tooltip,
-  useIcons,
-} from "@circle-vibe/components";
-import { TopbarLogo, UserAvatar } from "@shared/components";
-import {
-  TopBarActions,
-} from "../conversations/topbar-actions";
-import { Outlet, useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-import { useCurrentUser } from "@core/hooks";
-import { composeAvatarFallback } from "@circle-vibe/shared";
-import { PrivatePagesEnum } from "@core/navigation";
-import { ConversationProvider } from "@features/conversation";
+import React from 'react';
+
+import { composeAvatarFallback } from '@circle-vibe/shared';
+
+import { ClusterLayout, Icon, Tooltip, useIcons } from '@circle-vibe/components';
+
+import { useTranslation } from 'react-i18next';
+import { Outlet, useNavigate } from 'react-router-dom';
+
+import { TopBarLogo, UserAvatar } from '@shared/components';
+
+import { useCurrentUser } from '@core/hooks';
+import { PrivatePagesEnum } from '@core/navigation';
+
+import { ConversationProvider } from '@features/conversation';
+
+import { TopBarActions } from '../conversations/topbar-actions';
 
 export const PrivateRoutesLayout: React.FC = () => {
   const { t } = useTranslation();
@@ -29,27 +29,27 @@ export const PrivateRoutesLayout: React.FC = () => {
 
   return (
     <ConversationProvider>
-      <main className="h-full">
+      <main className='h-full'>
         <ClusterLayout
-          className="p-2"
-          alignItems="center"
-          justifyContent="space-between"
-          space="1rem"
+          className='p-2'
+          alignItems='center'
+          justifyContent='space-between'
+          space='1rem'
         >
-          <TopbarLogo />
+          <TopBarLogo />
 
-          <ClusterLayout space="1.15rem">
-            <Tooltip title={t("conversations.actions.account-settings")}>
+          <ClusterLayout space='1.15rem'>
+            <Tooltip title={t('conversations.actions.account-settings')}>
               <UserAvatar
-                className="cursor-pointer"
+                className='cursor-pointer'
                 fallback={avatarFallback}
                 onClick={goToAccountSettings}
               />
             </Tooltip>
 
-            <Tooltip title="Settings">
+            <Tooltip title='Settings'>
               <Icon
-                className="cursor-pointer"
+                className='cursor-pointer'
                 size={28}
                 name={cilSettings}
                 onClick={goToAccountSettings}

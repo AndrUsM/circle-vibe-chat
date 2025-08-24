@@ -1,30 +1,17 @@
-import { HTMLAttributes } from "react";
-import Markdown from "react-markdown";
+import { HTMLAttributes } from 'react';
 
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
+
+import Markdown from 'react-markdown';
+
+import { MARKDOWN_TAGS_CUSTOMIZATION } from './constants';
 
 export const TextMessagePreview: ExtendedReactFunctionalComponent<
   HTMLAttributes<HTMLDivElement>
 > = ({ children, ...rest }) => {
   return (
     <section {...rest}>
-      <Markdown
-        components={{
-          p: ({ node, ...props }) => <p className="my-1" {...props} />,
-          code: ({ node, ...props }) => <code className="my-1" {...props} />,
-          ul: ({ node, ...props }) => (
-            <ul className="m-1 px-4 py-0" {...props} />
-          ),
-          h1: ({ node, ...props }) => <h1 className="my-1" {...props} />,
-          h2: ({ node, ...props }) => <h2 className="my-1" {...props} />,
-          h3: ({ node, ...props }) => <h3 className="my-1" {...props} />,
-          h4: ({ node, ...props }) => <h4 className="my-1" {...props} />,
-          h5: ({ node, ...props }) => <h5 className="my-1" {...props} />,
-          h6: ({ node, ...props }) => <h6 className="my-1" {...props} />,
-        }}
-      >
-        {children as string}
-      </Markdown>
+      <Markdown components={MARKDOWN_TAGS_CUSTOMIZATION}>{children as string}</Markdown>
     </section>
   );
 };

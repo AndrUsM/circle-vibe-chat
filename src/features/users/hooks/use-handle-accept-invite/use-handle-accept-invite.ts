@@ -1,9 +1,10 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import { useNotification } from "@core/hooks";
-import { useAcceptInvite } from "@api/conversations";
+import { useNotification } from '@core/hooks';
 
-import { AcceptInviteFormValues } from "../../types";
+import { useAcceptInvite } from '@api/conversations';
+
+import { AcceptInviteFormValues } from '../../types';
 
 export const useHandleAcceptInvite = () => {
   const acceptInvite = useAcceptInvite();
@@ -16,16 +17,16 @@ export const useHandleAcceptInvite = () => {
 
     if (response) {
       notification({
-        type: "success",
-        content: "Successfully accepted invite!",
-      })
+        type: 'success',
+        content: 'Successfully accepted invite!',
+      });
 
       return;
     }
 
     notification({
-      type: "error",
-      content: "Failed to accept invite!",
-    })
+      type: 'error',
+      content: 'Failed to accept invite!',
+    });
   }, []);
 };

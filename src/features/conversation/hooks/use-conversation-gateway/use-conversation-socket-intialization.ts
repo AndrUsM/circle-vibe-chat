@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import { useEffect } from 'react';
 
 import {
   Chat,
@@ -6,16 +6,14 @@ import {
   ChatSocketCommand,
   PaginatedResponse,
   Message,
-} from "@circle-vibe/shared";
+} from '@circle-vibe/shared';
 
-import { useSocket } from "@core/hooks";
-import { setAuthToken } from "@core/utils";
+import { useSocket } from '@core/hooks';
+import { setAuthToken } from '@core/utils';
 
 interface UseChatSocketLogicInitializationOptions {
   socketListenerNotifyNewMessage: VoidFunction;
-  socketListenerJoinChat: (options: {
-    chatParticipant: ChatParticipant;
-  }) => void;
+  socketListenerJoinChat: (options: { chatParticipant: ChatParticipant }) => void;
   socketListenerReceiveChats: (chats: PaginatedResponse<Chat>) => void;
   socketListenerReceiveMessages: (messages: PaginatedResponse<Message>) => void;
   triggerGetPaginatedChats: (page: number) => void;
@@ -56,19 +54,10 @@ export const useChatSocketLogicInitialization = ({
     socket.on(ChatSocketCommand.MESSAGE_TYPE_STOP_TYPING, socketListenerStopTyping);
     socket.on(ChatSocketCommand.REFRESH_TOKEN, socketListenerRefreshToken);
     socket.on(ChatSocketCommand.RECEIVE_CHATS, socketListenerReceiveChats);
-    socket.on(
-      ChatSocketCommand.RECEIVE_MESSAGES,
-      socketListenerReceiveMessages
-    );
+    socket.on(ChatSocketCommand.RECEIVE_MESSAGES, socketListenerReceiveMessages);
     socket.on(ChatSocketCommand.JOIN_CHAT, socketListenerJoinChat);
-    socket.on(
-      ChatSocketCommand.SCROLL_TO_END_OF_MESSAGES,
-      socketListenerScrollToEnd
-    );
-    socket.on(
-      ChatSocketCommand.NOTIFY_ABOUT_NEW_MESSAGE,
-      socketListenerNotifyNewMessage
-    );
+    socket.on(ChatSocketCommand.SCROLL_TO_END_OF_MESSAGES, socketListenerScrollToEnd);
+    socket.on(ChatSocketCommand.NOTIFY_ABOUT_NEW_MESSAGE, socketListenerNotifyNewMessage);
   };
 
   useEffect(() => {
@@ -80,19 +69,10 @@ export const useChatSocketLogicInitialization = ({
       socket.off(ChatSocketCommand.MESSAGE_TYPE_STOP_TYPING, socketListenerStopTyping);
       socket.off(ChatSocketCommand.REFRESH_TOKEN, socketListenerRefreshToken);
       socket.off(ChatSocketCommand.RECEIVE_CHATS, socketListenerReceiveChats);
-      socket.off(
-        ChatSocketCommand.RECEIVE_MESSAGES,
-        socketListenerReceiveMessages
-      );
+      socket.off(ChatSocketCommand.RECEIVE_MESSAGES, socketListenerReceiveMessages);
       socket.off(ChatSocketCommand.JOIN_CHAT, socketListenerJoinChat);
-      socket.off(
-        ChatSocketCommand.SCROLL_TO_END_OF_MESSAGES,
-        socketListenerScrollToEnd
-      );
-      socket.off(
-        ChatSocketCommand.NOTIFY_ABOUT_NEW_MESSAGE,
-        socketListenerNotifyNewMessage
-      );
+      socket.off(ChatSocketCommand.SCROLL_TO_END_OF_MESSAGES, socketListenerScrollToEnd);
+      socket.off(ChatSocketCommand.NOTIFY_ABOUT_NEW_MESSAGE, socketListenerNotifyNewMessage);
     };
   }, [socket?.id]);
 };

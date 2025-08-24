@@ -1,12 +1,11 @@
-import { Table } from "./table";
-import { TableBody } from "./table-body";
-import { TableCell } from "./table-cell";
-import { EmptyTableRow } from "./table-empty-row";
-import { TableHead } from "./table-head";
-import { TableRow } from "./table-row";
-import { TableSortCell } from "./table-sort-cell";
-
-import { TableComponent } from "./types";
+import { Table } from './table';
+import { TableBody } from './table-body';
+import { TableCell } from './table-cell';
+import { EmptyTableRow } from './table-empty-row';
+import { TableHead } from './table-head';
+import { TableRow } from './table-row';
+import { TableSortCell } from './table-sort-cell';
+import { TableComponent } from './types';
 
 (Table as TableComponent).Cell = TableCell;
 (Table as TableComponent).Body = TableBody;

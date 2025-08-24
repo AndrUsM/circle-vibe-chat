@@ -1,4 +1,5 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
+
 import {
   Form,
   FormControlInput,
@@ -6,31 +7,31 @@ import {
   FormSubmitButton,
   noop,
   StackLayout,
-} from "@circle-vibe/components";
-import { ACCOUNT_CONFIRMATION_FORM_INITIAL_VALUES } from "./constants/account-confirmation-form-initial-values";
-import { ACCOUNT_CONFIRMATION_FORM_VALIDATION_SCHEMA } from "./constants/account-confirmaiton-form-validation-schema";
-import { useConfirmAccount } from "@api/auth/hooks";
-import { AccountConfirmationFormValues } from "./types";
+} from '@circle-vibe/components';
+
+import { useConfirmAccount } from '@api/auth/hooks';
+
+import { ACCOUNT_CONFIRMATION_FORM_VALIDATION_SCHEMA } from './constants/account-confirmaiton-form-validation-schema';
+import { ACCOUNT_CONFIRMATION_FORM_INITIAL_VALUES } from './constants/account-confirmation-form-initial-values';
+import { AccountConfirmationFormValues } from './types';
 
 interface AccountConfirmationFormProps {
   email: string;
   onClose?: VoidFunction;
 }
 
-export const AccountConfirmationForm: React.FC<
-  AccountConfirmationFormProps
-> = ({ email, onClose = noop }) => {
+export const AccountConfirmationForm: React.FC<AccountConfirmationFormProps> = ({
+  email,
+  onClose = noop,
+}) => {
   const confirmAccount = useConfirmAccount();
-  const onSubmit = useCallback(
-    async (values: AccountConfirmationFormValues) => {
-      const response = await confirmAccount(values);
+  const onSubmit = useCallback(async (values: AccountConfirmationFormValues) => {
+    const response = await confirmAccount(values);
 
-      if (response.status === 201) {
-        onClose();
-      }
-    },
-    []
-  );
+    if (response.status === 201) {
+      onClose();
+    }
+  }, []);
 
   return (
     <Form
@@ -41,8 +42,8 @@ export const AccountConfirmationForm: React.FC<
       }}
       onSubmit={onSubmit}
     >
-      <StackLayout space="1rem">
-        <FormGroup label="Confirmation Code" formFieldName="code" isRequired>
+      <StackLayout space='1rem'>
+        <FormGroup label='Confirmation Code' formFieldName='code' isRequired>
           <FormControlInput />
         </FormGroup>
 

@@ -1,4 +1,4 @@
-import { useMemo, useState } from "react";
+import { useMemo, useState } from 'react';
 
 export const useReadFileForPreview = () => {
   const [fileReader, setFileReader] = useState<FileReader | null>(null);
@@ -13,14 +13,14 @@ export const useReadFileForPreview = () => {
     setTotalFileSize(0);
 
     setFileReader(null);
-  }
+  };
 
   const clearState = () => {
     setFileReader(null);
     setProgress(0);
     setTotalReadedMb(0);
     setTotalFileSize(0);
-  }
+  };
 
   const readFile = async (file: File) => {
     if (!file) {
@@ -59,8 +59,8 @@ export const useReadFileForPreview = () => {
       abortReadFile,
       readFileProgress: progress,
       totalReadedMb,
-      totalFileSize
+      totalFileSize,
     }),
-    [totalFileSize, totalReadedMb, progress]
+    [totalFileSize, totalReadedMb, progress],
   );
 };

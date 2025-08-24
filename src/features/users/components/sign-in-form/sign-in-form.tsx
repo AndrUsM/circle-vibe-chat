@@ -1,6 +1,3 @@
-import { useNavigate } from "react-router-dom";
-import { useTranslation } from "react-i18next";
-
 import {
   CenteredVertialLayout,
   FormControlInput,
@@ -10,15 +7,16 @@ import {
   Form,
   StackLayout,
   HorizontalDivider,
-} from "@circle-vibe/components";
+} from '@circle-vibe/components';
 
-import { useSignIn } from "@features/users/hooks";
+import { useTranslation } from 'react-i18next';
+import { useNavigate } from 'react-router-dom';
 
-import {
-  AUTHORIZATION_FORM_SCHEMA,
-  AUTHORIZATION_FORM_INITIAL_VALUES,
-} from "./constants";
-import { PublicPagesEnum } from "@core/navigation";
+import { PublicPagesEnum } from '@core/navigation';
+
+import { useSignIn } from '@features/users/hooks';
+
+import { AUTHORIZATION_FORM_SCHEMA, AUTHORIZATION_FORM_INITIAL_VALUES } from './constants';
 
 export const AuthorizationForm: React.FC = () => {
   const { t } = useTranslation();
@@ -40,26 +38,26 @@ export const AuthorizationForm: React.FC = () => {
       validationSchema={AUTHORIZATION_FORM_SCHEMA}
       initialValues={AUTHORIZATION_FORM_INITIAL_VALUES}
     >
-      <FormGroup isRequired label={"Email"} formFieldName={"email"}>
+      <FormGroup isRequired label={'Email'} formFieldName={'email'}>
         <FormControlInput />
       </FormGroup>
 
-      <FormGroup isRequired label="Password" formFieldName="password">
-        <FormControlInput type="password" />
+      <FormGroup isRequired label='Password' formFieldName='password'>
+        <FormControlInput type='password' />
       </FormGroup>
 
-      <StackLayout space={"1rem"}>
-        <FormSubmitButton>{t("login.sign-in.submit-button")}</FormSubmitButton>
+      <StackLayout space={'1rem'}>
+        <FormSubmitButton>{t('login.sign-in.submit-button')}</FormSubmitButton>
 
-        <HorizontalDivider height="1px" />
+        <HorizontalDivider height='1px' />
 
-        <CenteredVertialLayout space={"1rem"} justifyContent="center">
-          <Button color="secondary" onClick={onNavigateToSignUpPage}>
-            {t("login.create-account.button")}
+        <CenteredVertialLayout space={'1rem'} justifyContent='center'>
+          <Button color='secondary' onClick={onNavigateToSignUpPage}>
+            {t('login.create-account.button')}
           </Button>
 
-          <Button color="secondary" onClick={onNavigateToRestorePasswordPage}>
-            {t("login.restore-password.button")}
+          <Button color='secondary' onClick={onNavigateToRestorePasswordPage}>
+            {t('login.restore-password.button')}
           </Button>
         </CenteredVertialLayout>
       </StackLayout>

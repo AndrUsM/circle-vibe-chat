@@ -1,6 +1,11 @@
-import { MessageFileEntityType, SendMessageChatSocketParams } from "@circle-vibe/shared";
+import { MessageFileEntityType, SendMessageChatSocketParams } from '@circle-vibe/shared';
 
-export const composeSendVideoFileMessageParams = (messageInputDto: SendMessageChatSocketParams, filePath: string, optimisedFilePath: string, file: File) => ({
+export const composeSendVideoFileMessageParams = (
+  messageInputDto: SendMessageChatSocketParams,
+  filePath: string,
+  optimisedFilePath: string,
+  file: File,
+) => ({
   ...messageInputDto,
   fileUrl: filePath,
   optimizedUrl: filePath,
@@ -8,7 +13,7 @@ export const composeSendVideoFileMessageParams = (messageInputDto: SendMessageCh
     fileName: file.name,
     url: filePath,
     optimizedUrl: filePath,
-    type: "VIDEO",
+    type: 'VIDEO',
     description: messageInputDto.content,
     entityType: MessageFileEntityType.VIDEO,
   },

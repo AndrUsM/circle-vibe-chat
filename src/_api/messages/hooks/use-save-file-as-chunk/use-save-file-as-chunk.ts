@@ -1,25 +1,24 @@
-import { useCallback } from "react";
-import { useNotification, useSocket } from "@core/hooks";
+import { useCallback } from 'react';
+
 import {
   FileSocketStartUploadParams,
   FileSocketSuccessOutput,
   GenericFileServerSocketKeys,
-} from "@circle-vibe/shared";
-import {
-  handleUploadingVideoProcess,
-} from "./utils";
+} from '@circle-vibe/shared';
+
+import { useNotification, useSocket } from '@core/hooks';
+
+import { handleUploadingVideoProcess } from './utils';
 
 export const useSaveFileAsChunk = () => {
   const { createFileSocketConnection } = useSocket();
   const notification = useNotification();
 
   return useCallback(
-    async (
-      file: File,
-    ): Promise<string | undefined> => {
+    async (file: File): Promise<string | undefined> => {
       if (!file) {
         notification({
-          type: "error",
+          type: 'error',
           content: `Please select file to upload`,
         });
 
@@ -29,7 +28,7 @@ export const useSaveFileAsChunk = () => {
       const fileSocket = await createFileSocketConnection();
 
       return new Promise<string>((resolve, reject) => {
-        fileSocket?.on("connect", () => {
+        fileSocket?.on('connect', () => {
           const startVideoUploadPayload: FileSocketStartUploadParams = {
             fileName: file.name,
             type: GenericFileServerSocketKeys,
@@ -38,7 +37,7 @@ export const useSaveFileAsChunk = () => {
           fileSocket.emit(GenericFileServerSocketKeys.START_UPLOAD, startVideoUploadPayload);
 
           notification({
-            type: "success",
+            type: 'success',
             content: `Started uploading file ${file.name}`,
           });
 
@@ -49,19 +48,19 @@ export const useSaveFileAsChunk = () => {
           GenericFileServerSocketKeys.UPLOAD_SUCCESS,
           ({ filePath }: FileSocketSuccessOutput) => {
             notification({
-              type: "success",
-              content: "File uploaded successfully",
+              type: 'success',
+              content: 'File uploaded successfully',
             });
 
             fileSocket.disconnect();
             resolve(filePath);
-          }
+          },
         );
 
         fileSocket?.on(GenericFileServerSocketKeys.UPLOAD_ERROR, (error: string) => {
           notification({
-            type: "error",
-            content: "Something went wrong on file uploading",
+            type: 'error',
+            content: 'Something went wrong on file uploading',
           });
           fileSocket.disconnect();
 
@@ -69,6 +68,6 @@ export const useSaveFileAsChunk = () => {
         });
       });
     },
-    [createFileSocketConnection, notification]
+    [createFileSocketConnection, notification],
   );
 };

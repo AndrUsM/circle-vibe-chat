@@ -1,8 +1,8 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import { ChatParticipant, UserChatRole } from "@circle-vibe/shared";
+import { ChatParticipant, UserChatRole } from '@circle-vibe/shared';
 
-import { request } from "@core/request";
+import { request } from '@core/request';
 
 interface UseUpdateConversationParticipantInput {
   chatRole?: UserChatRole;
@@ -17,7 +17,7 @@ export const useUpdateConversationParticipant = () => {
 
     const resonse = await request<ChatParticipant>({
       url: `chat/${chatId}/participants/${participantId}`,
-      method: "PUT",
+      method: 'PUT',
       data: requestParams,
     });
 

@@ -1,8 +1,11 @@
-import { User } from "@circle-vibe/shared";
-import { useNotification } from "@core/hooks";
-import { request } from "@core/request";
-import { AxiosError } from "axios";
-import { useState } from "react";
+import { useState } from 'react';
+
+import { User } from '@circle-vibe/shared';
+
+import { AxiosError } from 'axios';
+
+import { useNotification } from '@core/hooks';
+import { request } from '@core/request';
 
 export const useGetUserToInvite = () => {
   const [loading, setLoading] = useState(false);
@@ -12,14 +15,14 @@ export const useGetUserToInvite = () => {
     conversationId: number,
     chatParticipantId: number,
     username: string,
-    personalTargetUserToken?: string
+    personalTargetUserToken?: string,
   ) => {
     setLoading(true);
 
     try {
       const response = await request<User>({
         url: `chat/${conversationId}/user-to-invite`,
-        method: "GET",
+        method: 'GET',
         params: {
           chatParticipantId,
           username,
@@ -31,8 +34,8 @@ export const useGetUserToInvite = () => {
     } catch (error) {
       if (!(error instanceof AxiosError)) {
         notification({
-          type: "error",
-          content: "Failed to get user to invite",
+          type: 'error',
+          content: 'Failed to get user to invite',
         });
 
         return;
@@ -40,8 +43,8 @@ export const useGetUserToInvite = () => {
 
       if (error.response?.status === 400) {
         notification({
-          type: "error",
-          content: "User already invited",
+          type: 'error',
+          content: 'User already invited',
         });
 
         return;

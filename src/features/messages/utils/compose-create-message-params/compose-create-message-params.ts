@@ -1,8 +1,10 @@
-import { ChatParticipant, SendMessageChatSocketParams } from "@circle-vibe/shared";
-import { MessageFormValues } from "@features/messages/types";
+import { ChatParticipant, SendMessageChatSocketParams } from '@circle-vibe/shared';
 
-import { getMessageType } from "./get-message-type";
-import { encodeBase64 } from "@core/utils";
+import { encodeBase64 } from '@core/utils';
+
+import { MessageFormValues } from '@features/messages/types';
+
+import { getMessageType } from './get-message-type';
 
 export const composeCreateMessageParams = (
   chatParticipant: ChatParticipant,

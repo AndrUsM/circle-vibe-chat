@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
 
 export interface TableRowProps extends React.HTMLAttributes<HTMLTableRowElement> {
   children: React.ReactNode;

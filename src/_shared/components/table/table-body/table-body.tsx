@@ -1,4 +1,4 @@
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
 
 export interface TableBodyProps {
   children: React.ReactNode;

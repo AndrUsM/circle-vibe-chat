@@ -1,8 +1,6 @@
-import { useCallback, useRef } from "react";
-import { FormikHelpers, FormikProps } from "formik";
-import { useTranslation } from "react-i18next";
+import { useCallback, useRef } from 'react';
 
-import MDEditor from "@uiw/react-md-editor";
+import { MessageFileEntityType } from '@circle-vibe/shared';
 
 import {
   Button,
@@ -17,8 +15,11 @@ import {
   StackLayout,
   Tooltip,
   useIcons,
-} from "@circle-vibe/components";
-import { MessageFileEntityType } from "@circle-vibe/shared";
+} from '@circle-vibe/components';
+
+import MDEditor from '@uiw/react-md-editor';
+import { FormikHelpers, FormikProps } from 'formik';
+import { useTranslation } from 'react-i18next';
 
 import {
   MESSAGE_FORM_INITIAL_VALUE,
@@ -26,24 +27,20 @@ import {
   MessageFormValues,
   useFileEntityType,
   useHandleFileUpload,
-} from "@features/messages";
-import { UploadedFilePreview } from "./uploaded-file-preview";
+} from '@features/messages';
 
-import "./message-form.scss";
+import { UploadedFilePreview } from './uploaded-file-preview';
+
+import './message-form.scss';
 
 interface MessageFormProps {
   initialValues?: Partial<MessageFormValues>;
   onStartTyping: VoidFunction;
   onStopTyping: VoidFunction;
-  onCreateMessage: (
-    values: MessageFormValues,
-    options: FormikHelpers<MessageFormValues>
-  ) => void;
+  onCreateMessage: (values: MessageFormValues, options: FormikHelpers<MessageFormValues>) => void;
 }
 
-export const MessageForm: ExtendedReactFunctionalComponent<
-  MessageFormProps
-> = ({
+export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = ({
   initialValues = MESSAGE_FORM_INITIAL_VALUE,
   onCreateMessage,
   onStartTyping,
@@ -73,7 +70,7 @@ export const MessageForm: ExtendedReactFunctionalComponent<
 
       onCreateMessage(values, options);
     },
-    []
+    [],
   );
 
   return (
@@ -87,28 +84,28 @@ export const MessageForm: ExtendedReactFunctionalComponent<
       }}
     >
       {({ values, setFieldValue }: FormikProps<MessageFormValues>) => (
-        <StackLayout space="1rem">
+        <StackLayout space='1rem'>
           <Show.When isTrue={fileLoadingForPreview}>
-            <StackLayout space="0.25rem" className="w-fit relative">
+            <StackLayout space='0.25rem' className='w-fit relative'>
               <Button
-                color="primary"
-                size="small"
+                color='primary'
+                size='small'
                 onClick={() => {
                   abortReadFile();
                   setFileLoadingForPreview(false);
                   if (fileInputRef.current) {
-                    setFieldValue("file", null);
+                    setFieldValue('file', null);
                   }
                 }}
               >
-                {t("button.actions.cancel")}
+                {t('button.actions.cancel')}
               </Button>
 
-              <div className="relative overflow-hidden file-empty-block bg-light rounded-2">
+              <div className='relative overflow-hidden file-empty-block bg-light rounded-2'>
                 <LoadingOverlay />
               </div>
 
-              <span className="text-xs italic bg-tertiary rounded-2 p-2 text-center">
+              <span className='text-xs italic bg-tertiary rounded-2 p-2 text-center'>
                 {readFileProgress}%, {totalReadedMb}/{totalFileSize} MB
               </span>
             </StackLayout>
@@ -121,19 +118,15 @@ export const MessageForm: ExtendedReactFunctionalComponent<
               fileName={String(fileInputRef.current?.files?.[0]?.name)}
               onClear={() => {
                 setFileSource(undefined);
-                setFieldValue("file", undefined);
+                setFieldValue('file', undefined);
               }}
             />
           </Show.When>
 
-          <StackLayout
-            space="0.5rem"
-            alignItems="flex-start"
-            data-color-mode="light"
-          >
-            <FormikFormControl formFieldName="content" className="w-full">
+          <StackLayout space='0.5rem' alignItems='flex-start' data-color-mode='light'>
+            <FormikFormControl formFieldName='content' className='w-full'>
               <MDEditor
-                preview="edit"
+                preview='edit'
                 highlightEnable={false}
                 fullscreen={false}
                 hideToolbar={true}
@@ -142,29 +135,27 @@ export const MessageForm: ExtendedReactFunctionalComponent<
                 minHeight={100}
                 maxHeight={500}
                 textareaProps={{
-                  placeholder: t("conversations.send.input.placeholder"),
-                  onKeyDown: values.content.length
-                    ? onStartTyping
-                    : onStopTyping,
+                  placeholder: t('conversations.send.input.placeholder'),
+                  onKeyDown: values.content.length ? onStartTyping : onStopTyping,
                   onMouseLeave: onStopTyping,
                 }}
                 value={values.content}
                 onChange={(message) => {
-                  setFieldValue("content", message);
+                  setFieldValue('content', message);
                 }}
               />
             </FormikFormControl>
 
-            <ClusterLayout justifyContent="flex-end" space="0.5rem">
+            <ClusterLayout justifyContent='flex-end' space='0.5rem'>
               <Button
                 disabled={Boolean(values.file?.name)}
-                type="button"
+                type='button'
                 onClick={openFileSelectionDialog}
               >
-                <Icon size={18} color="var(--cv-light)" name={cilFile} />
+                <Icon size={18} color='var(--cv-light)' name={cilFile} />
 
                 <input
-                  type="file"
+                  type='file'
                   ref={fileInputRef}
                   hidden
                   onChange={(event) => {
@@ -175,13 +166,13 @@ export const MessageForm: ExtendedReactFunctionalComponent<
               </Button>
 
               <FormSubmitButton
-                className="text-center"
+                className='text-center'
                 disabled={!values.file?.name && !values.content.length}
-                color="primary"
-                size="large"
+                color='primary'
+                size='large'
               >
-                <Tooltip title={t("conversations.send.button")}>
-                  <Icon color="var(--cv-light)" size={18} name={cilSend} />
+                <Tooltip title={t('conversations.send.button')}>
+                  <Icon color='var(--cv-light)' size={18} name={cilSend} />
                 </Tooltip>
               </FormSubmitButton>
             </ClusterLayout>

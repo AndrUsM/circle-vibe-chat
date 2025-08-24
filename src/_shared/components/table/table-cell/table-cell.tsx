@@ -1,12 +1,12 @@
-import React, { useContext } from "react";
-import classNames from "classnames";
+import React, { useContext } from 'react';
 
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
 
-import { CellGroupContext } from "../context";
+import classNames from 'classnames';
 
-export interface TableCellProps
-  extends React.HTMLAttributes<HTMLTableCellElement> {
+import { CellGroupContext } from '../context';
+
+export interface TableCellProps extends React.HTMLAttributes<HTMLTableCellElement> {
   children?: React.ReactNode;
   head?: boolean;
 }
@@ -21,14 +21,14 @@ export const TableCell: ExtendedReactFunctionalComponent<TableCellProps> = ({
 
   if (isHead) {
     return (
-      <th className={classNames("p-2 element_effect-hover", className)} {...rest}>
+      <th className={classNames('p-2 element_effect-hover', className)} {...rest}>
         {children}
       </th>
     );
   }
 
   return (
-    <td className={classNames("p-2 element_effect-hover", className)} {...rest}>
+    <td className={classNames('p-2 element_effect-hover', className)} {...rest}>
       {children}
     </td>
   );

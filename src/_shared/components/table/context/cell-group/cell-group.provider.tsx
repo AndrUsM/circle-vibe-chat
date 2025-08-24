@@ -1,10 +1,8 @@
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
 
-import { CellGroupContext } from "./cell-group.context";
+import { CellGroupContext } from './cell-group.context';
 
-export const CellGroupProvider: ExtendedReactFunctionalComponent = ({
-  children,
-}) => {
+export const CellGroupProvider: ExtendedReactFunctionalComponent = ({ children }) => {
   return (
     <CellGroupContext.Provider
       value={{

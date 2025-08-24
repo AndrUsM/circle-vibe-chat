@@ -1,6 +1,6 @@
 export const encodeBase64 = (str: string): string => {
   const bytes = new TextEncoder().encode(str);
-  let binary = "";
+  let binary = '';
   bytes.forEach((b) => (binary += String.fromCharCode(b)));
   return window.btoa(binary);
 };

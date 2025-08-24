@@ -1,4 +1,7 @@
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from 'react';
+
+import { ChatParticipant, composeAvatarFallback, getUserFullName, Chat } from '@circle-vibe/shared';
+
 import {
   FormGroup,
   StackLayout,
@@ -10,91 +13,84 @@ import {
   HorizontalDivider,
   FormControlTextarea,
   useCopyToClickboard,
-} from "@circle-vibe/components";
-import {
-  ChatParticipant,
-  composeAvatarFallback,
-  getUserFullName,
-  Chat,
-} from "@circle-vibe/shared";
-import { Table, UserAvatar } from "@shared/components";
-import {
-  MANAGE_CONVERSATION_PARTICIPANTS_INITIAL_FORM_VALUE,
-  MANAGE_CONVERSATION_PARTICIPANTS_VALIDATION_SCHEMA,
-} from "./constants";
-import { ManageConversationParticipantsFormValue } from "./types";
+} from '@circle-vibe/components';
+
+import { Table, UserAvatar } from '@shared/components';
+
+import { useNotification } from '@core/hooks';
+
 import {
   useGetUserToInvite,
   useGenerateConversationInvite,
   useGetChatParticipants,
-} from "@api/conversations";
-import { useNotification } from "@core/hooks";
+} from '@api/conversations';
+
+import {
+  MANAGE_CONVERSATION_PARTICIPANTS_INITIAL_FORM_VALUE,
+  MANAGE_CONVERSATION_PARTICIPANTS_VALIDATION_SCHEMA,
+} from './constants';
+import { ManageConversationParticipantsFormValue } from './types';
 
 interface ConversationMembersProps {
   conversation: Chat;
   chatParticipantId: number;
 }
 
-export const ConversationMembers: ExtendedReactFunctionalComponent<
-  ConversationMembersProps
-> = ({ conversation, chatParticipantId }) => {
-  const [chatParticipants, setChatParticipants] = useState<ChatParticipant[]>(
-    []
-  );
+export const ConversationMembers: ExtendedReactFunctionalComponent<ConversationMembersProps> = ({
+  conversation,
+  chatParticipantId,
+}) => {
+  const [chatParticipants, setChatParticipants] = useState<ChatParticipant[]>([]);
   const notification = useNotification();
   const copyToClipboard = useCopyToClickboard();
   const [chatInvitation, setChatInvitation] = useState<string | null>(null);
   const getChatParticipants = useGetChatParticipants();
-  const { getUserToInvite, loading: isChatParticipantsToInviteLoading } =
-    useGetUserToInvite();
+  const { getUserToInvite, loading: isChatParticipantsToInviteLoading } = useGetUserToInvite();
   const generateConversationInvite = useGenerateConversationInvite();
   const handleCopyOfInvite = useCallback(async () => {
-    await copyToClipboard(chatInvitation ?? "");
+    await copyToClipboard(chatInvitation ?? '');
 
     notification({
-      type: "success",
-      content: "Invite link successfully copied!",
+      type: 'success',
+      content: 'Invite link successfully copied!',
     });
   }, []);
   const isChatHasFreeSlots = chatParticipants.length < conversation.usersLimit;
-  const onInviteUser = useCallback(
-    async (formValue: ManageConversationParticipantsFormValue) => {
-      const user = await getUserToInvite(
-        conversation.id,
-        chatParticipantId,
-        formValue.username,
-        formValue.personalToken
-      );
+  const onInviteUser = useCallback(async (formValue: ManageConversationParticipantsFormValue) => {
+    const user = await getUserToInvite(
+      conversation.id,
+      chatParticipantId,
+      formValue.username,
+      formValue.personalToken,
+    );
 
-      if (!user) {
-        notification({
-          type: "error",
-          content: "User not found",
-        });
-
-        return;
-      }
-
-      const generatedInvite = await generateConversationInvite({
-        conversationId: conversation.id,
-        targetUserId: user.id,
-        fromChatParticipantId: chatParticipantId,
+    if (!user) {
+      notification({
+        type: 'error',
+        content: 'User not found',
       });
 
-      setChatInvitation(generatedInvite);
-      handleCopyOfInvite();
-    },
-    []
-  );
+      return;
+    }
+
+    const generatedInvite = await generateConversationInvite({
+      conversationId: conversation.id,
+      targetUserId: user.id,
+      fromChatParticipantId: chatParticipantId,
+    });
+
+    setChatInvitation(generatedInvite);
+    handleCopyOfInvite();
+  }, []);
 
   useEffect(() => {
     getChatParticipants(conversation.id).then(setChatParticipants);
   }, []);
 
   return (
-    <StackLayout space="3rem">
+    <StackLayout space='3rem'>
       <StackLayout>
-        <div className="text-xl">Members:</div>
+        <div className='text-xl'>Members:</div>
 
         <Table>
           <Table.Head>
@@ -112,7 +108,7 @@ export const ConversationMembers: ExtendedReactFunctionalComponent<
                 <Table.Cell>
                   <UserAvatar
                     url={user.avatarUrl}
-                    className="cursor-pointer"
+                    className='cursor-pointer'
                     fallback={composeAvatarFallback(user)}
                   />
                 </Table.Cell>
@@ -120,60 +116,51 @@ export const ConversationMembers: ExtendedReactFunctionalComponent<
 
                 <Table.Cell>{chatParticipant.chatRole}</Table.Cell>
 
-                <Table.Cell>
-                  {chatParticipant.isMuted ? "Enabled" : "Disabled"}
-                </Table.Cell>
+                <Table.Cell>{chatParticipant.isMuted ? 'Enabled' : 'Disabled'}</Table.Cell>
               </Table.Row>
             ))}
 
             <Show.When isTrue={!chatParticipants?.length}>
-              <Table.EmptyCell colSpan={3}>
-                There are no chat members.
-              </Table.EmptyCell>
+              <Table.EmptyCell colSpan={3}>There are no chat members.</Table.EmptyCell>
             </Show.When>
           </Table.Body>
         </Table>
 
         <section>
           <div>
-            Chat members limit: {chatParticipants?.length ?? 0}/
-            {conversation.usersLimit}
+            Chat members limit: {chatParticipants?.length ?? 0}/{conversation.usersLimit}
           </div>
         </section>
       </StackLayout>
 
       <Show.When isTrue={!chatParticipants?.length}>
-        <div className="text-sm">There are no chat members.</div>
+        <div className='text-sm'>There are no chat members.</div>
       </Show.When>
 
       <Show.When isTrue={isChatHasFreeSlots}>
         <StackLayout>
-          <div className="text-xl">Generate Token to Invite</div>
+          <div className='text-xl'>Generate Token to Invite</div>
 
           <Form
-            validationSchema={
-              MANAGE_CONVERSATION_PARTICIPANTS_VALIDATION_SCHEMA
-            }
+            validationSchema={MANAGE_CONVERSATION_PARTICIPANTS_VALIDATION_SCHEMA}
             initialValues={MANAGE_CONVERSATION_PARTICIPANTS_INITIAL_FORM_VALUE}
             onSubmit={onInviteUser}
           >
-            <StackLayout space="1rem">
-              <FormGroup label="Find User By Username" formFieldName="username">
-                <FormControlInput
-                  disabled={isChatParticipantsToInviteLoading}
-                />
+            <StackLayout space='1rem'>
+              <FormGroup label='Find User By Username' formFieldName='username'>
+                <FormControlInput disabled={isChatParticipantsToInviteLoading} />
               </FormGroup>
 
               <HorizontalDivider />
 
-              <div className="text-sm">
-                This is unsave action. Try to find user by username instead of
-                sharing in network personal user token.
+              <div className='text-sm'>
+                This is unsave action. Try to find user by username instead of sharing in network
+                personal user token.
               </div>
 
-              <FormGroup label="Personal Token" formFieldName="personalToken">
+              <FormGroup label='Personal Token' formFieldName='personalToken'>
                 <FormControlTextarea
-                  className="resize-vertical min-h-10 p-3"
+                  className='resize-vertical min-h-10 p-3'
                   disabled={isChatParticipantsToInviteLoading}
                 />
               </FormGroup>
@@ -183,10 +170,10 @@ export const ConversationMembers: ExtendedReactFunctionalComponent<
           </Form>
 
           <Show.When isTrue={Boolean(chatInvitation)}>
-            <div className="text-lg">Generated Token:</div>
+            <div className='text-lg'>Generated Token:</div>
             <StackLayout>
               <div>Invitations:</div>
-              <div className="truncate" onClick={handleCopyOfInvite}>
+              <div className='truncate' onClick={handleCopyOfInvite}>
                 {chatInvitation}
               </div>
             </StackLayout>

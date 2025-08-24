@@ -1,4 +1,4 @@
-import { SortDirection } from "@circle-vibe/shared";
+import { SortDirection } from '@circle-vibe/shared';
 
 export interface ITableContext {
   onSort: (sortingKey: string) => void;

@@ -1,28 +1,23 @@
-import React from "react";
-import {
-  Route,
-  BrowserRouter,
-  Routes,
-  Navigate,
-  Outlet,
-} from "react-router-dom";
+import React from 'react';
 
-import { SocketProvider } from "@core/context/socket/socket.provider";
-import { PublicPagesEnum } from "@core/navigation";
+import { Route, BrowserRouter, Routes, Navigate, Outlet } from 'react-router-dom';
 
-import { PrivateRouter } from "./private-routes";
-import { PublicRouter } from "./public-routes";
-import { AuthInterceptor } from "./auth-interceptor";
+import { SocketProvider } from '@core/context/socket/socket.provider';
+import { PublicPagesEnum } from '@core/navigation';
+
+import { AuthInterceptor } from './auth-interceptor';
+import { PrivateRouter } from './private-routes';
+import { PublicRouter } from './public-routes';
 
 export const RootRoute: React.FC = () => {
   return (
     <BrowserRouter>
       <AuthInterceptor>
         <Routes>
-          <Route path="auth" children={PublicRouter} />
+          <Route path='auth' children={PublicRouter} />
 
           <Route
-            path="/app"
+            path='/app'
             element={
               <SocketProvider>
                 <Outlet />
@@ -33,12 +28,7 @@ export const RootRoute: React.FC = () => {
           </Route>
 
           {/* !DEFAULT ROUTES */}
-          <Route
-            path=""
-            element={
-              <Navigate to={`/auth/${PublicPagesEnum.SIGN_IN}`} replace />
-            }
-          />
+          <Route path='' element={<Navigate to={`/auth/${PublicPagesEnum.SIGN_IN}`} replace />} />
         </Routes>
       </AuthInterceptor>
     </BrowserRouter>

@@ -1,22 +1,22 @@
-import { useCallback, useState } from "react";
-import { SortDirection } from "@circle-vibe/shared";
+import { useCallback, useState } from 'react';
 
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import { SortDirection } from '@circle-vibe/shared';
 
-import { TableContext } from "./table.context";
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
+
+import { TableContext } from './table.context';
 
 interface TableProvierProps {
   onSort: (sortingKey: string) => void;
   sortingKey: string | null;
 }
 
-export const TableProvider: ExtendedReactFunctionalComponent<
-  TableProvierProps
-> = ({ children, onSort }) => {
+export const TableProvider: ExtendedReactFunctionalComponent<TableProvierProps> = ({
+  children,
+  onSort,
+}) => {
   const [sortingKey, setSortingKey] = useState<string | null>(null);
-  const [sortDirection, setSortDirection] = useState<SortDirection | null>(
-    null
-  );
+  const [sortDirection, setSortDirection] = useState<SortDirection | null>(null);
   const handleSortKeyChange = useCallback(
     (updatedSortingKey: string) => {
       if (updatedSortingKey !== sortingKey) {
@@ -24,15 +24,11 @@ export const TableProvider: ExtendedReactFunctionalComponent<
         onSort(updatedSortingKey);
       }
     },
-    [sortingKey]
+    [sortingKey],
   );
 
   const toggleSortDirection = useCallback(() => {
-    setSortDirection(
-      sortDirection === SortDirection.ASC
-        ? SortDirection.DESC
-        : SortDirection.ASC
-    );
+    setSortDirection(sortDirection === SortDirection.ASC ? SortDirection.DESC : SortDirection.ASC);
   }, [sortDirection]);
 
   return (

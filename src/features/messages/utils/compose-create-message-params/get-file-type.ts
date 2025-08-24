@@ -1,9 +1,9 @@
-import { documentRegex, MessageFileType, msDocumnetRegex } from "@circle-vibe/shared";
+import { documentRegex, MessageFileType, msDocumnetRegex } from '@circle-vibe/shared';
 
 export const getFileType = (file: File): MessageFileType => {
   const type = file.type;
 
-  if (type.includes("video")) {
+  if (type.includes('video')) {
     return MessageFileType.MP4;
   }
 
@@ -16,4 +16,4 @@ export const getFileType = (file: File): MessageFileType => {
   }
 
   return MessageFileType.DOCUMENT;
-}
+};

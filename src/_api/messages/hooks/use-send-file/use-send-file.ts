@@ -3,21 +3,22 @@ import {
   UploadImageOutputDto,
   UploadVideoOutputDto,
   ConversationBucketNameEnum,
-} from "@circle-vibe/shared";
-import { fileServerRequest } from "@core/request";
+} from '@circle-vibe/shared';
+
+import { fileServerRequest } from '@core/request';
 
 export const useSendFile = () => {
   const uploadFile = async (file: File, bucket: ConversationBucketNameEnum) => {
     const data = new FormData();
-    data.append("file", file);
+    data.append('file', file);
 
     const response = await fileServerRequest({
-      method: "POST",
-      url: "/files/upload",
+      method: 'POST',
+      url: '/files/upload',
       data,
       params: {
         bucket,
-      }
+      },
     });
 
     return response.data as UploadFileOutputDto;
@@ -25,15 +26,15 @@ export const useSendFile = () => {
 
   const uploadImage = async (file: File, bucket: ConversationBucketNameEnum) => {
     const data = new FormData();
-    data.append("image", file);
+    data.append('image', file);
 
     const response = await fileServerRequest({
-      method: "POST",
-      url: "/images/upload",
+      method: 'POST',
+      url: '/images/upload',
       data,
       params: {
         bucket,
-      }
+      },
     });
 
     return response.data as UploadImageOutputDto;
@@ -41,15 +42,15 @@ export const useSendFile = () => {
 
   const uploadVideo = async (file: File, bucket: ConversationBucketNameEnum) => {
     const data = new FormData();
-    data.append("video", file);
+    data.append('video', file);
 
     const response = await fileServerRequest({
-      method: "POST",
-      url: "/videos/upload",
+      method: 'POST',
+      url: '/videos/upload',
       data,
       params: {
         bucket,
-      }
+      },
     });
 
     return response.data as UploadVideoOutputDto;

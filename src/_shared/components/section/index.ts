@@ -1,10 +1,9 @@
 import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
 
+import { Section } from './section';
 import { SectionContent } from './section-content';
-import  {SectionHeader} from './section-header';
-import {SectionDescription} from './section-description';
-import {Section} from './section';
-
+import { SectionDescription } from './section-description';
+import { SectionHeader } from './section-header';
 
 interface SectionComponent extends ExtendedReactFunctionalComponent {
   Content: ExtendedReactFunctionalComponent;

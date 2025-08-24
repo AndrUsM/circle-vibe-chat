@@ -1,6 +1,8 @@
-import { useMemo, useState } from "react";
-import { Chat, Message, PaginatedResponse } from "@circle-vibe/shared";
-import { useBoolean } from "@circle-vibe/components";
+import { useMemo, useState } from 'react';
+
+import { Chat, Message, PaginatedResponse } from '@circle-vibe/shared';
+
+import { useBoolean } from '@circle-vibe/components';
 
 export const useConversationGatewayState = () => {
   const [chatsLoading, setChatsLoading] = useState(false);
@@ -9,9 +11,7 @@ export const useConversationGatewayState = () => {
   const [messagesPage, setMessagesPage] = useState(1);
   const [chatsPage, setChatsPage] = useState(1);
   const [chats, setChats] = useState<PaginatedResponse<Chat> | null>(null);
-  const [messages, setMessages] = useState<PaginatedResponse<Message> | null>(
-    null
-  );
+  const [messages, setMessages] = useState<PaginatedResponse<Message> | null>(null);
 
   return useMemo(() => {
     return {
@@ -30,13 +30,5 @@ export const useConversationGatewayState = () => {
       setChats,
       setMessages,
     };
-  }, [
-    isAnyoneTyping,
-    chatsLoading,
-    messagesLoading,
-    messagesPage,
-    chatsPage,
-    chats,
-    messages,
-  ]);
+  }, [isAnyoneTyping, chatsLoading, messagesLoading, messagesPage, chatsPage, chats, messages]);
 };

@@ -1,7 +1,7 @@
-import { ChatParticipant } from "@circle-vibe/shared";
+import { ChatParticipant } from '@circle-vibe/shared';
 
 export interface IConversationContext {
-  selectedChatId: number | null,
+  selectedChatId: number | null;
   setSelectedChatId: (chatId: number) => void;
   currentConversationParticipant: ChatParticipant | null;
   setCurrentConversationParticipant: (participants: ChatParticipant) => void;

@@ -1,6 +1,7 @@
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
 
-import { Chat, ChatParticipant } from "@circle-vibe/shared";
+import { Chat, ChatParticipant } from '@circle-vibe/shared';
+
 import {
   Menu,
   useIcons,
@@ -11,24 +12,21 @@ import {
   ExtendedReactFunctionalComponent,
   Show,
   Modal,
-} from "@circle-vibe/components";
+} from '@circle-vibe/components';
 
-import { useUpdateConversationParticipant } from "@api/conversation-participants";
-import {
-  ConversationMembers,
-  useActiveConversation,
-} from "@features/conversation";
+import { ConversationMembers, useActiveConversation } from '@features/conversation';
+
+import { useUpdateConversationParticipant } from '@api/conversation-participants';
 
 interface ChatActionsProps {
   chat: Chat;
 }
 
-export const ChatActions: ExtendedReactFunctionalComponent<
-  ChatActionsProps
-> = ({ chat }) => {
+export const ChatActions: ExtendedReactFunctionalComponent<ChatActionsProps> = ({ chat }) => {
   const { id: chatId } = chat;
   const icons = useIcons();
-  const { currentConversationParticipant, setCurrentConversationParticipant } = useActiveConversation();
+  const { currentConversationParticipant, setCurrentConversationParticipant } =
+    useActiveConversation();
   const updateConversationParticipant = useUpdateConversationParticipant();
   const { isMuted, id: participantId } = currentConversationParticipant as ChatParticipant;
   const [isConversationMembersModalOpen, setIsConversationMembersModalOpen] = useState(false);
@@ -42,8 +40,8 @@ export const ChatActions: ExtendedReactFunctionalComponent<
       chatId,
       participantId,
       isMuted: !isMuted,
-    })
-    
+    });
+
     setCurrentConversationParticipant(updatedChatParticipant);
   }, [isMuted, chatId, participantId]);
 
@@ -52,28 +50,28 @@ export const ChatActions: ExtendedReactFunctionalComponent<
       <Menu
         zIndex={10}
         button={() => <Icon name={icons.cilOptions} size={24} />}
-        className="chat-actions-menu"
+        className='chat-actions-menu'
       >
         <StackLayout>
-          <div className="text-lg font-medium">Chat Actions:</div>
+          <div className='text-lg font-medium'>Chat Actions:</div>
 
           <Button onClick={openConversationSettings}>Settings</Button>
           <Button onClick={showConversationMembers}>Members</Button>
 
-          <Button color="danger" onClick={deleteConversation}>
+          <Button color='danger' onClick={deleteConversation}>
             Delete
           </Button>
 
           <Show.When isTrue={!chat?.isSavedMessages}>
             <HorizontalDivider />
 
-            <div className="text-lg font-medium">Participant Actions:</div>
+            <div className='text-lg font-medium'>Participant Actions:</div>
 
-            <Button color="secondary" onClick={toggleMuteConversationAlerts}>
-              {isMuted ? "Enable Notifications" : "Disable Notifications"}
+            <Button color='secondary' onClick={toggleMuteConversationAlerts}>
+              {isMuted ? 'Enable Notifications' : 'Disable Notifications'}
             </Button>
 
-            <Button color="danger" onClick={leaveConversation}>
+            <Button color='danger' onClick={leaveConversation}>
               Leave
             </Button>
           </Show.When>
@@ -87,10 +85,7 @@ export const ChatActions: ExtendedReactFunctionalComponent<
         <Modal.Header onClose={() => setIsConversationMembersModalOpen(false)} />
 
         <Modal.Body>
-          <ConversationMembers
-            conversation={chat}
-            chatParticipantId={participantId}
-          />
+          <ConversationMembers conversation={chat} chatParticipantId={participantId} />
         </Modal.Body>
       </Modal.Root>
     </>

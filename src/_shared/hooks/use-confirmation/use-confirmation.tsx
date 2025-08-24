@@ -1,19 +1,21 @@
-import { useCallback } from "react";
-import { createRoot } from "react-dom/client";
+import { useCallback } from 'react';
 
-import { Modal } from "@circle-vibe/components";
-import { ConfirmationModalLayout } from "./confirmation-modal-layout";
+import { Modal } from '@circle-vibe/components';
 
-let modalRoot = document.getElementById("modal-root");
+import { createRoot } from 'react-dom/client';
+
+import { ConfirmationModalLayout } from './confirmation-modal-layout';
+
+let modalRoot = document.getElementById('modal-root');
 
 export const useConfirmation = () => {
   return useCallback(
     (
       content: React.ReactNode | string,
       confirmButtonColor?: string,
-      minWidth?: string
+      minWidth?: string,
     ): Promise<boolean> => {
-      const container = document.createElement("div");
+      const container = document.createElement('div');
       const root = createRoot(container);
       modalRoot!.appendChild(container);
 
@@ -36,7 +38,7 @@ export const useConfirmation = () => {
         };
 
         root.render(
-          <Modal.Root minWidth="20rem" isOpen={true} onClose={onClose}>
+          <Modal.Root minWidth='20rem' isOpen={true} onClose={onClose}>
             <Modal.Header onClose={onClose}>{content}</Modal.Header>
 
             <Modal.Body>
@@ -46,10 +48,10 @@ export const useConfirmation = () => {
                 onClose={onClose}
               />
             </Modal.Body>
-          </Modal.Root>
+          </Modal.Root>,
         );
       });
     },
-    []
+    [],
   );
 };

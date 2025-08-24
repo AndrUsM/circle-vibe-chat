@@ -1,6 +1,7 @@
-import { useNotification } from "@core/hooks";
-import { request } from "@core/request";
-import { useCallback, useState } from "react";
+import { useCallback, useState } from 'react';
+
+import { useNotification } from '@core/hooks';
+import { request } from '@core/request';
 
 export const useGenerateAccountConfirmationCode = () => {
   const [loading, setLoading] = useState(false);
@@ -11,32 +12,33 @@ export const useGenerateAccountConfirmationCode = () => {
       setLoading(true);
 
       const response = await request({
-        method: "POST",
-        url: "user-confirmation/generate-code",
+        method: 'POST',
+        url: 'user-confirmation/generate-code',
         data: {
           email,
         },
       });
 
-      const status = (response?.data as {
-        status: number;
-      })?.status;
+      const status = (
+        response?.data as {
+          status: number;
+        }
+      )?.status;
 
       setLoading(false);
 
       if (status === 400) {
         notification({
-          type: "error",
-          content: "Incorrect email, please check and try again!",
+          type: 'error',
+          content: 'Incorrect email, please check and try again!',
         });
 
         return null;
       }
 
       return response;
-
     },
-    [loading]
+    [loading],
   );
 
   return {

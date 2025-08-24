@@ -1,4 +1,6 @@
-import { Section } from "@shared/components";
+import React, { useCallback } from 'react';
+
+import { ConversationBucketNameEnum, UserType } from '@circle-vibe/shared';
 
 import {
   Button,
@@ -12,27 +14,33 @@ import {
   FormSubmitButton,
   Icon,
   StackLayout,
+  Textarea,
   useCopyToClickboard,
   useIcons,
-  Textarea,
-} from "@circle-vibe/components";
-import { UserType } from "@circle-vibe/shared";
+} from '@circle-vibe/components';
 
-import { useUpdateUserSettings } from "@api/user";
-import { useCurrentUser } from "@core/hooks";
+import { FormikProps } from 'formik';
 
-import { composeAccountSettingsFormValues } from "./utils";
-import { ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA } from "./constants";
-import { useCallback } from "react";
-import { AccountSettingsFormValues } from "./types";
+import { FileUploadForm, FileUploadFormFileType, Section } from '@shared/components';
+
+import { useCurrentUser } from '@core/hooks';
+
+import { useUpdateUserSettings } from '@api/user';
+
+import { ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA } from './constants';
+import { AccountSettingsFormValues } from './types';
+import { composeAccountSettingsFormValues } from './utils';
 
 export const AccountSettingsForm: React.FC = () => {
   const { user } = useCurrentUser();
   const { cilCopy } = useIcons();
   const updateUserSettings = useUpdateUserSettings();
-  const onSubmit = useCallback((values: AccountSettingsFormValues) => {
-    return updateUserSettings(user.id, values);
-  }, [user?.id]);
+  const onSubmit = useCallback(
+    (values: AccountSettingsFormValues) => {
+      return updateUserSettings(user.id, values);
+    },
+    [user?.id],
+  );
   const copyToClickboard = useCopyToClickboard();
   const initialValues = composeAccountSettingsFormValues(user);
 
@@ -43,110 +51,129 @@ export const AccountSettingsForm: React.FC = () => {
       validationSchema={ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA}
       onSubmit={onSubmit}
     >
-      <StackLayout space="2rem" className="pt-6">
-        <Section>
-          <Section.Header>General Account Setting</Section.Header>
+      {({ values, setFieldValue }: FormikProps<AccountSettingsFormValues>) => (
+        <StackLayout space='2rem' className='pt-6'>
+          <Section>
+            <Section.Header>General Account Setting</Section.Header>
 
-          <Section.Content>
-            <FormGroup label="Firstname" formFieldName="firstname">
-              <FormControlInput />
-            </FormGroup>
+            <Section.Content>
+              <FormGroup label='Firstname' formFieldName='firstname'>
+                <FormControlInput />
+              </FormGroup>
 
-            <FormGroup label="Surname" formFieldName="surname">
-              <FormControlInput />
-            </FormGroup>
+              <FormGroup label='Surname' formFieldName='surname'>
+                <FormControlInput />
+              </FormGroup>
 
-            <FormGroup label="Nickname" formFieldName="username">
-              <FormControlInput />
-            </FormGroup>
+              <FormGroup label='Nickname' formFieldName='username'>
+                <FormControlInput />
+              </FormGroup>
 
-            <FormGroup label="Birth Date" formFieldName="birthDate">
-              <FormControlInput type="date" />
-            </FormGroup>
-          </Section.Content>
-        </Section>
+              <FormGroup label='Birth Date' formFieldName='birthDate'>
+                <FormControlInput type='date' />
+              </FormGroup>
 
-        <Section>
-          <Section.Header>Contact Information</Section.Header>
+              <FileUploadForm
+                url={values?.avatarUrl ?? null}
+                label='Avatar'
+                bucket={ConversationBucketNameEnum.USER_AVATARS}
+                type={FileUploadFormFileType.IMAGE}
+                afterUpload={(fileUrls) => {
+                  setFieldValue('avatarUrl', fileUrls?.filePath);
+                  setFieldValue('optimisedAvatarUrl', fileUrls?.optimizedFilePath);
+                }}
+              />
+            </Section.Content>
+          </Section>
 
-          <Section.Content>
-            <FormGroup label="Email" formFieldName="email">
-              <FormControlInput type="email" />
-            </FormGroup>
+          <Section>
+            <Section.Header>Contact Information</Section.Header>
 
-            <FormGroup label="Phone" formFieldName="primaryPhone">
-              <FormControlInput type="phone" />
-            </FormGroup>
-          </Section.Content>
-        </Section>
+            <Section.Content>
+              <FormGroup label='Email' formFieldName='email'>
+                <FormControlInput type='email' />
+              </FormGroup>
 
-        <Section>
-          <Section.Header>Security</Section.Header>
+              <FormGroup label='Phone' formFieldName='primaryPhone'>
+                <FormControlInput type='phone' />
+              </FormGroup>
+            </Section.Content>
+          </Section>
 
-          <Section.Content>
-            <StackLayout space="1rem">
-              <StackLayout space="0.5rem">
-                <FormGroup label="Password" formFieldName="password">
-                  <FormControlInput type="password" />
-                </FormGroup>
+          <Section>
+            <Section.Header>Security</Section.Header>
 
-                <FormikFormControl label="Account Type" formFieldName="type">
-                  <FormControlSelect>
-                    <option value={UserType.PRIVATE}>Private</option>
-                    <option value={UserType.PUBLIC}>Public</option>
-                  </FormControlSelect>
+            <Section.Content>
+              <StackLayout space='1rem'>
+                <StackLayout space='0.5rem'>
+                  <FormGroup label='Password' formFieldName='password'>
+                    <FormControlInput type='password' />
+                  </FormGroup>
 
-                  <FormControlError />
-                </FormikFormControl>
+                  <FormikFormControl label='Account Type' formFieldName='type'>
+                    <FormControlSelect>
+                      <option value={UserType.PRIVATE}>Private</option>
+                      <option value={UserType.PUBLIC}>Public</option>
+                    </FormControlSelect>
+
+                    <FormControlError />
+                  </FormikFormControl>
+                </StackLayout>
+
+                <StackLayout space='0'>
+                  <FormikFormControl formFieldName='isAllowedToSearch'>
+                    <FormControlCheckbox>Show in search</FormControlCheckbox>
+                  </FormikFormControl>
+
+                  <FormikFormControl formFieldName='isHiddenContactInfo'>
+                    <FormControlCheckbox>Hide contact info</FormControlCheckbox>
+                  </FormikFormControl>
+                </StackLayout>
               </StackLayout>
+            </Section.Content>
+          </Section>
 
-              <StackLayout space="0">
-                <FormikFormControl formFieldName="isAllowedToSearch">
-                  <FormControlCheckbox>Show in search</FormControlCheckbox>
-                </FormikFormControl>
+          <Section>
+            <Section.Header>Location Information</Section.Header>
 
-                <FormikFormControl formFieldName="isHiddenContactInfo">
-                  <FormControlCheckbox>Hide contact info</FormControlCheckbox>
-                </FormikFormControl>
+            <Section.Content>
+              <FormGroup label='Country' formFieldName='country'>
+                <FormControlInput />
+              </FormGroup>
+
+              <FormGroup label='City' formFieldName='city'>
+                <FormControlInput />
+              </FormGroup>
+            </Section.Content>
+          </Section>
+
+          <Section>
+            <Section.Header>Personal Key</Section.Header>
+
+            <Section.Content>
+              <StackLayout>
+                <Button
+                  size='small'
+                  color='secondary'
+                  onClick={() => copyToClickboard(user.privateToken)}
+                >
+                  <Icon color='var(--cv-light)' name={cilCopy} size={14} />
+                </Button>
+
+                <Textarea
+                  minRows={3}
+                  disabled
+                  className='resize-vertical min-h-15'
+                  value={user.privateToken}
+                  readOnly
+                />
               </StackLayout>
-            </StackLayout>
-          </Section.Content>
-        </Section>
+            </Section.Content>
+          </Section>
 
-        <Section>
-          <Section.Header>Location Information</Section.Header>
-
-          <Section.Content>
-            <FormGroup label="Country" formFieldName="country">
-              <FormControlInput />
-            </FormGroup>
-
-            <FormGroup label="City" formFieldName="city">
-              <FormControlInput />
-            </FormGroup>
-          </Section.Content>
-        </Section>
-
-        <Section>
-          <Section.Header>Personal Key</Section.Header>
-
-          <Section.Content>
-            <StackLayout>
-              <Button
-                size="small"
-                color="secondary"
-                onClick={() => copyToClickboard(user.privateToken)}
-              >
-                <Icon color="var(--cv-light)" name={cilCopy} size={14} />
-              </Button>
-
-              <Textarea minRows={3} disabled className="resize-vertical min-h-15" value={user.privateToken} readOnly />
-            </StackLayout>
-          </Section.Content>
-        </Section>
-
-        <FormSubmitButton>Save</FormSubmitButton>
-      </StackLayout>
+          <FormSubmitButton>Save</FormSubmitButton>
+        </StackLayout>
+      )}
     </Form>
   );
 };

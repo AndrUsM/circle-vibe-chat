@@ -1,8 +1,8 @@
-import { useCallback } from "react"
+import { useCallback } from 'react';
 
-import { useNotification } from "@core/hooks";
-import { request } from "@core/request";
-import { getAuthToken, setAuthToken } from "@core/utils";
+import { useNotification } from '@core/hooks';
+import { request } from '@core/request';
+import { getAuthToken, setAuthToken } from '@core/utils';
 
 export const useRefreshToken = () => {
   const notification = useNotification();
@@ -13,11 +13,11 @@ export const useRefreshToken = () => {
     const response = await request<{
       token: string;
     }>({
-      url: "auth/refresh-token",
-      method: "POST",
+      url: 'auth/refresh-token',
+      method: 'POST',
       data: {
         token,
-      }
+      },
     });
 
     if (response?.data?.token) {
@@ -27,8 +27,8 @@ export const useRefreshToken = () => {
     }
 
     notification({
-      type: "warning",
-      content: "You are not logged in!",
+      type: 'warning',
+      content: 'You are not logged in!',
     });
   }, [notification]);
-}
+};

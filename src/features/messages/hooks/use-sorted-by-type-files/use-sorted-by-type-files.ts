@@ -1,6 +1,6 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
-import { MessageFile, MessageFileEntityType } from "@circle-vibe/shared";
+import { MessageFile, MessageFileEntityType } from '@circle-vibe/shared';
 
 export const useSortedByTypeFiles = (files: MessageFile[]) => {
   return useMemo(
@@ -27,8 +27,8 @@ export const useSortedByTypeFiles = (files: MessageFile[]) => {
           images: [] as MessageFile[],
           videos: [] as typeof files,
           files: [] as typeof files,
-        }
+        },
       ),
-    [files]
+    [files],
   );
 };

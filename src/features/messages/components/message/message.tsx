@@ -1,12 +1,10 @@
-import { FormikHelpers } from "formik";
-
 import {
   MessageType,
   Message as MessageModel,
   getUserFullName,
   composeAvatarFallback,
   MessageFile,
-} from "@circle-vibe/shared";
+} from '@circle-vibe/shared';
 
 import {
   CenteredVertialLayout,
@@ -22,7 +20,11 @@ import {
   useFormatDatetime,
   useIcons,
   FormatDateTime,
-} from "@circle-vibe/components";
+} from '@circle-vibe/components';
+
+import { FormikHelpers } from 'formik';
+
+import { UserAvatar } from '@shared/components';
 
 import {
   MessageForm,
@@ -30,13 +32,11 @@ import {
   TextMessagePreview,
   useSplitMessageContent,
   useThreadParticipants,
-} from "@features/messages";
+} from '@features/messages';
 
-import { UserAvatar } from "@shared/components";
+import { MessageFiles } from './message-files/message-files';
 
-import { MessageFiles } from "./message-files/message-files";
-
-import "./message.scss";
+import './message.scss';
 
 interface MessageProps {
   message: MessageModel;
@@ -49,7 +49,7 @@ interface MessageProps {
   onOpenFile: (file: MessageFile) => void;
   onReplyMessage?: (
     fileMessage: MessageFormValues,
-    formikUtils: FormikHelpers<MessageFormValues>
+    formikUtils: FormikHelpers<MessageFormValues>,
   ) => Promise<void>;
 }
 
@@ -66,17 +66,12 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
 }) => {
   const icons = useIcons();
   const formatDateTime = useFormatDatetime();
-  const [isReplyMessageEnabled, toggleIsReplyMessageEnabled] =
-    useBoolean(false);
+  const [isReplyMessageEnabled, toggleIsReplyMessageEnabled] = useBoolean(false);
 
   const { content, files, messageType, sender, updatedAt } = message;
 
-  const {
-    messageContent,
-    isContentTooLong,
-    toggleOfTooLongMessage,
-    toggleIconIcon,
-  } = useSplitMessageContent(content);
+  const { messageContent, isContentTooLong, toggleOfTooLongMessage, toggleIconIcon } =
+    useSplitMessageContent(content);
   const senderFullName = getUserFullName(sender?.user);
   const imageFallback = composeAvatarFallback(sender?.user);
   const threadParticipants = useThreadParticipants(message?.threads);
@@ -84,67 +79,53 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   const avatarUrl = sender?.user?.avatarUrl;
 
   return (
-    <StackLayout space="0.5rem" className="element_effect-hover-reverse">
-      <StackLayout
-        space="0.5rem"
-        className="bg-tertiary rounded-1 p-2 rounded-2"
-      >
+    <StackLayout space='0.5rem' className='element_effect-hover-reverse'>
+      <StackLayout space='0.5rem' className='bg-tertiary rounded-1 p-2 rounded-2'>
         <Show.When isTrue={Boolean(content) && !files?.length}>
           <StackLayout
-            space="0.5rem"
-            justifyContent="space-between"
-            className="white-space-pre-wrap"
+            space='0.5rem'
+            justifyContent='space-between'
+            className='white-space-pre-wrap'
           >
             <TextMessagePreview>{messageContent}</TextMessagePreview>
 
             <Show.When isTrue={isContentTooLong}>
-              <Button color="primary" onClick={toggleOfTooLongMessage}>
-                <Icon name={toggleIconIcon} size={16} color="white" />
+              <Button color='primary' onClick={toggleOfTooLongMessage}>
+                <Icon name={toggleIconIcon} size={16} color='white' />
               </Button>
             </Show.When>
           </StackLayout>
         </Show.When>
 
         <Show.When isTrue={Boolean(files?.length)}>
-          <MessageFiles
-            files={files}
-            messageType={messageType}
-            onOpenFile={onOpenFile}
-          />
+          <MessageFiles files={files} messageType={messageType} onOpenFile={onOpenFile} />
         </Show.When>
 
         <ClusterLayout
-          space="0.5rem"
-          alignItems="center"
-          justifyContent="space-between"
-          className="flex-wrap"
+          space='0.5rem'
+          alignItems='center'
+          justifyContent='space-between'
+          className='flex-wrap'
         >
           {/* SENDER, TIMESTAMP */}
-          <ClusterLayout space="0.5rem" alignItems="center">
+          <ClusterLayout space='0.5rem' alignItems='center'>
             <Show.When isTrue={Boolean(sender) && !isSavedMessages}>
-              <UserAvatar
-                url={avatarUrl ?? undefined}
-                fallback={imageFallback}
-              />
+              <UserAvatar url={avatarUrl ?? undefined} fallback={imageFallback} />
 
-              <div className="italic">{senderFullName}</div>
+              <div className='italic'>{senderFullName}</div>
             </Show.When>
 
             <div>{formatDateTime(updatedAt, FormatDateTime.DATE_TIME)}</div>
           </ClusterLayout>
 
           {/* THREAD INFORMATION, ACTIONS */}
-          <ClusterLayout space="0.5rem" alignItems="center">
+          <ClusterLayout space='0.5rem' alignItems='center'>
             <Show.When
-              isTrue={
-                !isSavedMessages &&
-                sender.id !== chatParticipantId &&
-                !message?.threadId
-              }
+              isTrue={!isSavedMessages && sender.id !== chatParticipantId && !message?.threadId}
             >
               {/* THREAD PARTICIPANTS */}
               <Show.When isTrue={Boolean(message?.threads?.length)}>
-                <CenteredVertialLayout space="0.5rem">
+                <CenteredVertialLayout space='0.5rem'>
                   {threadParticipants.slice(0, 2)?.map((threadParticipant) => (
                     <UserAvatar
                       url={sender?.user?.avatarUrl}
@@ -154,14 +135,10 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
                   ))}
 
                   <Show.When isTrue={threadParticipants?.length > 2}>
-                    <IconLayout space="0.15rem">
-                      <Icon
-                        name={icons.cilPlus}
-                        color="var(--cv-dark)"
-                        size={10}
-                      />
+                    <IconLayout space='0.15rem'>
+                      <Icon name={icons.cilPlus} color='var(--cv-dark)' size={10} />
 
-                      <span className="text-sm italic">
+                      <span className='text-sm italic'>
                         {threadParticipants.slice(2).length} more
                       </span>
                     </IconLayout>
@@ -170,50 +147,30 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
               </Show.When>
 
               <Button
-                color={message?.childThreadId ? "primary" : "secondary"}
-                size="small"
+                color={message?.childThreadId ? 'primary' : 'secondary'}
+                size='small'
                 onClick={toggleIsReplyMessageEnabled}
               >
-                <IconLayout space="0.25rem">
-                  <Icon
-                    color="var(--cv-light)"
-                    name={icons.cilChatBubble}
-                    size={14}
-                  />
+                <IconLayout space='0.25rem'>
+                  <Icon color='var(--cv-light)' name={icons.cilChatBubble} size={14} />
 
                   <Show.When isTrue={Boolean(message?.threads?.length)}>
-                    <span className="font-medium text-sm">
-                      {message?.threads?.length}
-                    </span>
+                    <span className='font-medium text-sm'>{message?.threads?.length}</span>
                   </Show.When>
                 </IconLayout>
               </Button>
             </Show.When>
 
             {/* DELETE, UPDATE ACTIONS */}
-            <Show.When
-              isTrue={isSavedMessages || sender.id === chatParticipantId}
-            >
+            <Show.When isTrue={isSavedMessages || sender.id === chatParticipantId}>
               <Show.When isTrue={message.messageType === MessageType.TEXT}>
-                <Button
-                  color="secondary"
-                  size="small"
-                  onClick={() => onUpdateMessage(message.id)}
-                >
-                  <Icon color="var(--cv-light)" name={icons.cilPen} size={14} />
+                <Button color='secondary' size='small' onClick={() => onUpdateMessage(message.id)}>
+                  <Icon color='var(--cv-light)' name={icons.cilPen} size={14} />
                 </Button>
               </Show.When>
 
-              <Button
-                color="secondary"
-                size="small"
-                onClick={() => onDeleteMessage(message.id)}
-              >
-                <Icon
-                  color="var(--cv-light)"
-                  name={icons.cilDelete}
-                  size={14}
-                />
+              <Button color='secondary' size='small' onClick={() => onDeleteMessage(message.id)}>
+                <Icon color='var(--cv-light)' name={icons.cilDelete} size={14} />
               </Button>
             </Show.When>
           </ClusterLayout>
@@ -222,7 +179,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
 
       {/*THREADS  */}
       <Show.When isTrue={isReplyMessageEnabled}>
-        <StackLayout className="pl-6">
+        <StackLayout className='pl-6'>
           <Show.When isTrue={Boolean(message.childThreadId)}>
             {message.threads?.map((childMessage: MessageModel) => (
               <Message

@@ -1,4 +1,4 @@
 export enum AccountSettingsTabs {
-  GENERAL = "GENERAL",
-  INVITES = "INVITES",
+  GENERAL = 'GENERAL',
+  INVITES = 'INVITES',
 }

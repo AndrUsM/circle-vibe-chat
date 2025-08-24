@@ -1,5 +1,6 @@
-import { MessageFile } from "@circle-vibe/shared";
-import { useMemo, useState } from "react";
+import { useMemo, useState } from 'react';
+
+import { MessageFile } from '@circle-vibe/shared';
 
 export const usePreviewFileState = () => {
   const [previewFile, setPreviewFile] = useState<MessageFile | null>(null);
@@ -18,6 +19,6 @@ export const usePreviewFileState = () => {
       previewFile,
       toggleFileDialogVisibility,
     }),
-    [toggleFileDialogVisibility, previewFile]
+    [toggleFileDialogVisibility, previewFile],
   );
 };

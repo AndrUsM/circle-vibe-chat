@@ -1,5 +1,4 @@
-import { useCallback } from "react";
-import { useNavigate } from "react-router-dom";
+import { useCallback } from 'react';
 
 import {
   ExtendedReactFunctionalComponent,
@@ -7,9 +6,11 @@ import {
   useIcons,
   Icon,
   Button,
-} from "@circle-vibe/components";
+} from '@circle-vibe/components';
 
-import { cookiesService, localStorageService } from "@core/services";
+import { useNavigate } from 'react-router-dom';
+
+import { cookiesService, localStorageService } from '@core/services';
 
 export const TopBarActions: ExtendedReactFunctionalComponent = () => {
   const icons = useIcons();
@@ -19,8 +20,8 @@ export const TopBarActions: ExtendedReactFunctionalComponent = () => {
     cookiesService.clear();
     localStorageService.clear();
 
-    void navigate("/auth/sign-in");
-  }, []);
+    void navigate('/auth/sign-in');
+  }, [navigate]);
 
   return (
     <Menu button={() => <Icon name={icons.cilHamburgerMenu} size={28} />}>

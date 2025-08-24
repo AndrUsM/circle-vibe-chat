@@ -1,6 +1,8 @@
-import { Thread } from "@circle-vibe/shared";
-import { request } from "@core/request";
-import { useCallback } from "react";
+import { useCallback } from 'react';
+
+import { Thread } from '@circle-vibe/shared';
+
+import { request } from '@core/request';
 
 interface UseReplyMessageParams {
   chatId: number;
@@ -10,8 +12,8 @@ interface UseReplyMessageParams {
 export const useCreateThread = () => {
   return useCallback(async (data: UseReplyMessageParams) => {
     const response = await request({
-      url: "threads",
-      method: "POST",
+      url: 'threads',
+      method: 'POST',
       data,
     });
 

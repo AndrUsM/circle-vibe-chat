@@ -1,9 +1,9 @@
-import { MessageFileEntityType } from "@circle-vibe/shared";
+import { MessageFileEntityType } from '@circle-vibe/shared';
 
 export const getEntityType = (file: File): MessageFileEntityType => {
   const type = file.type;
 
-  if (type.includes("image")) {
+  if (type.includes('image')) {
     return MessageFileEntityType.IMAGE;
   }
 
@@ -12,4 +12,4 @@ export const getEntityType = (file: File): MessageFileEntityType => {
   }
 
   return MessageFileEntityType.FILE;
-}
+};

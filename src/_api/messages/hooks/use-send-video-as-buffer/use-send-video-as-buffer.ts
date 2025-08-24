@@ -1,13 +1,16 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
+
 import {
   ChatSocketCommand,
   SendMessageChatSocketParams,
   ConversationBucketNameEnum,
-} from "@circle-vibe/shared";
-import { useNotification, useSocket } from "@core/hooks";
-import { useSendFile } from "@api/messages";
+} from '@circle-vibe/shared';
 
-import { composeSendVideoFileMessageParams } from "../use-save-file-as-chunk/utils";
+import { useNotification, useSocket } from '@core/hooks';
+
+import { useSendFile } from '@api/messages';
+
+import { composeSendVideoFileMessageParams } from '../use-save-file-as-chunk/utils';
 
 export const useSendVideoAsBuffer = () => {
   const { socket } = useSocket();
@@ -18,7 +21,7 @@ export const useSendVideoAsBuffer = () => {
     async (file: File, messageInputDto: SendMessageChatSocketParams) => {
       if (!file) {
         notification({
-          type: "error",
+          type: 'error',
           content: `Please select video to upload`,
         });
 
@@ -26,7 +29,7 @@ export const useSendVideoAsBuffer = () => {
       }
 
       notification({
-        type: "success",
+        type: 'success',
         content: `Started uploading video ${file.name}`,
       });
 
@@ -35,21 +38,16 @@ export const useSendVideoAsBuffer = () => {
 
       socket.emit(
         ChatSocketCommand.SEND_VIDEO_FILE_MESSAGE,
-        composeSendVideoFileMessageParams(
-          messageInputDto,
-          filePath,
-          optimisedFilePath,
-          file
-        )
+        composeSendVideoFileMessageParams(messageInputDto, filePath, optimisedFilePath, file),
       );
 
       notification({
-        type: "success",
-        content: "Video uploaded successfully",
+        type: 'success',
+        content: 'Video uploaded successfully',
       });
 
       return video;
     },
-    [socket, uploadVideo]
+    [socket, uploadVideo],
   );
 };

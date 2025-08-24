@@ -1,7 +1,8 @@
-import { createContext } from "react";
-import { noop } from "@circle-vibe/components";
+import { createContext } from 'react';
 
-import { IFiltersContext } from "@shared/components";
+import { noop } from '@circle-vibe/components';
+
+import { IFiltersContext } from '@shared/components';
 
 export const FiltersContext = createContext<IFiltersContext<any>>({
   filters: {},
@@ -11,4 +12,4 @@ export const FiltersContext = createContext<IFiltersContext<any>>({
   setFilter: noop,
   resetFilters: noop,
   resetFilter: noop,
-})
+});

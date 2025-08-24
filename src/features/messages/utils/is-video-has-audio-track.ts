@@ -5,13 +5,13 @@ export const isVideoHasAudioTrack = (video: HTMLVideoElement) => {
   }
 
   // Firefox specific
-  if (typeof video?.mozHasAudio !== "undefined") {
+  if (typeof video?.mozHasAudio !== 'undefined') {
     return video?.mozHasAudio;
   }
 
   // WebKit fallback
   if (
-    typeof video?.webkitAudioDecodedByteCount !== "undefined" &&
+    typeof video?.webkitAudioDecodedByteCount !== 'undefined' &&
     video?.webkitAudioDecodedByteCount > 0
   ) {
     return true;

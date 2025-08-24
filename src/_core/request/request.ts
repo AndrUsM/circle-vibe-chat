@@ -1,9 +1,9 @@
-import axios, { AxiosRequestConfig } from "axios";
-import i18n from "i18next";
+import axios, { AxiosRequestConfig } from 'axios';
+import i18n from 'i18next';
 
-import { BASE_API_URL, BASE_FILE_SERVER_API_URL } from "@core/constants";
-import { getAuthToken, setAuthToken } from "@core/utils";
-import { notificationFunction } from "@core/hooks";
+import { BASE_API_URL, BASE_FILE_SERVER_API_URL } from '@core/constants';
+import { notificationFunction } from '@core/hooks';
+import { getAuthToken, setAuthToken } from '@core/utils';
 
 const axiosInstance = axios.create({
   timeout: 10000,
@@ -13,13 +13,13 @@ axiosInstance.interceptors.response.use(
   async (response) => {
     if (response.status === 403) {
       const refreshTokenResponse = await request<{
-        token: string
+        token: string;
       }>({
-        url: "auth/refresh-token",
-        method: "POST",
+        url: 'auth/refresh-token',
+        method: 'POST',
         data: {
           token: getAuthToken(),
-        }
+        },
       });
 
       const updatedToken = String(refreshTokenResponse?.data?.token);
@@ -31,12 +31,12 @@ axiosInstance.interceptors.response.use(
         return response;
       }
     }
-    
+
     if (response?.status >= 500) {
       notificationFunction({
-        type: "error",
-        content: i18n.t("http-request.general-internal-server-error.message"),
-      })
+        type: 'error',
+        content: i18n.t('http-request.general-internal-server-error.message'),
+      });
 
       return new Promise<any>(() => {});
     }
@@ -45,8 +45,8 @@ axiosInstance.interceptors.response.use(
   },
   (error) => {
     return Promise.reject(error);
-  }
-)
+  },
+);
 
 export const request = <T = unknown>(options: AxiosRequestConfig) => {
   const token = getAuthToken();
@@ -55,7 +55,7 @@ export const request = <T = unknown>(options: AxiosRequestConfig) => {
     ...options,
     baseURL: BASE_API_URL,
     headers: {
-      Authorization: token
+      Authorization: token,
     },
   });
 };

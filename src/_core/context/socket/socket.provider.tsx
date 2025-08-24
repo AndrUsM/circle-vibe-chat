@@ -1,19 +1,14 @@
-import {
-  createContext,
-  useCallback,
-  useEffect,
-  useMemo,
-  useState,
-} from "react";
+import { createContext, useCallback, useEffect, useMemo, useState } from 'react';
 
-import { Socket } from "socket.io-client";
-import io from "socket.io-client";
+import { GatewayNamespaces } from '@circle-vibe/shared';
 
-import { GatewayNamespaces } from "@circle-vibe/shared";
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
 
-import { useCurrentUser } from "@core/hooks";
-import { getAuthToken } from "@core/utils";
+import { Socket } from 'socket.io-client';
+import io from 'socket.io-client';
+
+import { useCurrentUser } from '@core/hooks';
+import { getAuthToken } from '@core/utils';
 
 interface ISocketContext {
   socket: Socket;
@@ -24,12 +19,10 @@ interface ISocketContext {
 
 export const SocketContext = createContext<ISocketContext | null>(null);
 
-export const SocketProvider: ExtendedReactFunctionalComponent = ({
-  children,
-}) => {
+export const SocketProvider: ExtendedReactFunctionalComponent = ({ children }) => {
   const { user } = useCurrentUser();
   const socket = io(`http://localhost:3002/${GatewayNamespaces.CHAT_MAIN}`, {
-    transports: ["websocket"],
+    transports: ['websocket'],
     autoConnect: false,
     reconnection: false,
     auth: {
@@ -44,17 +37,14 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
       return;
     }
 
-    const fileSocketConnection = io(
-      `http://localhost:3005/${GatewayNamespaces.FILE_UPLOAD}`,
-      {
-        transports: ["websocket"],
-        autoConnect: true,
-        reconnection: false,
-        auth: {
-          token: getAuthToken(),
-        },
-      }
-    );
+    const fileSocketConnection = io(`http://localhost:3005/${GatewayNamespaces.FILE_UPLOAD}`, {
+      transports: ['websocket'],
+      autoConnect: true,
+      reconnection: false,
+      auth: {
+        token: getAuthToken(),
+      },
+    });
 
     setFileSocket(fileSocketConnection);
 
@@ -81,10 +71,8 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({
 
   const value = useMemo(
     () => ({ socket, fileSocket, createFileSocketConnection, connectToChatSocket }),
-    [socket, fileSocket, createFileSocketConnection, connectToChatSocket]
+    [socket, fileSocket, createFileSocketConnection, connectToChatSocket],
   );
 
-  return (
-    <SocketContext.Provider value={value}>{children}</SocketContext.Provider>
-  );
+  return <SocketContext.Provider value={value}>{children}</SocketContext.Provider>;
 };

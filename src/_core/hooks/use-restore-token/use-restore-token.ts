@@ -1,6 +1,6 @@
-import React from "react";
+import React from 'react';
 
-import { useGetCurrentUserByToken } from "@api/auth/hooks";
+import { useGetCurrentUserByToken } from '@api/auth/hooks';
 
 export const useRestoreToken = () => {
   const getCurrentUser = useGetCurrentUserByToken();

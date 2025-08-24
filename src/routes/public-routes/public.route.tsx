@@ -1,24 +1,25 @@
-import React, { ReactNode } from "react";
-import { Navigate, Route } from "react-router-dom";
+import React, { ReactNode } from 'react';
 
-import { PublicPagesEnum } from "@core/navigation";
+import { Navigate, Route } from 'react-router-dom';
+
+import { PublicPagesEnum } from '@core/navigation';
 
 const SignInFormLazy = React.lazy(() =>
-  import("./sign-in").then(({ SignInForm }) => ({
+  import('./sign-in').then(({ SignInForm }) => ({
     default: SignInForm,
-  }))
+  })),
 );
 
 const SignUpFormLazy = React.lazy(() =>
-  import("./sign-up").then(({ SignUp }) => ({
+  import('./sign-up').then(({ SignUp }) => ({
     default: SignUp,
-  }))
+  })),
 );
 
 const ResetPasswordLazy = React.lazy(() =>
-  import("./reset-password").then(({ ResetPassword }) => ({
+  import('./reset-password').then(({ ResetPassword }) => ({
     default: ResetPassword,
-  }))
+  })),
 );
 
 export const PublicRouter: ReactNode = (
@@ -28,9 +29,6 @@ export const PublicRouter: ReactNode = (
     <Route path={PublicPagesEnum.RESET_PASSWORD} Component={ResetPasswordLazy} />
 
     {/* !DEFAULT ROUTE */}
-    <Route
-      path=""
-      element={<Navigate to={`/auth/${PublicPagesEnum.SIGN_IN}`} replace />}
-    />
+    <Route path='' element={<Navigate to={`/auth/${PublicPagesEnum.SIGN_IN}`} replace />} />
   </>
 );

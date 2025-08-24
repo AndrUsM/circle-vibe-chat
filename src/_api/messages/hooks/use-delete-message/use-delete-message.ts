@@ -1,8 +1,9 @@
-import { useCallback } from "react";
+import { useCallback } from 'react';
 
-import { ChatSocketCommand, DEFAULT_PAGINATION_PAGE_SIZE } from "@circle-vibe/shared";
-import { useNotification, useSocket } from "@core/hooks";
-import { request } from "@core/request";
+import { ChatSocketCommand, DEFAULT_PAGINATION_PAGE_SIZE } from '@circle-vibe/shared';
+
+import { useNotification, useSocket } from '@core/hooks';
+import { request } from '@core/request';
 
 export const useDeleteMessage = () => {
   const { socket } = useSocket();
@@ -11,7 +12,7 @@ export const useDeleteMessage = () => {
   return useCallback(async (chatId: number, messageId: number, currentPage: number) => {
     const response = await request({
       url: `chat/${chatId}/message/${messageId}`,
-      method: "DELETE",
+      method: 'DELETE',
     });
 
     if (response?.status === 200) {
@@ -22,8 +23,8 @@ export const useDeleteMessage = () => {
       });
 
       notification({
-        type: "success",
-        content: "Successfully deleted message!",
+        type: 'success',
+        content: 'Successfully deleted message!',
       });
     }
   }, []);

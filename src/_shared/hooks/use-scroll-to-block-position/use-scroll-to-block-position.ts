@@ -1,8 +1,8 @@
 export const useScrollToBlockPosition = () => {
   return (
     ref: React.RefObject<HTMLDivElement | null>,
-    position: "start" | "end",
-    block: "start" | "end"
+    position: 'start' | 'end',
+    block: 'start' | 'end',
   ): void => {
     if (!ref.current || !ref?.current?.scrollHeight) {
       return;
@@ -11,14 +11,12 @@ export const useScrollToBlockPosition = () => {
     const container = ref.current;
 
     const targetDomElement =
-      position === "end"
-        ? container?.lastElementChild
-        : container.firstElementChild;
+      position === 'end' ? container?.lastElementChild : container.firstElementChild;
 
     if (!targetDomElement) {
       return;
     }
 
-    targetDomElement.scrollIntoView({ behavior: "smooth", block });
+    targetDomElement.scrollIntoView({ behavior: 'smooth', block });
   };
-}
+};

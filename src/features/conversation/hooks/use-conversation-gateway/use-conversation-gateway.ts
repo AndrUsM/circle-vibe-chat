@@ -1,5 +1,4 @@
-import { FormikHelpers } from "formik";
-import { useCallback, useMemo } from "react";
+import { useCallback, useMemo } from 'react';
 
 import {
   Chat,
@@ -10,22 +9,22 @@ import {
   RequestChatsWithPaginationChatSocketParams,
   RequestMessagesWithPaginationChatSocketParams,
   DEFAULT_PAGINATION_PAGE_SIZE,
-} from "@circle-vibe/shared";
-import { useSendMessage } from "@api/messages";
-import { useCreateThread } from "@api/threads";
+} from '@circle-vibe/shared';
 
-import { useCurrentUser, useNotification, useSocket } from "@core/hooks";
+import { FormikHelpers } from 'formik';
 
-import { composePaginationResponse } from "@shared/utils";
+import { composePaginationResponse } from '@shared/utils';
 
-import {
-  useActiveConversation,
-  useIsSavedMessagesChat,
-} from "@features/conversation";
-import { MessageFormValues } from "@features/messages";
+import { useCurrentUser, useNotification, useSocket } from '@core/hooks';
 
-import { useConversationGatewayState } from "./use-conversation-gateway-state";
-import { useChatSocketLogicInitialization } from "./use-conversation-socket-intialization";
+import { useActiveConversation, useIsSavedMessagesChat } from '@features/conversation';
+import { MessageFormValues } from '@features/messages';
+
+import { useSendMessage } from '@api/messages';
+import { useCreateThread } from '@api/threads';
+
+import { useConversationGatewayState } from './use-conversation-gateway-state';
+import { useChatSocketLogicInitialization } from './use-conversation-socket-intialization';
 
 /**
  * A custom React hook that manages the conversation gateway logic, handling chat and message interactions.
@@ -72,7 +71,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   const isAnyChatSelected = Boolean(selectedChatId);
   const allowToPreselectChat = useMemo<boolean>(
     () => Boolean(selectedChatId || chatParticipant),
-    [selectedChatId, chatParticipant]
+    [selectedChatId, chatParticipant],
   );
 
   const onChatSelect = (chatId: number) => {
@@ -91,19 +90,12 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     setMessages(null);
   };
 
-  const handleSendMessage = useSendMessage(
-    chatParticipant,
-    selectedChatId,
-    setMessagesLoading
-  );
-  
+  const handleSendMessage = useSendMessage(chatParticipant, selectedChatId, setMessagesLoading);
+
   const isSavedMessagesChat = useIsSavedMessagesChat(chats, selectedChatId);
 
   const handleSendMessageWithThread = useCallback(
-    async (
-      formValues: MessageFormValues,
-      formikUtils: FormikHelpers<MessageFormValues>
-    ) => {
+    async (formValues: MessageFormValues, formikUtils: FormikHelpers<MessageFormValues>) => {
       if (!formValues.threadId) {
         const { parentMessageId } = formValues;
         const thread = await createThread({
@@ -120,7 +112,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
 
       return handleSendMessage(formValues, formikUtils);
     },
-    [selectedChatId, chatParticipant]
+    [selectedChatId, chatParticipant],
   );
 
   const handleRefreshMessages = useCallback(() => {
@@ -139,9 +131,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     setChatsLoading(false);
   };
 
-  const socketListenerReceiveMessages = (
-    updatedMessages: PaginatedResponse<Message>
-  ) => {
+  const socketListenerReceiveMessages = (updatedMessages: PaginatedResponse<Message>) => {
     setMessages(composePaginationResponse(updatedMessages));
     setMessagesLoading(false);
 
@@ -153,7 +143,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       setMessagesPage(1);
       setChatParticipant(chatParticipant);
     },
-    [setChatParticipant]
+    [setChatParticipant],
   );
 
   const socketListenerNotifyNewMessage = () => {
@@ -162,8 +152,8 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     }
 
     notification({
-      type: "success",
-      content: "New messages received",
+      type: 'success',
+      content: 'New messages received',
     });
   };
 
@@ -176,7 +166,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       filters?: {
         content?: string;
         senderIds?: number[];
-      }
+      },
     ) => {
       const isSamePage = options?.force ? false : page === messagesPage;
 
@@ -197,14 +187,14 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       setMessagesLoading(true);
       socket.emit(ChatSocketCommand.REQUEST_MESSAGES_WITH_PAGINATION, params);
     },
-    [selectedChatId, messagesPage]
+    [selectedChatId, messagesPage],
   );
 
   const triggerGetPaginatedChats = (
     page: number,
     filters?: {
       name?: string;
-    }
+    },
   ) => {
     setMessagesPage(page);
     setChatsLoading(true);
@@ -285,6 +275,6 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       isAnyoneTyping,
       user,
       isSavedMessagesChat,
-    ]
+    ],
   );
 };

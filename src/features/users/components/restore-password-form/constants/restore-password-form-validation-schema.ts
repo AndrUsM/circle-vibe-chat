@@ -1,8 +1,8 @@
-import { object, string } from "yup";
+import { PASSWORD_REGEX } from '@circle-vibe/shared';
 
-import { PASSWORD_REGEX } from "@circle-vibe/shared";
+import { object, string } from 'yup';
 
-import { RestorePasswordFormValues } from "../types";
+import { RestorePasswordFormValues } from '../types';
 
 export const RESTORE_PASSWORD_FORM_VALIDATION_SCHEMA = object<RestorePasswordFormValues>({
   email: string().email().required(),

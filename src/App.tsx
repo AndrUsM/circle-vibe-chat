@@ -1,10 +1,11 @@
-import React from "react";
-import { ToastContainer } from "react-toastify";
+import React from 'react';
 
-import { useRestoreToken, useRestoreUser } from "@core/hooks";
-import { CurrentUserProvider } from "@core/context";
+import { ToastContainer } from 'react-toastify';
 
-import { RootRoute } from "./routes/root.route";
+import { CurrentUserProvider } from '@core/context';
+import { useRestoreToken, useRestoreUser } from '@core/hooks';
+
+import { RootRoute } from './routes/root.route';
 
 export const App: React.FC = () => {
   useRestoreToken();

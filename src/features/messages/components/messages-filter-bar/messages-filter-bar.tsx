@@ -1,8 +1,6 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { FormikProps } from "formik";
-import { useTranslation } from "react-i18next";
-import classNames from "classnames";
+import { ChatParticipant, getUserFullName } from '@circle-vibe/shared';
 
 import {
   Button,
@@ -14,20 +12,24 @@ import {
   noop,
   Show,
   StackLayout,
-} from "@circle-vibe/components";
-import { ChatParticipant, getUserFullName } from "@circle-vibe/shared";
+} from '@circle-vibe/components';
 
-import { useGetChatParticipants } from "@api/conversations";
-import { useFilters } from "@shared/components";
+import classNames from 'classnames';
+import { FormikProps } from 'formik';
+import { useTranslation } from 'react-i18next';
 
-import { useActiveConversation } from "@features/conversation";
+import { useFilters } from '@shared/components';
+
+import { useActiveConversation } from '@features/conversation';
+
+import { useGetChatParticipants } from '@api/conversations';
 
 import {
   MESSAGES_FILTER_BAR_FORM_INITIAL_VALUES,
   MESSAGES_FILTER_BAR_FORM_SCHEMA,
-} from "./constants";
-import { MessagesFilterBarFormValues } from "./types";
-import { useToggleParticipantsFilter } from "./hooks";
+} from './constants';
+import { useToggleParticipantsFilter } from './hooks';
+import { MessagesFilterBarFormValues } from './types';
 
 interface MessagesFilterBarProps {
   conversationId: number;
@@ -46,9 +48,7 @@ export const MessagesFilterBar: React.FC<MessagesFilterBarProps> = ({
   const { setFilters, isActive } = useFilters();
   const { currentConversationParticipant } = useActiveConversation();
   const getChatParticipants = useGetChatParticipants();
-  const [chatParticipants, setChatParticipants] = useState<ChatParticipant[]>(
-    []
-  );
+  const [chatParticipants, setChatParticipants] = useState<ChatParticipant[]>([]);
   const toggleParticipantFilter = useToggleParticipantsFilter(chatParticipants);
 
   useEffect(() => {
@@ -77,46 +77,33 @@ export const MessagesFilterBar: React.FC<MessagesFilterBarProps> = ({
       validationSchema={MESSAGES_FILTER_BAR_FORM_SCHEMA}
       onSubmit={onHandleSubmit}
     >
-      {({
-        values,
-        setFieldValue,
-        setValues,
-      }: FormikProps<MessagesFilterBarFormValues>) => (
-        <StackLayout space="0.25rem">
-          <FormGroup label="Message Text" formFieldName="content">
+      {({ values, setFieldValue, setValues }: FormikProps<MessagesFilterBarFormValues>) => (
+        <StackLayout space='0.25rem'>
+          <FormGroup label='Message Text' formFieldName='content'>
             <FormControlTextarea
-              className="resize-vertical p-3 min-h-10"
-              placeholder={t("input.search.placeholder")}
+              className='resize-vertical p-3 min-h-10'
+              placeholder={t('input.search.placeholder')}
             />
           </FormGroup>
 
           <Show.When isTrue={chatParticipants.length > 1}>
-            <FormGroup label="Participants:" formFieldName="senderIds">
-              <StackLayout space="0.25rem">
+            <FormGroup label='Participants:' formFieldName='senderIds'>
+              <StackLayout space='0.25rem'>
                 {chatParticipants.map((participant) => (
-                  <CenteredVertialLayout
-                    key={participant.id}
-                    value={participant.id}
-                  >
+                  <CenteredVertialLayout key={participant.id} value={participant.id}>
                     <Checkbox
                       selected={values.senderIds?.includes(participant.id)}
-                      onClick={() =>
-                        toggleParticipantFilter(
-                          values,
-                          participant,
-                          setFieldValue
-                        )
-                      }
+                      onClick={() => toggleParticipantFilter(values, participant, setFieldValue)}
                     >
                       <span
                         className={classNames({
-                          "font-semibold": isCurrentParticipantMe(participant),
+                          'font-semibold': isCurrentParticipantMe(participant),
                         })}
                       >
                         {getUserFullName(participant.user)}
-												<Show.When isTrue={isCurrentParticipantMe(participant)}>
-													<span className="ml-1">(You)</span>
-												</Show.When>
+                        <Show.When isTrue={isCurrentParticipantMe(participant)}>
+                          <span className='ml-1'>(You)</span>
+                        </Show.When>
                       </span>
                     </Checkbox>
                   </CenteredVertialLayout>
@@ -125,26 +112,26 @@ export const MessagesFilterBar: React.FC<MessagesFilterBarProps> = ({
             </FormGroup>
           </Show.When>
 
-          <CenteredVertialLayout space="0.5rem">
-            <Button type="submit" size="medium">
-              {t("button.actions.search")}
+          <CenteredVertialLayout space='0.5rem'>
+            <Button type='submit' size='medium'>
+              {t('button.actions.search')}
             </Button>
 
             <Show.When isTrue={isActive}>
               <Button
-                color="secondary"
+                color='secondary'
                 onClick={() => {
                   onReset();
                   setValues(MESSAGES_FILTER_BAR_FORM_INITIAL_VALUES);
                 }}
-                size="medium"
+                size='medium'
               >
-                {t("button.actions.reset")}
+                {t('button.actions.reset')}
               </Button>
             </Show.When>
 
-            <Button color="secondary" onClick={onClose} size="medium">
-              {t("button.actions.close")}
+            <Button color='secondary' onClick={onClose} size='medium'>
+              {t('button.actions.close')}
             </Button>
           </CenteredVertialLayout>
         </StackLayout>

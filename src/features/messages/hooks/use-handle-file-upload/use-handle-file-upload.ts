@@ -1,32 +1,22 @@
-import { ChangeEvent, useCallback, useMemo, useState } from "react";
+import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 
-import { useBoolean } from "@circle-vibe/components";
+import { useBoolean } from '@circle-vibe/components';
 
-import { useNotification } from "@core/hooks";
+import { useNotification } from '@core/hooks';
 
-import { useReadFileForPreview } from "../use-read-file-for-preview";
+import { useReadFileForPreview } from '../use-read-file-for-preview';
+
+type SetFieldValue = (field: string, value: any) => void;
 
 export const useHandleFileUpload = () => {
   const [fileSource, setFileSource] = useState<string | undefined>(undefined);
-  const {
-    readFile,
-    abortReadFile,
-    readFileProgress,
-    totalReadedMb,
-    totalFileSize,
-  } = useReadFileForPreview();
+  const { readFile, abortReadFile, readFileProgress, totalReadedMb, totalFileSize } =
+    useReadFileForPreview();
   const notification = useNotification();
-  const [
-    fileLoadingForPreview,
-    _toggleFileLoadingForPreview,
-    setFileLoadingForPreview,
-  ] = useBoolean(false);
+  const [fileLoadingForPreview, , setFileLoadingForPreview] = useBoolean(false);
 
   const handleFileChange = useCallback(
-    (
-      event: ChangeEvent<HTMLInputElement>,
-      setFieldValue: (field: string, value: any) => void
-    ) => {
+    (event: ChangeEvent<HTMLInputElement>, setFieldValue: SetFieldValue) => {
       const files = event?.currentTarget?.files;
 
       if (!files?.length) {
@@ -39,15 +29,15 @@ export const useHandleFileUpload = () => {
         setFileLoadingForPreview(false);
 
         notification({
-          type: "error",
-          content: "File size must be less than 1GB",
+          type: 'error',
+          content: 'File size must be less than 1GB',
         });
 
         return;
       }
 
       if (file) {
-        setFieldValue("file", file);
+        setFieldValue('file', file);
       }
 
       readFile(file)
@@ -59,12 +49,12 @@ export const useHandleFileUpload = () => {
           setFileSource(undefined);
           setFileLoadingForPreview(false);
           notification({
-            type: "error",
-            content: "Failed to read file!",
+            type: 'error',
+            content: 'Failed to read file!',
           });
         });
     },
-    [readFile, notification]
+    [readFile, notification],
   );
 
   return useMemo(
@@ -80,12 +70,6 @@ export const useHandleFileUpload = () => {
       abortReadFile,
       handleFileChange,
     }),
-    [
-      fileSource,
-      fileLoadingForPreview,
-      readFileProgress,
-      totalReadedMb,
-      totalFileSize,
-    ]
+    [fileSource, fileLoadingForPreview, readFileProgress, totalReadedMb, totalFileSize],
   );
 };

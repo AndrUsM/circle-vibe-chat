@@ -1,4 +1,4 @@
-import Cookies from "js-cookie";
+import Cookies from 'js-cookie';
 
 export const cookiesService = {
   set: (name: string, value: string, options = {}) => {

@@ -1,6 +1,4 @@
-import { FormikProps } from "formik";
-import { use, useCallback, useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { use, useCallback, useState } from 'react';
 
 import {
   Button,
@@ -15,35 +13,32 @@ import {
   Show,
   StackLayout,
   useBoolean,
-} from "@circle-vibe/components";
-import {
-  useGenerateAccountConfirmationCode,
-  useRestorePassword,
-} from "@api/auth/hooks";
-import { PublicPagesEnum } from "@core/navigation";
-import { useNotification } from "@core/hooks";
+} from '@circle-vibe/components';
+
+import { FormikProps } from 'formik';
+import { useNavigate } from 'react-router-dom';
+
+import { useNotification } from '@core/hooks';
+import { PublicPagesEnum } from '@core/navigation';
+
+import { useGenerateAccountConfirmationCode, useRestorePassword } from '@api/auth/hooks';
+
+import { AccountConfirmationForm } from '../account-confirmation-form';
 
 import {
   RESTORE_PASSWORD_FORM_INITIAL_VALUES,
   RESTORE_PASSWORD_FORM_VALIDATION_SCHEMA,
-} from "./constants";
-import { RestorePasswordFormValues } from "./types";
-import { AccountConfirmationForm } from "../account-confirmation-form";
+} from './constants';
+import { RestorePasswordFormValues } from './types';
 
 export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
   const navigate = useNavigate();
   const notification = useNotification();
-  const [email, setEmail] = useState("");
-  const [
-    isConfirmationCodeAdded,
-    _toggleConfirmationCodeMode,
-    setConfirmationCodeAdded,
-  ] = useBoolean(false);
-  const [
-    isConfirmationModalOpen,
-    _toggleConfirmationModalOpen,
-    setConfirmationModalOpen,
-  ] = useBoolean(false);
+  const [email, setEmail] = useState('');
+  const [isConfirmationCodeAdded, _toggleConfirmationCodeMode, setConfirmationCodeAdded] =
+    useBoolean(false);
+  const [isConfirmationModalOpen, _toggleConfirmationModalOpen, setConfirmationModalOpen] =
+    useBoolean(false);
   const { generateAccountConfirmationCode, loading: isGeneratingCode } =
     useGenerateAccountConfirmationCode();
 
@@ -54,25 +49,22 @@ export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
     void navigate(`/auth/${PublicPagesEnum.SIGN_UP}`, { replace: true });
   };
   const restorePassword = useRestorePassword();
-  const onGenerateConfirmaitonCode = useCallback(
-    async (values: RestorePasswordFormValues) => {
-      if (!values?.email) {
-        return;
-      }
+  const onGenerateConfirmaitonCode = useCallback(async (values: RestorePasswordFormValues) => {
+    if (!values?.email) {
+      return;
+    }
 
-      setEmail(values.email);
-      const response = await generateAccountConfirmationCode(values.email);
+    setEmail(values.email);
+    const response = await generateAccountConfirmationCode(values.email);
 
-      if (response) {
-        setConfirmationModalOpen(true);
-        notification({
-          type: "success",
-          content: "Confirmation code has been sent to your email!",
-        });
-      }
-    },
-    []
-  );
+    if (response) {
+      setConfirmationModalOpen(true);
+      notification({
+        type: 'success',
+        content: 'Confirmation code has been sent to your email!',
+      });
+    }
+  }, []);
   const onSubmit = useCallback(
     async (values: RestorePasswordFormValues) => {
       if (!isConfirmationCodeAdded) {
@@ -82,7 +74,7 @@ export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
 
       return restorePassword(values);
     },
-    [isConfirmationCodeAdded]
+    [isConfirmationCodeAdded],
   );
 
   return (
@@ -94,12 +86,12 @@ export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
       >
         {({ values, isValid }: FormikProps<RestorePasswordFormValues>) => (
           <StackLayout>
-            <FormGroup isRequired label="Email" formFieldName="email">
-              <FormControlInput type="email" placeholder="Email" />
+            <FormGroup isRequired label='Email' formFieldName='email'>
+              <FormControlInput type='email' placeholder='Email' />
             </FormGroup>
 
-            <FormGroup isRequired label="Password" formFieldName="password">
-              <FormControlInput type="password" placeholder="Password" />
+            <FormGroup isRequired label='Password' formFieldName='password'>
+              <FormControlInput type='password' placeholder='Password' />
             </FormGroup>
 
             <Show.When isTrue={isConfirmationCodeAdded}></Show.When>
@@ -110,7 +102,7 @@ export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
 
             <Show.When isTrue={!isConfirmationCodeAdded}>
               <Button
-                type="button"
+                type='button'
                 disabled={isGeneratingCode || !isValid}
                 onClick={() => {
                   onGenerateConfirmaitonCode(values);
@@ -120,14 +112,14 @@ export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
               </Button>
             </Show.When>
 
-            <HorizontalDivider height="1px" />
+            <HorizontalDivider height='1px' />
 
-            <CenteredVertialLayout space={"1rem"} justifyContent="center">
-              <Button type="button" color="secondary" onClick={goToSignInPage}>
+            <CenteredVertialLayout space={'1rem'} justifyContent='center'>
+              <Button type='button' color='secondary' onClick={goToSignInPage}>
                 Sign-in
               </Button>
 
-              <Button type="button" color="secondary" onClick={goToSignUpPage}>
+              <Button type='button' color='secondary' onClick={goToSignUpPage}>
                 Sign-up
               </Button>
             </CenteredVertialLayout>

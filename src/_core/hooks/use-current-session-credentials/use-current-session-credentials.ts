@@ -1,9 +1,10 @@
-import { useMemo } from "react";
+import { useMemo } from 'react';
 
-import { User } from "@circle-vibe/shared";
-import { AUTH_TOKEN_KEY, SESSION_USER_KEY } from "@core/constants";
-import { cookiesService, localStorageService } from "@core/services";
-import { setAuthToken } from "@core/utils";
+import { User } from '@circle-vibe/shared';
+
+import { AUTH_TOKEN_KEY, SESSION_USER_KEY } from '@core/constants';
+import { cookiesService, localStorageService } from '@core/services';
+import { setAuthToken } from '@core/utils';
 
 export const useCurrentSessionCredentials = () => {
   const token: string | undefined = cookiesService.get(AUTH_TOKEN_KEY);
@@ -23,10 +24,13 @@ export const useCurrentSessionCredentials = () => {
     localStorageService.set(SESSION_USER_KEY, user);
   };
 
-  return useMemo(() => ({
-    token,
-    currentUser,
-    setToken,
-    setCurrentUser,
-  }), [token, currentUser]);
-}
+  return useMemo(
+    () => ({
+      token,
+      currentUser,
+      setToken,
+      setCurrentUser,
+    }),
+    [token, currentUser],
+  );
+};

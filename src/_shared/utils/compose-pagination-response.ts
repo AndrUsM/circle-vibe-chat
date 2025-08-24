@@ -1,4 +1,4 @@
-import { PaginatedResponse } from "@circle-vibe/shared";
+import { PaginatedResponse } from '@circle-vibe/shared';
 
 export const composePaginationResponse = (response: PaginatedResponse<any>) => {
   return {

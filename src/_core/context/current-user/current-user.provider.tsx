@@ -1,9 +1,10 @@
-import { createContext, useCallback, useMemo, useState } from "react";
+import { createContext, useCallback, useMemo, useState } from 'react';
 
-import { User } from "@circle-vibe/shared";
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import { User } from '@circle-vibe/shared';
 
-import { useCurrentSessionCredentials } from "@core/hooks";
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
+
+import { useCurrentSessionCredentials } from '@core/hooks';
 
 export interface CurrentUserContext {
   user: User;
@@ -11,21 +12,11 @@ export interface CurrentUserContext {
   clear: VoidFunction;
 }
 
-export const CurrentUserContext = createContext<CurrentUserContext | undefined>(
-  undefined
-);
+export const CurrentUserContext = createContext<CurrentUserContext | undefined>(undefined);
 
-export const CurrentUserProvider: ExtendedReactFunctionalComponent = ({
-  children,
-}) => {
-  const {
-    currentUser,
-    setCurrentUser,
-    setToken,
-  } = useCurrentSessionCredentials();
-  const [user, setUser] = useState<User | null>(
-    currentUser,
-  );
+export const CurrentUserProvider: ExtendedReactFunctionalComponent = ({ children }) => {
+  const { currentUser, setCurrentUser, setToken } = useCurrentSessionCredentials();
+  const [user, setUser] = useState<User | null>(currentUser);
 
   const clear = () => {
     setUser(null);
@@ -43,12 +34,8 @@ export const CurrentUserProvider: ExtendedReactFunctionalComponent = ({
       clear,
       setUser: saveUser,
     }),
-    [user]
+    [user],
   );
 
-  return (
-    <CurrentUserContext.Provider value={state}>
-      {children}
-    </CurrentUserContext.Provider>
-  );
+  return <CurrentUserContext.Provider value={state}>{children}</CurrentUserContext.Provider>;
 };

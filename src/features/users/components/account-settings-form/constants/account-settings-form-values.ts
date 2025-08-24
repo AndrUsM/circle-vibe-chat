@@ -1,18 +1,18 @@
-import { AccountSettingsFormValues } from "../types";
+import { AccountSettingsFormValues } from '../types';
 
 export const ACCOUNT_SETTINGS_FORM_VALUES: AccountSettingsFormValues = {
-  username: "",
-  firstname: "",
-  surname: "",
-  avatarUrl: "",
+  username: '',
+  firstname: '',
+  surname: '',
+  avatarUrl: '',
   birthDate: undefined,
-  password: "",
-  passwordConfirmation: "",
+  password: '',
+  passwordConfirmation: '',
   isHiddenContactInfo: false,
   isAllowedToSearch: false,
-  city: "",
+  city: '',
   country: undefined,
-  email: "",
-  primaryPhone: "",
+  email: '',
+  primaryPhone: '',
   type: undefined,
-}
+};

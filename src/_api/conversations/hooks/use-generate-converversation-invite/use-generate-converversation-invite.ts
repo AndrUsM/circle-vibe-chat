@@ -1,4 +1,4 @@
-import { request } from "@core/request";
+import { request } from '@core/request';
 
 interface UseGenerateConversationInviteOptions {
   conversationId: number;
@@ -12,7 +12,7 @@ export const useGenerateConversationInvite = () => {
 
     const response = await request<string>({
       url: `chat/${conversationId}/invite`,
-      method: "POST",
+      method: 'POST',
       data: {
         targetUserId,
         fromChatParticipantId,
