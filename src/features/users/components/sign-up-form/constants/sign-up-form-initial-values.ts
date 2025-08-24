@@ -7,6 +7,7 @@ export interface SignUpFormInput {
   birthDate?: Date;
   password: string;
   passwordConfirmation: string;
+  avatarUrl: string | null;
   avatar: File | null;
   isHiddenContactInfo: boolean;
   isAllowedToSearch: boolean;
@@ -24,6 +25,7 @@ export const SIGN_UP_FORM_INITIAL_VALUES: SignUpFormInput = {
   birthDate: undefined,
   password: "",
   passwordConfirmation: "",
+  avatarUrl: null,
   avatar: null,
   primaryPhone: "",
   isAllowedToSearch: true,

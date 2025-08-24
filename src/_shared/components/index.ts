@@ -6,3 +6,5 @@ export * from './pagination';
 export * from './table';
 export * from './back-navigation-button';
 export * from './filters';
+export * from './file-upload-form';
+export * from './avatar-preview';

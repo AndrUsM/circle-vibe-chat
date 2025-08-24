@@ -1,0 +1,39 @@
+.border-inherit {
+  border-color: inherit;
+}
+
+.border-current {
+  border-color: currentColor;
+}
+
+.border-primary {
+  border-color: var(--cv-primary);
+}
+
+.border-secondary {
+  border-color: var(--cv-secondary);
+}
+
+.border-dark {
+  border-color: var(--cv-dark);
+}
+
+.border-base {
+  border-color: var(--cv-base);
+}
+
+.border-info {
+  border-color: var(--cv-info);
+}
+
+.border-success {
+  border-color: var(--cv-success);
+}
+
+.border-warning {
+  border-color: var(--cv-warning);
+}
+
+.border-danger {
+  border-color: var(--cv-danger);
+}

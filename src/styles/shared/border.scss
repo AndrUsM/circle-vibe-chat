@@ -1,0 +1,129 @@
+.border {
+  border-width: 1px;
+}
+
+@for $i from 1 through 12 {
+  .border-#{$i} {
+    border-width: #{$i}px;
+  }
+}
+
+.border-x {
+  border-inline-width: 1px;
+}
+
+@for $i from 1 through 12 {
+  .border-x-#{$i} {
+    border-inline-width: #{$i}px;
+  }
+}
+
+.border-y {
+  border-block-width: 1px;
+}
+
+@for $i from 1 through 12 {
+  .border-y-#{$i} {
+    border-block-width: #{$i}px;
+  }
+}
+
+.border-s {
+  border-inline-start-width: 1px;
+}
+
+@for $i from 1 through 12 {
+  .border-s-#{$i} {
+    border-inline-start-width: #{$i}px;
+  }
+}
+
+.border-e {
+  border-inline-end-width: 1px;
+}
+
+@for $i from 1 through 12 {
+  .border-e-#{$i} {
+    border-inline-end-width: #{$i}px;
+  }
+}
+
+.border-t {
+  border-top-width: 1px;
+}
+
+@for $i from 1 through 12 {
+  .border-t-#{$i} {
+    border-top-width: #{$i}px;
+  }
+}
+
+.border-r {
+  border-right-width: 1px;
+}
+
+@for $i from 1 through 12 {
+  .border-r-#{$i} {
+    border-right-width: #{$i}px;
+  }
+}
+.border-b {
+  border-bottom-width: 1px;
+}
+
+@for $i from 1 through 12 {
+  .border-b-#{$i} {
+    border-bottom-width: #{$i}px;
+  }
+}
+
+.border-l {
+  border-left-width: 1px;
+}
+
+@for $i from 1 through 12 {
+  .border-l-#{$i} {
+    border-left-width: #{$i}px;
+  }
+}
+
+// Divide utilities
+.divide-x {
+  & > :not(:last-child) {
+    border-inline-start-width: 0;
+    border-inline-end-width: 1px;
+  }
+}
+
+@for $i from 1 through 12 {
+  .divide-x-#{$i} {
+    & > :not(:last-child) {
+      border-inline-start-width: 0;
+      border-inline-end-width: #{$i}px;
+    }
+  }
+}
+
+.divide-y {
+  & > :not(:last-child) {
+    border-top-width: 0;
+    border-bottom-width: 1px;
+  }
+}
+
+@for $i from 1 through 12 {
+  .divide-y-#{$i} {
+    & > :not(:last-child) {
+      border-top-width: 0;
+      border-bottom-width: #{$i}px;
+    }
+  }
+}
+
+.divide-x-reverse {
+  --tw-divide-x-reverse: 1;
+}
+
+.divide-y-reverse {
+  --tw-divide-y-reverse: 1;
+}

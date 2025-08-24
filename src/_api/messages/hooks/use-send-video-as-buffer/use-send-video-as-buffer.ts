@@ -1,10 +1,12 @@
 import { useCallback } from "react";
-import { useSendFile } from "../use-send-file";
 import {
   ChatSocketCommand,
   SendMessageChatSocketParams,
+  ConversationBucketNameEnum,
 } from "@circle-vibe/shared";
 import { useNotification, useSocket } from "@core/hooks";
+import { useSendFile } from "@api/messages";
+
 import { composeSendVideoFileMessageParams } from "../use-save-file-as-chunk/utils";
 
 export const useSendVideoAsBuffer = () => {
@@ -28,7 +30,7 @@ export const useSendVideoAsBuffer = () => {
         content: `Started uploading video ${file.name}`,
       });
 
-      const video = await uploadVideo(file);
+      const video = await uploadVideo(file, ConversationBucketNameEnum.CONVERSATIONS);
       const { filePath, optimisedFilePath } = video;
 
       socket.emit(

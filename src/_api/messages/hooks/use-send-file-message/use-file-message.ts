@@ -1,6 +1,6 @@
-import { ChatSocketCommand } from "@circle-vibe/shared";
+import { ChatSocketCommand, ConversationBucketNameEnum } from "@circle-vibe/shared";
 
-import { useSendFile } from "../use-send-file/use-send-file";
+import { useSendFile } from "@api/messages";
 import { useSocket } from "@core/hooks";
 
 import {
@@ -22,8 +22,8 @@ export const useSendFileMessage = () => {
     const fileType = getFileType(file);
 
     const fileUrl: IFileUrl = await (fileType === "IMAGE"
-      ? uploadImage(file)
-      : uploadFile(file));
+      ? uploadImage(file, ConversationBucketNameEnum.CONVERSATIONS)
+      : uploadFile(file, ConversationBucketNameEnum.CONVERSATIONS));
 
     const payload = composeCreateMessageFileParams(
       messageInputDto,

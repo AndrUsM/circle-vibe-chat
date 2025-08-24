@@ -19,6 +19,10 @@
 @use "./shared/images.scss";
 @use "./shared/animations.scss";
 @use "./shared/image.scss";
+@use "./shared/border.scss";
+@use "./shared/border-color.scss";
+@use "./shared/border-style.scss";
+@use "./shared/box-shadow.scss";
 
 // SPECIFIC STYLES
 @use "./shared/element";

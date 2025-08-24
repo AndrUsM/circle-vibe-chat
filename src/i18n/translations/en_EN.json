@@ -13,6 +13,7 @@
   "http-request.general-internal-server-error.message": "Something went wrong, we will work on it",
   "login.wrong-credentials.message": "Please check email or password",
   "login.sign-in.submit-button": "Sign in",
+  "login.sign-up.submit-button": "Sign-up",
   "login.restore-password.button": "Restore password",
   "login.create-account.button": "Create Account",
   "conversations.send.button": "Send",

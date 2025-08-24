@@ -2,12 +2,12 @@ import {
   UploadFileOutputDto,
   UploadImageOutputDto,
   UploadVideoOutputDto,
+  ConversationBucketNameEnum,
 } from "@circle-vibe/shared";
-import { CONVERSATION_BUCKET_NAME } from "@core/constants";
 import { fileServerRequest } from "@core/request";
 
 export const useSendFile = () => {
-  const uploadFile = async (file: File) => {
+  const uploadFile = async (file: File, bucket: ConversationBucketNameEnum) => {
     const data = new FormData();
     data.append("file", file);
 
@@ -16,14 +16,14 @@ export const useSendFile = () => {
       url: "/files/upload",
       data,
       params: {
-        bucket: CONVERSATION_BUCKET_NAME,
+        bucket,
       }
     });
 
     return response.data as UploadFileOutputDto;
   };
 
-  const uploadImage = async (file: File) => {
+  const uploadImage = async (file: File, bucket: ConversationBucketNameEnum) => {
     const data = new FormData();
     data.append("image", file);
 
@@ -32,14 +32,14 @@ export const useSendFile = () => {
       url: "/images/upload",
       data,
       params: {
-        bucket: CONVERSATION_BUCKET_NAME,
+        bucket,
       }
     });
 
     return response.data as UploadImageOutputDto;
   };
 
-  const uploadVideo = async (file: File) => {
+  const uploadVideo = async (file: File, bucket: ConversationBucketNameEnum) => {
     const data = new FormData();
     data.append("video", file);
 
@@ -48,7 +48,7 @@ export const useSendFile = () => {
       url: "/videos/upload",
       data,
       params: {
-        bucket: CONVERSATION_BUCKET_NAME,
+        bucket,
       }
     });
 
