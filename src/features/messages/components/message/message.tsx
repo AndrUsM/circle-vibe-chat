@@ -110,7 +110,11 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
           {/* SENDER, TIMESTAMP */}
           <ClusterLayout space='0.5rem' alignItems='center'>
             <Show.When isTrue={Boolean(sender) && !isSavedMessages}>
-              <UserAvatar url={avatarUrl ?? undefined} fallback={imageFallback} />
+              <UserAvatar
+                user={sender.user}
+                url={avatarUrl ?? undefined}
+                fallback={imageFallback}
+              />
 
               <div className='italic'>{senderFullName}</div>
             </Show.When>

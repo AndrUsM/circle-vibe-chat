@@ -42,7 +42,7 @@ export const useSignIn = () => {
       });
 
       void navigate(`/app/${PrivatePagesEnum.CONVERSATIONS}`);
-    } catch () {
+    } catch {
       notification({
         type: 'warning',
         content: t('login.wrong-credentials.message'),

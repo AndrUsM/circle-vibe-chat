@@ -1,17 +1,11 @@
-import React, { ChangeEvent, useCallback, useRef } from 'react';
+import React, { ChangeEvent, useRef } from 'react';
 
-import {
-  ConversationBucketNameEnum,
-  UploadFileOutputDto,
-  UploadImageOutputDto,
-  UploadVideoOutputDto,
-} from '@circle-vibe/shared';
+import { ConversationBucketNameEnum } from '@circle-vibe/shared';
 
 import {
   CenteredVertialLayout,
   FormControl,
   FormControlError,
-  Button,
   Icon,
   Input,
   Label,
@@ -24,21 +18,12 @@ import {
 import classNames from 'classnames';
 
 import { FileUploadImagePreview } from '@shared/components';
-import { useConfirmation } from '@shared/hooks';
+import { useAfterUploadingAction } from '@shared/components/file-upload-form/hooks/use-after-uploading-action';
 
-import { useNotification } from '@core/hooks';
 import { composeFileUrl } from '@core/utils';
 
-import { useSendFile } from '@api/messages';
-
-type ComposedFileUploadResponse = UploadFileOutputDto | UploadImageOutputDto | UploadVideoOutputDto;
-
-export enum FileUploadFormFileType {
-  FILE = 'file',
-  IMAGE = 'image',
-  VIDEO = 'video',
-  AUDIO = 'audio',
-}
+import { FileUploadFormFileType } from './enums';
+import { ComposedFileUploadResponse } from './types';
 
 interface FileUploadFormProps {
   label: string;
@@ -61,34 +46,7 @@ export const FileUploadForm: React.FC<FileUploadFormProps> = ({
 }) => {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const { cilCloudUpload } = useIcons();
-  const { uploadImage } = useSendFile();
-  const notification = useNotification();
-  const confirmation = useConfirmation();
-
-  const afterUploadAction = useCallback(async (file: File) => {
-    await confirmation('Are you sure you want to upload image?');
-
-    try {
-      const response = await uploadImage(file, bucket);
-
-      notification({
-        type: 'success',
-        content: 'Avatar successfully uploaded',
-      });
-
-      if (!response) {
-        return;
-      }
-
-      afterUpload(response);
-    } catch {
-      notification({
-        type: 'error',
-        content: 'An error occurred while uploading image',
-      });
-    }
-  }, []);
-
+  const afterUploadAction = useAfterUploadingAction(afterUpload, bucket);
   const openFileSelectionDialog = () => {
     fileInputRef?.current?.click();
   };
@@ -130,24 +88,12 @@ export const FileUploadForm: React.FC<FileUploadFormProps> = ({
         </Show.When>
 
         <Show.When isTrue={Boolean(url) && type === FileUploadFormFileType.IMAGE}>
-          <Tooltip title={'Change file'}>
-            <div onClick={openFileSelectionDialog} className='w-full'>
-              <FileUploadImagePreview url={composeFileUrl(String(url), bucket)} />
-            </div>
+          <Tooltip title='Change file' className='cursor-pointer mx-auto'>
+            <FileUploadImagePreview
+              onClick={openFileSelectionDialog}
+              url={composeFileUrl(String(url), bucket)}
+            />
           </Tooltip>
-
-          <Button
-            color='secondary'
-            className='w-fit mx-auto'
-            onClick={() =>
-              afterUpload({
-                optimisedFilePath: '',
-                filePath: '',
-              })
-            }
-          >
-            Clear selection
-          </Button>
         </Show.When>
 
         <Show.When isTrue={Boolean(url) && type !== FileUploadFormFileType.IMAGE}>

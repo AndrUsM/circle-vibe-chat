@@ -1,1 +1,1 @@
-export * from './file-upload-image-preview.tsx';
+export * from './file-upload-image-preview';

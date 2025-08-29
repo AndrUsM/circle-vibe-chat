@@ -11,16 +11,6 @@
   }
 }
 
-// underline
-// text-decoration-line: underline;
-// overline
-// text-decoration-line: overline;
-// line-through
-// text-decoration-line: line-through;
-// no-underline
-// text-decoration-line: none;
-
-
 .underline {
   text-decoration: underline;
 }
@@ -162,6 +152,23 @@
   overflow: hidden;
   display: -webkit-box;
   -webkit-box-orient: vertical;
+}
+
+.text-uppercase {
+  text-transform: uppercase;
+}
+
+.text-lowercase {
+  text-transform: lowercase;
+}
+
+.text-bracket {
+  &:before {
+    content: "(";
+  }
+  &:after {
+    content: ")";
+  }
 }
 
 @for $i from 0 through 100 {

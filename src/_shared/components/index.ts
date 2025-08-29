@@ -8,3 +8,4 @@ export * from './back-navigation-button';
 export * from './filters';
 export * from './file-upload-form';
 export * from './avatar-preview';
+export * from './user-info-popover';

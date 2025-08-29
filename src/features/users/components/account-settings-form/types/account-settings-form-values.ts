@@ -1,10 +1,11 @@
 import { CountryCode, UserType } from '@circle-vibe/shared';
 
 export interface AccountSettingsFormValues {
+  avatarUrl?: string;
+  avatarUrlOptimized?: string;
   username?: string;
   firstname?: string;
   surname?: string;
-  avatarUrl?: string;
   birthDate?: string;
   password?: string;
   isHiddenContactInfo?: boolean;

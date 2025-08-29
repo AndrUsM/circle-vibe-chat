@@ -3,10 +3,11 @@ import { formatDateTimeForBackend } from '@circle-vibe/components';
 import { AccountSettingsFormValues } from '@features/users/components/account-settings-form/types';
 
 export interface IComposeUpdateUserPayload {
+  avatarUrl?: string;
+  avatarUrlOptimized?: string;
   username?: string;
   firstname?: string;
   surname?: string;
-  avatarUrl?: string;
   birthDate?: string;
   password?: string;
   isHiddenContactInfo?: boolean;
@@ -26,6 +27,7 @@ export const composeUpdateUserPayload = (
     firstname: user.firstname,
     surname: user.surname,
     avatarUrl: user.avatarUrl,
+    avatarUrlOptimized: user.avatarUrlOptimized,
     birthDate: user.birthDate ? formatDateTimeForBackend(new Date(user.birthDate)) : undefined,
     password: user.password?.length ? user.password : undefined,
     isHiddenContactInfo: user.isHiddenContactInfo,
