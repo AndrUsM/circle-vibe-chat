@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import React, { RefObject, useCallback, useRef } from 'react';
 
 import { MessageFileEntityType } from '@circle-vibe/shared';
 
@@ -45,9 +45,11 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
   onCreateMessage,
   onStartTyping,
   onStopTyping,
+  children,
 }) => {
   const { cilFile, cilSend } = useIcons();
   const { t } = useTranslation();
+  const textareaRef = useRef<RefObject<RefMDEditor>>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fileMimeType = useFileEntityType(fileInputRef);
   const {
@@ -126,13 +128,14 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
           <StackLayout space='0.5rem' alignItems='flex-start' data-color-mode='light'>
             <FormikFormControl formFieldName='content' className='w-full'>
               <MDEditor
+                ref={textareaRef}
                 preview='edit'
                 highlightEnable={false}
                 fullscreen={false}
                 hideToolbar={true}
                 enableScroll={false}
-                height={100}
-                minHeight={100}
+                height={50}
+                minHeight={50}
                 maxHeight={500}
                 textareaProps={{
                   placeholder: t('conversations.send.input.placeholder'),
@@ -146,13 +149,15 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
               />
             </FormikFormControl>
 
-            <ClusterLayout justifyContent='flex-end' space='0.5rem'>
+            <ClusterLayout justifyContent='flex-end' space='0.5rem' alignItems='flex-start'>
+              {children}
+
               <Button
                 disabled={Boolean(values.file?.name)}
                 type='button'
                 onClick={openFileSelectionDialog}
               >
-                <Icon size={18} color='var(--cv-light)' name={cilFile} />
+                <Icon size={16} color='var(--cv-light)' name={cilFile} />
 
                 <input
                   type='file'
@@ -169,10 +174,9 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
                 className='text-center'
                 disabled={!values.file?.name && !values.content.length}
                 color='primary'
-                size='large'
               >
-                <Tooltip title={t('conversations.send.button')}>
-                  <Icon color='var(--cv-light)' size={18} name={cilSend} />
+                <Tooltip title={t('conversations.send.button')} className='flex '>
+                  <Icon color='var(--cv-light)' size={16} name={cilSend} />
                 </Tooltip>
               </FormSubmitButton>
             </ClusterLayout>

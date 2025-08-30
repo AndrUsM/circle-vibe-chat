@@ -1,3 +1,31 @@
+@mixin responsive-overflow-by-direction($direction: 'both') {
+  @media (hover: hover) {
+    overflow-#{$direction}: hidden;
+
+    &:hover {
+      overflow-#{$direction}: auto !important;
+    }
+  }
+
+  @media (hover: none) {
+    overflow-#{$direction}: auto !important;
+  }
+}
+
+@mixin responsive-overflow() {
+  @media (hover: hover) {
+    overflow: hidden;
+
+    &:hover {
+      overflow: auto !important;
+    }
+  }
+
+  @media (hover: none) {
+    overflow: auto !important;
+  }
+}
+
 .overflow-auto      { overflow: auto; }
 .overflow-hidden    { overflow: hidden; }
 .overflow-visible   { overflow: visible; }
@@ -13,14 +41,19 @@
 .overflow-y-scroll  { overflow-y: scroll; }
 
 .overflow-y-container {
-  overflow: hidden;
   position: relative;
   scrollbar-gutter: stable;
   scrollbar-width: thin;
 
-  &:hover {
-    overflow-y: auto !important;
-  }
+  @include responsive-overflow-by-direction('y');
+}
+
+.overflow-y-container-no-gutter {
+  position: relative;
+  scrollbar-gutter: unset;
+  scrollbar-width: thin;
+
+  @include responsive-overflow-by-direction('x');
 }
 
 .overflow-x-container {
@@ -29,9 +62,7 @@
   scrollbar-gutter: stable;
   scrollbar-width: thin;
 
-  &:hover {
-    overflow-x: auto !important;
-  }
+  @include responsive-overflow-by-direction('x');
 }
 
 .overflow-container {
@@ -40,7 +71,5 @@
   scrollbar-gutter: stable;
   scrollbar-width: thin;
 
-  &:hover {
-    overflow: auto !important;
-  }
+  @include responsive-overflow();
 }

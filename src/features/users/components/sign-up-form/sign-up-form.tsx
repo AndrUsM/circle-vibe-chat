@@ -100,10 +100,6 @@ export const SignUpForm: React.FC = () => {
             <FormControlInput type='date' />
           </FormGroup>
 
-          <FormGroup label='Avatar' formFieldName='avatar'>
-            <FormControlInput type='file' accept='image/*' />
-          </FormGroup>
-
           <FormGroup label='User Type' formFieldName='type'>
             <FormControlSelect>
               {USER_TYPE_DROPDOWN_OPTIONS.map(({ key, label }) => (

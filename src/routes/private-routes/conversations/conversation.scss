@@ -15,9 +15,31 @@
   container-name: messageResizerSection;
 }
 
+.toggle-chats-section-button {
+  display: none;
+}
+
 @container messageResizerSection (max-width: 250px) {
   .chat-actions-menu {
     display: none;
     width: 0;
+  }
+
+  .chats-section_desktop-only-content {
+    display: none;
+  }
+
+  .chat {
+    min-height: 3rem;
+  }
+}
+
+@container messageResizerSection (max-width: 100px) {
+  .chat {
+    display: none;
+  }
+
+  .toggle-chats-section-button {
+    display: block;
   }
 }

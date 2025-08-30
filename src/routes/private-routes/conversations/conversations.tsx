@@ -1,38 +1,39 @@
 import React, { Suspense, useCallback, useRef } from 'react';
 
 import {
-  StackLayout,
-  HorizontalDivider,
-  FormControl,
   Button,
   CenteredVertialLayout,
-  Input,
-  Modal,
+  FormControl,
+  HorizontalDivider,
   Icon,
-  Show,
+  Input,
   LoadingOverlay,
-  useIcons,
+  Modal,
+  Show,
+  StackLayout,
   useBoolean,
+  useIcons,
 } from '@circle-vibe/components';
 
 import * as Resizer from '@column-resizer/react';
+import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { PaginationControls, PaginationScrollButton, Filters } from '@shared/components';
+import { Filters, PaginationControls, PaginationScrollButton } from '@shared/components';
 import { useConfirmation, useScrollToBlockPosition } from '@shared/hooks';
 
-import { useConversationGateway, useInitialChatSelection, Chat } from '@features/conversation';
+import { Chat, useConversationGateway, useInitialChatSelection } from '@features/conversation';
 import {
-  usePreviewFileState,
   Message,
-  useUpdateMessageState,
+  MessageForm,
+  MESSAGES_FILTER_BAR_FORM_INITIAL_VALUES,
+  MessagesFilterBar,
+  MessagesFilterBarFormValues,
   MessageUpdateDialog,
   MessageUpdateFormValues,
-  MessageForm,
-  MessagesFilterBar,
-  MESSAGES_FILTER_BAR_FORM_INITIAL_VALUES,
-  MessagesFilterBarFormValues,
+  usePreviewFileState,
+  useUpdateMessageState,
 } from '@features/messages';
 
 import { useDeleteMessage } from '@api/messages';
@@ -43,7 +44,8 @@ import './conversation.scss';
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
-  const { cilKeyboard, cilFilter } = useIcons();
+  const { cilKeyboard, cilFilter, cilArrowThickToRight } = useIcons();
+  const chatsSectionRef = useRef<HTMLDivElement>(null);
   const confirm = useConfirmation();
   const onScrollToPosition = useScrollToBlockPosition();
   const deleteMessage = useDeleteMessage();
@@ -54,6 +56,7 @@ export const Conversations: React.FC = () => {
 
   const [openChatCreationModal, toggleOpenChatCreationModal, setOpenChatCreationModal] =
     useBoolean(false);
+  const [openMessageControls, toggleMessageControls] = useBoolean(false);
   const {
     openMessageUpdateDialog,
     onCloseMessageUpdateDialog,
@@ -67,6 +70,14 @@ export const Conversations: React.FC = () => {
     }
 
     onScrollToPosition(messagesRef, 'end', 'end');
+  };
+
+  const onExpandChats = () => {
+    if (!chatsSectionRef?.current) {
+      return;
+    }
+
+    chatsSectionRef.current.style.flexGrow = '1';
   };
 
   const {
@@ -120,11 +131,20 @@ export const Conversations: React.FC = () => {
 
       <Resizer.Container className='conversations'>
         <Resizer.Section
+          ref={chatsSectionRef}
           className='relative flex items-center justify-center w-full messages-resizer-section'
-          minSize={250}
+          minSize={30}
         >
-          <StackLayout className='w-full py-3 pl-3'>
-            <StackLayout space='1rem' justifyContent='justify-between' className='flex-wrap pr-3'>
+          <Button className='toggle-chats-section-button' color='secondary' onClick={onExpandChats}>
+            <Icon name={cilArrowThickToRight} color='var(--cv-light)' size={16} />
+          </Button>
+
+          <StackLayout className='w-full p-3 overflow-x-hidden'>
+            <StackLayout
+              space='1rem'
+              justifyContent='justify-between'
+              className='flex-wrap chats-section_desktop-only-content'
+            >
               <FormControl className='w-full'>
                 <Input
                   className='p-4 rounded-2'
@@ -140,7 +160,7 @@ export const Conversations: React.FC = () => {
               </Button>
             </StackLayout>
 
-            <StackLayout className='overflow-y-container'>
+            <StackLayout className='overflow-y-container-no-gutter'>
               {chats?.data.map((chat) => (
                 <Chat
                   key={chat.id}
@@ -167,10 +187,10 @@ export const Conversations: React.FC = () => {
           </Show.When>
         </Resizer.Section>
 
-        <Resizer.Bar size={7} className='transition bg-secondary cursor-resize' />
+        <Resizer.Bar size={10} className='transition bg-tertiary cursor-resize' />
 
-        <Resizer.Section className='relative flex items-center w-full' minSize={100}>
-          <StackLayout justifyContent='end' className='w-full p-3'>
+        <Resizer.Section className='relative flex items-center w-full' minSize={175}>
+          <StackLayout justifyContent='end' className='w-full p-3 overflow-x-hidden'>
             <Filters initialValue={MESSAGES_FILTER_BAR_FORM_INITIAL_VALUES}>
               {({ isActive, filters }) => (
                 <>
@@ -187,7 +207,7 @@ export const Conversations: React.FC = () => {
                     <HorizontalDivider color='var(--cv-bg-secondary)' height='0.2rem' />
                   </Show.When>
 
-                  <StackLayout ref={messagesRef} className='overflow-y-container'>
+                  <StackLayout ref={messagesRef} className='overflow-y-container overflow-x-hidden'>
                     {(messages?.data ?? [])?.map((message) => (
                       <Suspense key={message.id} fallback={<LoadingOverlay />}>
                         <Message
@@ -209,46 +229,59 @@ export const Conversations: React.FC = () => {
                     </Show.When>
                   </StackLayout>
 
-                  <CenteredVertialLayout space='0.5rem' justifyContent='space-between'>
-                    <PaginationControls
-                      paginatedResponse={messages}
-                      currentPage={messagesPage}
-                      onPageChange={triggerGetPaginatedMessages}
-                    />
+                  <Show.When isTrue={openMessageControls}>
+                    <CenteredVertialLayout space='0.5rem' justifyContent='space-between'>
+                      <PaginationControls
+                        paginatedResponse={messages}
+                        currentPage={messagesPage}
+                        onPageChange={triggerGetPaginatedMessages}
+                      />
 
-                    <Show>
-                      <Show.When isTrue={isAnyoneTyping}>
-                        <Icon
-                          className='typing-indicator'
-                          name={cilKeyboard}
-                          color='var(--cv-primary)'
-                          size={32}
-                        />
-                      </Show.When>
-                      <Show.Else>
-                        <div></div>
-                      </Show.Else>
-                    </Show>
+                      <Show>
+                        <Show.When isTrue={isAnyoneTyping}>
+                          <Icon
+                            className='typing-indicator'
+                            name={cilKeyboard}
+                            color='var(--cv-primary)'
+                            size={32}
+                          />
+                        </Show.When>
+                        <Show.Else>
+                          <div />
+                        </Show.Else>
+                      </Show>
 
-                    <CenteredVertialLayout space='0.5rem'>
-                      <Button
-                        className='messages-filter-button'
-                        color={isActive ? 'primary' : 'secondary'}
-                        onClick={triggerFiltersBarVisibility}
-                      >
-                        <Icon color='var(--cv-light)' name={cilFilter} size={12} />
-                      </Button>
+                      <CenteredVertialLayout space='0.5rem'>
+                        <Button
+                          className='messages-filter-button'
+                          color={isActive ? 'primary' : 'secondary'}
+                          onClick={triggerFiltersBarVisibility}
+                        >
+                          <Icon color='var(--cv-light)' name={cilFilter} size={12} />
+                        </Button>
 
-                      <PaginationScrollButton messagesRef={messagesRef} />
+                        <PaginationScrollButton messagesRef={messagesRef} />
+                      </CenteredVertialLayout>
                     </CenteredVertialLayout>
-                  </CenteredVertialLayout>
+                  </Show.When>
 
                   <Show.When isTrue={isAnyChatSelected && Boolean(chatParticipant?.id)}>
                     <MessageForm
                       onStopTyping={triggerStopTypingNotification}
                       onStartTyping={triggerStartTypingNotification}
                       onCreateMessage={handleSendMessage}
-                    />
+                    >
+                      <Button
+                        color='secondary'
+                        type='button'
+                        className={classNames({
+                          'line-through': !openMessageControls,
+                        })}
+                        onClick={toggleMessageControls}
+                      >
+                        Tools
+                      </Button>
+                    </MessageForm>
                   </Show.When>
                 </>
               )}

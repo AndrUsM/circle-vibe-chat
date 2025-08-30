@@ -58,10 +58,13 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
       <StackLayout space='0.15rem' className='text-sm max-w-full'>
         <span className='block font-bold truncate'>{chatName}</span>
 
-        <span className='truncate'>Last seen: {format(updatedAt)}</span>
+        <span className='truncate'>
+          <span className='chats-section_desktop-only-content'>Last seen: </span>
+          <span>{format(updatedAt)}</span>
+        </span>
 
         <Show.When isTrue={Boolean(lastMessage)}>
-          <div className='p-1'>
+          <div className='p-1 chats-section_desktop-only-content'>
             <MessageShortPreview message={lastMessage as SharedEnums.Message} />
           </div>
         </Show.When>

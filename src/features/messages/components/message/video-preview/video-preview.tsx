@@ -11,7 +11,7 @@ import { isVideoHasAudioTrack } from '@features/messages/utils';
 interface VideoPreviewProps {
   videos: MessageFile[];
   isMuted?: boolean;
-  onOpenFile: (file: MessageFile) => void;
+  onOpenFile: (_file: MessageFile) => void;
 }
 
 export const VideoPreview: React.FC<VideoPreviewProps> = ({
@@ -43,7 +43,6 @@ export const VideoPreview: React.FC<VideoPreviewProps> = ({
     <video
       ref={videoRef}
       className='message-video rounded-2'
-      width={320}
       height={240}
       controls
       muted
