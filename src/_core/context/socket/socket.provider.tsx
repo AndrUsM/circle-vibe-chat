@@ -21,15 +21,18 @@ export const SocketContext = createContext<ISocketContext | null>(null);
 
 export const SocketProvider: ExtendedReactFunctionalComponent = ({ children }) => {
   const { user } = useCurrentUser();
-  const socket = io(`http://localhost:3002/${GatewayNamespaces.CHAT_MAIN}`, {
-    transports: ['websocket'],
-    autoConnect: false,
-    reconnection: false,
-    auth: {
-      token: getAuthToken(),
-      personalToken: user?.privateToken,
+  const socket = io(
+    `${import.meta.env.VITE_APP_CHAT_SOCKET_API_URL}/${GatewayNamespaces.CHAT_MAIN}`,
+    {
+      transports: ['websocket'],
+      autoConnect: false,
+      reconnection: false,
+      auth: {
+        token: getAuthToken(),
+        personalToken: user?.privateToken,
+      },
     },
-  });
+  );
   const [fileSocket, setFileSocket] = useState<Socket | null>(null);
 
   const createFileSocketConnection = useCallback(async () => {
@@ -37,14 +40,17 @@ export const SocketProvider: ExtendedReactFunctionalComponent = ({ children }) =
       return;
     }
 
-    const fileSocketConnection = io(`http://localhost:3005/${GatewayNamespaces.FILE_UPLOAD}`, {
-      transports: ['websocket'],
-      autoConnect: true,
-      reconnection: false,
-      auth: {
-        token: getAuthToken(),
+    const fileSocketConnection = io(
+      `${import.meta.env.VITE_APP_FILE_SERVER_SOCKET_API_URL}/${GatewayNamespaces.FILE_UPLOAD}`,
+      {
+        transports: ['websocket'],
+        autoConnect: true,
+        reconnection: false,
+        auth: {
+          token: getAuthToken(),
+        },
       },
-    });
+    );
 
     setFileSocket(fileSocketConnection);
 
