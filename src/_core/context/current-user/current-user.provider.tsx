@@ -15,7 +15,7 @@ export interface CurrentUserContext {
 export const CurrentUserContext = createContext<CurrentUserContext | undefined>(undefined);
 
 export const CurrentUserProvider: ExtendedReactFunctionalComponent = ({ children }) => {
-  const { currentUser, setCurrentUser, setToken } = useCurrentSessionCredentials();
+  const { currentUser, setCurrentUser } = useCurrentSessionCredentials();
   const [user, setUser] = useState<User | null>(currentUser);
 
   const clear = () => {

@@ -1,6 +1,6 @@
 import React, { useCallback } from 'react';
 
-import { ConversationBucketNameEnum, UserType } from '@circle-vibe/shared';
+import { ConversationBucketNameEnum, UploadImageOutputDto, UserType } from '@circle-vibe/shared';
 
 import {
   Button,
@@ -78,9 +78,9 @@ export const AccountSettingsForm: React.FC = () => {
                 label='Avatar'
                 bucket={ConversationBucketNameEnum.USER_AVATARS}
                 type={FileUploadFormFileType.IMAGE}
-                afterUpload={(fileUrls) => {
+                afterUpload={(fileUrls: UploadImageOutputDto) => {
                   setFieldValue('avatarUrl', fileUrls?.filePath);
-                  setFieldValue('optimisedAvatarUrl', fileUrls?.optimizedFilePath);
+                  setFieldValue('optimisedAvatarUrl', fileUrls?.optimisedFilePath);
                 }}
               />
             </Section.Content>

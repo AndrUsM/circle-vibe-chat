@@ -4,7 +4,6 @@ import { User } from '@circle-vibe/shared';
 
 import { useCurrentSessionCredentials } from '@core/hooks';
 import { request } from '@core/request';
-import { cookiesService, localStorageService } from '@core/services';
 
 import { useRefreshToken } from '../use-refresh-token';
 

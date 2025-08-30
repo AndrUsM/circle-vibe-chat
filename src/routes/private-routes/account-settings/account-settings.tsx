@@ -10,8 +10,8 @@ import { PrivatePagesEnum } from '@core/navigation';
 
 import {
   AccountSettingsForm,
-  InviteAccountSettingsForm,
   AccountSettingsTabs,
+  InviteAccountSettingsForm,
 } from '@features/users';
 
 export const AccountSettings: React.FC = () => {

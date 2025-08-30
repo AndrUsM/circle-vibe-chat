@@ -17,7 +17,7 @@ import {
   useIcons,
 } from '@circle-vibe/components';
 
-import MDEditor from '@uiw/react-md-editor';
+import MDEditor, { RefMDEditor } from '@uiw/react-md-editor';
 import { FormikHelpers, FormikProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 

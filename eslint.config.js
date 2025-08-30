@@ -10,7 +10,7 @@ import pluginReact from 'eslint-plugin-react';
 import pluginReactHooks from 'eslint-plugin-react-hooks';
 import globals from 'globals';
 
-/** @type {import("eslint").Linter.FlatConfig[]} */
+/** @type {import('eslint').Linter.FlatConfig[]} */
 export default [
   js.configs.recommended,
 
@@ -53,7 +53,15 @@ export default [
     },
     rules: {
       // TypeScript rules (if needed)
-      '@typescript-eslint/no-unused-vars': ['warn', { argsIgnorePattern: '^_' }],
+      '@typescript-eslint/no-unused-vars': [
+        'warn',
+        {
+          argsIgnorePattern: '^_',
+          caughtErrorsIgnorePattern: '^_',
+          destructuredArrayIgnorePattern: '^_',
+          varsIgnorePattern: '^_',
+        },
+      ],
 
       // React rules
       'react/react-in-jsx-scope': 'off',
@@ -130,6 +138,11 @@ export default [
 
       // Prettier
       'prettier/prettier': 'error',
+    },
+  },
+  {
+    globals: {
+      VoidFunction: 'readonly',
     },
   },
 ];

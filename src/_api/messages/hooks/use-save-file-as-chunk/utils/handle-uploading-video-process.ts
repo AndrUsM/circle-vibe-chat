@@ -1,4 +1,4 @@
-import { FileVideoServerSocketKeys, FileVideoSocketErrorOutput } from '@circle-vibe/shared';
+import { GenericFileServerSocketKeys } from '@circle-vibe/shared';
 
 import { Socket } from 'socket.io-client';
 
@@ -10,13 +10,10 @@ async function uploadChunks(
     const { value, done } = await reader.read();
     if (done) break;
 
-    videoSocket?.emit<FileVideoSocketErrorOutput>(
-      FileVideoServerSocketKeys.UPLOAD_VIDEO_CHUNK,
-      value,
-    );
+    videoSocket?.emit<GenericFileServerSocketKeys>(GenericFileServerSocketKeys.UPLOAD_CHUNK, value);
   }
 
-  videoSocket?.emit(FileVideoServerSocketKeys.UPLOAD_VIDEO_END);
+  videoSocket?.emit(GenericFileServerSocketKeys.UPLOAD_END);
 }
 
 export const handleUploadingVideoProcess = async (file: File, videoSocket: Socket) => {

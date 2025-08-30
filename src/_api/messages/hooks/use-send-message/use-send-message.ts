@@ -24,7 +24,7 @@ import { useSendVideoAsBuffer } from '../use-send-video-as-buffer';
 export const useSendMessage = (
   chatParticipant: ChatParticipant | null,
   selectedChatId: number | null,
-  setMessagesLoading: (loading: boolean) => void,
+  setMessagesLoading: (_loading: boolean) => void,
 ) => {
   const { socket } = useSocket();
   const notification = useNotification();
@@ -61,7 +61,7 @@ export const useSendMessage = (
 
             resetForm();
             setMessagesLoading(false);
-          } catch (error) {
+          } catch {
             setMessagesLoading(false);
           }
 

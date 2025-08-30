@@ -14,7 +14,6 @@ export const composeAccountSettingsFormValues = (user: User): AccountSettingsFor
       ? formatDateTime(user.birthDate, FormatDateTime.DATE_INPUT)
       : undefined,
     password: '',
-    passwordConfirmation: '',
     isHiddenContactInfo: user.isHiddenContactInfo,
     isAllowedToSearch: user.isAllowedToSearch,
     city: user.city,
