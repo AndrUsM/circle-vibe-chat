@@ -108,7 +108,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
           className='flex-wrap'
         >
           {/* SENDER, TIMESTAMP */}
-          <ClusterLayout space='0.5rem' alignItems='center'>
+          <ClusterLayout space='0.5rem' alignItems='center' className='max-w-full'>
             <Show.When isTrue={Boolean(sender) && !isSavedMessages}>
               <UserAvatar
                 user={sender.user}
@@ -116,10 +116,10 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
                 fallback={imageFallback}
               />
 
-              <div className='italic'>{senderFullName}</div>
+              <div className='italic line-clamp-1 truncate'>{senderFullName}</div>
             </Show.When>
 
-            <div>{formatDateTime(updatedAt, FormatDateTime.DATE_TIME)}</div>
+            <div className='italic line-clamp-1 truncate'>{formatDateTime(updatedAt, FormatDateTime.DATE_TIME)}</div>
           </ClusterLayout>
 
           {/* THREAD INFORMATION, ACTIONS */}
@@ -173,7 +173,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
                 </Button>
               </Show.When>
 
-              <Button color='secondary' size='small' onClick={() => onDeleteMessage(message.id)}>
+              <Button color='danger' size='small' onClick={() => onDeleteMessage(message.id)}>
                 <Icon color='var(--cv-light)' name={icons.cilDelete} size={14} />
               </Button>
             </Show.When>

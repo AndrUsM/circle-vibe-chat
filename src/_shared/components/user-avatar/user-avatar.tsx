@@ -30,6 +30,9 @@ export const UserAvatar: ExtendedReactFunctionalComponent<UserAvatarProps> = ({
   const [isImageLoaded, setIsImageLoaded] = useState(true);
   const { open, referenceProps, contentProps, transitionStyles } = usePopover();
 
+  const isPopoverAvailable = Boolean(user?.id);
+  const popoverReferenceProps = isPopoverAvailable ? referenceProps : {};
+
   return (
     <>
       <Show>
@@ -39,7 +42,7 @@ export const UserAvatar: ExtendedReactFunctionalComponent<UserAvatarProps> = ({
             src={url}
             onError={() => setIsImageLoaded(false)}
             {...rest}
-            {...referenceProps}
+            {...popoverReferenceProps}
           />
         </Show.When>
 
@@ -47,14 +50,14 @@ export const UserAvatar: ExtendedReactFunctionalComponent<UserAvatarProps> = ({
           <div
             className={classNames('user-avatar text-xs', className)}
             {...rest}
-            {...referenceProps}
+            {...popoverReferenceProps}
           >
             {fallback}
           </div>
         </Show.Else>
       </Show>
 
-      <Show.When isTrue={Boolean(user?.id)}>
+      <Show.When isTrue={isPopoverAvailable}>
         <Popover open={open} transitionStyles={transitionStyles} tooltipProps={contentProps}>
           <UserInfoPopover user={user as User} />
         </Popover>

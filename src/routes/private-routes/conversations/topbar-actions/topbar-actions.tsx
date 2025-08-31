@@ -6,6 +6,7 @@ import {
   useIcons,
   Icon,
   Button,
+  IconLayout,
 } from '@circle-vibe/components';
 
 import { useNavigate } from 'react-router-dom';
@@ -13,7 +14,7 @@ import { useNavigate } from 'react-router-dom';
 import { cookiesService, localStorageService } from '@core/services';
 
 export const TopBarActions: ExtendedReactFunctionalComponent = () => {
-  const icons = useIcons();
+  const { cilHamburgerMenu, cilAccountLogout } = useIcons();
   const navigate = useNavigate();
 
   const handleLogout = useCallback(() => {
@@ -24,8 +25,14 @@ export const TopBarActions: ExtendedReactFunctionalComponent = () => {
   }, [navigate]);
 
   return (
-    <Menu button={() => <Icon name={icons.cilHamburgerMenu} size={28} />}>
-      <Button onClick={handleLogout}>Logout</Button>
+    <Menu button={() => <Icon name={cilHamburgerMenu} size={28} />}>
+      <Button onClick={handleLogout}>
+        <IconLayout>
+          <Icon color='var(--cv-light)' name={cilAccountLogout} size={16} />
+
+          <span>Logout</span>
+        </IconLayout>
+      </Button>
     </Menu>
   );
 };

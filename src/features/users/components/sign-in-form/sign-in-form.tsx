@@ -39,7 +39,7 @@ export const AuthorizationForm: React.FC = () => {
       initialValues={AUTHORIZATION_FORM_INITIAL_VALUES}
     >
       <FormGroup isRequired label={'Email'} formFieldName={'email'}>
-        <FormControlInput />
+        <FormControlInput type='email' />
       </FormGroup>
 
       <FormGroup isRequired label='Password' formFieldName='password'>

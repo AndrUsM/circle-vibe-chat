@@ -14,7 +14,7 @@ export const useInitialChatSelection = (
       return;
     }
 
-    const defaultChatId = chats[0].id;
+    const defaultChatId = chats[0]?.id;
     selectChatId(defaultChatId);
   }, [hasSelectedChat, chats]);
 };

@@ -75,7 +75,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   );
 
   const onChatSelect = (chatId: number) => {
-    if (selectedChatId === chatId) {
+    if (selectedChatId === chatId && !messages) {
       return;
     }
 
