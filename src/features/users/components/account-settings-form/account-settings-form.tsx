@@ -1,9 +1,17 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 
-import { ConversationBucketNameEnum, UploadImageOutputDto, UserType } from '@circle-vibe/shared';
+import {
+  ChatParticipant,
+  ConversationBucketNameEnum,
+  getUserFullName,
+  UploadImageOutputDto,
+  UserType,
+} from '@circle-vibe/shared';
 
 import {
   Button,
+  CenteredVertialLayout,
+  Checkbox,
   Form,
   FormControlCheckbox,
   FormControlError,
@@ -25,7 +33,8 @@ import { FileUploadForm, FileUploadFormFileType, Section } from '@shared/compone
 
 import { useCurrentUser } from '@core/hooks';
 
-import { useUpdateUserSettings } from '@api/user';
+import { useUpdateUserSettings, useUsersRelatedWithCurrent } from '@api/user';
+import { toggleArrayItem } from '@shared/utils';
 
 import { ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA } from './constants';
 import { AccountSettingsFormValues } from './types';
@@ -35,6 +44,7 @@ export const AccountSettingsForm: React.FC = () => {
   const { user } = useCurrentUser();
   const { cilCopy } = useIcons();
   const updateUserSettings = useUpdateUserSettings();
+  const getUsersRelatedWithCurrent = useUsersRelatedWithCurrent();
   const onSubmit = useCallback(
     (values: AccountSettingsFormValues) => {
       return updateUserSettings(user.id, values);
@@ -43,6 +53,15 @@ export const AccountSettingsForm: React.FC = () => {
   );
   const copyToClickboard = useCopyToClickboard();
   const initialValues = composeAccountSettingsFormValues(user);
+  const [usersRelatedWithCurrentUser, setUsersRelatedWithCurrentUser] = useState<ChatParticipant[]>(
+    [],
+  );
+
+  useEffect(() => {
+    getUsersRelatedWithCurrent().then((participants) => {
+      setUsersRelatedWithCurrentUser(participants);
+    });
+  }, []);
 
   return (
     <Form
@@ -83,6 +102,29 @@ export const AccountSettingsForm: React.FC = () => {
                   setFieldValue('optimisedAvatarUrl', fileUrls?.optimisedFilePath);
                 }}
               />
+            </Section.Content>
+          </Section>
+
+          <Section>
+            <Section.Header>Blocked Users</Section.Header>
+
+            <Section.Content>
+              <FormGroup label='Blocked Users' formFieldName='blockedUserIds'>
+                <StackLayout space="0.5rem">
+                  {usersRelatedWithCurrentUser?.map((participant) => (
+                    <CenteredVertialLayout key={participant.userId} onClick={() => {
+                      setFieldValue(
+                        'blockedUserIds',
+                        toggleArrayItem(values.blockedUserIds ?? [], participant.userId),
+                      );
+                    }}>
+                      <Checkbox checked={values.blockedUserIds?.includes(participant.userId)}>
+                        {getUserFullName(participant.user)}
+                      </Checkbox>
+                    </CenteredVertialLayout>
+                  ))}
+                </StackLayout>
+              </FormGroup>
             </Section.Content>
           </Section>
 

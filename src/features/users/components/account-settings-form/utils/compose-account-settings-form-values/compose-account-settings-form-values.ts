@@ -21,5 +21,6 @@ export const composeAccountSettingsFormValues = (user: User): AccountSettingsFor
     email: user.email,
     primaryPhone: user.primaryPhone,
     type: user.type,
+    blockedUserIds: user.blockedUserIds,
   };
 };

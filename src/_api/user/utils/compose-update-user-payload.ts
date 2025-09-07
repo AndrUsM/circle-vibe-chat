@@ -17,6 +17,7 @@ export interface IComposeUpdateUserPayload {
   email?: string;
   primaryPhone?: string;
   type?: string;
+  blockedUserIds?: number[];
 }
 
 export const composeUpdateUserPayload = (
@@ -37,5 +38,6 @@ export const composeUpdateUserPayload = (
     email: user.email,
     primaryPhone: user.primaryPhone,
     type: user.type,
+    blockedUserIds: user.blockedUserIds,
   };
 };

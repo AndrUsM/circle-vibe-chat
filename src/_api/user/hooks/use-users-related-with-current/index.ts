@@ -1,2 +1,1 @@
-export * from './use-update-user-settings';
 export * from './use-users-related-with-current';
