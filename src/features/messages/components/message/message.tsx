@@ -79,7 +79,7 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
   const avatarUrl = sender?.user?.avatarUrl;
 
   return (
-    <StackLayout space='0.5rem' className='element_effect-hover-reverse'>
+    <StackLayout space='0.5rem' className='element_effect-hover-reverse hover-container'>
       <StackLayout space='0.5rem' className='bg-tertiary rounded-1 p-2 rounded-2'>
         <Show.When isTrue={Boolean(content) && !files?.length}>
           <StackLayout
@@ -108,10 +108,11 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
           className='flex-wrap'
         >
           {/* SENDER, TIMESTAMP */}
-          <ClusterLayout space='0.5rem' alignItems='center' className='max-w-full'>
+          <ClusterLayout space='0.5rem' alignItems='center' className='max-w-full text-sm'>
             <Show.When isTrue={Boolean(sender) && !isSavedMessages}>
               <UserAvatar
                 user={sender.user}
+                className='cursor-pointer'
                 url={avatarUrl ?? undefined}
                 fallback={imageFallback}
               />
@@ -119,7 +120,9 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
               <div className='italic line-clamp-1 truncate'>{senderFullName}</div>
             </Show.When>
 
-            <div className='italic line-clamp-1 truncate'>{formatDateTime(updatedAt, FormatDateTime.DATE_TIME)}</div>
+            <div className='italic line-clamp-1 truncate'>
+              {formatDateTime(updatedAt, FormatDateTime.DATE_TIME)}
+            </div>
           </ClusterLayout>
 
           {/* THREAD INFORMATION, ACTIONS */}
@@ -168,12 +171,22 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
             {/* DELETE, UPDATE ACTIONS */}
             <Show.When isTrue={isSavedMessages || sender.id === chatParticipantId}>
               <Show.When isTrue={message.messageType === MessageType.TEXT}>
-                <Button color='secondary' size='small' onClick={() => onUpdateMessage(message.id)}>
+                <Button
+                  color='secondary'
+                  size='small'
+                  className='hover-content'
+                  onClick={() => onUpdateMessage(message.id)}
+                >
                   <Icon color='var(--cv-light)' name={icons.cilPen} size={14} />
                 </Button>
               </Show.When>
 
-              <Button color='danger' size='small' onClick={() => onDeleteMessage(message.id)}>
+              <Button
+                className='hover-content'
+                color='danger'
+                size='small'
+                onClick={() => onDeleteMessage(message.id)}
+              >
                 <Icon color='var(--cv-light)' name={icons.cilDelete} size={14} />
               </Button>
             </Show.When>

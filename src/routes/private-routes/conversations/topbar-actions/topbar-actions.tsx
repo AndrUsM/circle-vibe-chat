@@ -28,7 +28,7 @@ export const TopBarActions: ExtendedReactFunctionalComponent = () => {
     <Menu button={() => <Icon name={cilHamburgerMenu} size={28} />}>
       <Button onClick={handleLogout}>
         <IconLayout>
-          <Icon color='var(--cv-light)' name={cilAccountLogout} size={16} />
+          <Icon color='var(--cv-light)' name={cilAccountLogout} size={12} />
 
           <span>Logout</span>
         </IconLayout>

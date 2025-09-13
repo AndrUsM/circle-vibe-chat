@@ -9,3 +9,18 @@
     }
   }
 }
+
+.hover-container {
+  .hover-content {
+    transition: opacity 0.1s ease-in-out;
+    opacity: 0;
+    pointer-events: none;
+  }
+
+  &:hover {
+    .hover-content {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}

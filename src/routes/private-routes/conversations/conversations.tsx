@@ -127,7 +127,7 @@ export const Conversations: React.FC = () => {
 
   return (
     <>
-      <HorizontalDivider height='5px' />
+      {/*<HorizontalDivider height='5px' />*/}
 
       <Resizer.Container className='conversations'>
         <Resizer.Section
@@ -168,8 +168,10 @@ export const Conversations: React.FC = () => {
                   chatParticipant={chatParticipant}
                   selected={selectedChatId === chat.id}
                   onClick={() => {
-                    onChatSelect(chat.id);
-                    setFilterBarVisibility(false);
+                    if (chat.id !== selectedChatId) {
+                      onChatSelect(chat.id);
+                      setFilterBarVisibility(false);
+                    }
                   }}
                 />
               ))}
@@ -257,7 +259,7 @@ export const Conversations: React.FC = () => {
                           color={isActive ? 'primary' : 'secondary'}
                           onClick={triggerFiltersBarVisibility}
                         >
-                          <Icon color='var(--cv-light)' name={cilFilter} size={12} />
+                          <Icon color='var(--cv-light)' name={cilFilter} size={15} />
                         </Button>
 
                         <PaginationScrollButton messagesRef={messagesRef} />
