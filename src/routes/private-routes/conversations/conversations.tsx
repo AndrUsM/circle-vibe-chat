@@ -44,7 +44,7 @@ import './conversation.scss';
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
-  const { cilKeyboard, cilFilter, cilArrowThickToRight } = useIcons();
+  const { cilKeyboard, cilFilter, cilArrowThickToRight, cilLineWeight, cilLineStyle } = useIcons();
   const chatsSectionRef = useRef<HTMLDivElement>(null);
   const confirm = useConfirmation();
   const onScrollToPosition = useScrollToBlockPosition();
@@ -127,15 +127,13 @@ export const Conversations: React.FC = () => {
 
   return (
     <>
-      {/*<HorizontalDivider height='5px' />*/}
-
       <Resizer.Container className='conversations'>
         <Resizer.Section
           ref={chatsSectionRef}
-          className='relative flex items-center justify-center w-full messages-resizer-section'
+          className='relative flex items-center justify-center w-full messages-resizer-section bg-light rounded-tr-2 rounded-br-2'
           minSize={30}
         >
-          <Button className='toggle-chats-section-button' color='secondary' onClick={onExpandChats}>
+          <Button className='toggle-chats-section-button rounded-tl-0' color='secondary' onClick={onExpandChats}>
             <Icon name={cilArrowThickToRight} color='var(--cv-light)' size={16} />
           </Button>
 
@@ -191,100 +189,108 @@ export const Conversations: React.FC = () => {
 
         <Resizer.Bar size={10} className='transition bg-tertiary cursor-resize' />
 
-        <Resizer.Section className='relative flex items-center w-full' minSize={175}>
-          <StackLayout justifyContent='end' className='w-full p-3 overflow-x-hidden'>
+        <Resizer.Section
+          className='relative flex items-center w-full rounded-tl-2 rounded-bl-2'
+          minSize={175}
+        >
+          <StackLayout space="0.625rem" justifyContent='space-between' className='w-full overflow-x-hidden'>
             <Filters initialValue={MESSAGES_FILTER_BAR_FORM_INITIAL_VALUES}>
               {({ isActive, filters }) => (
                 <>
                   <Show.When isTrue={isFiltersBarVisible && Boolean(selectedChatId)}>
-                    <MessagesFilterBar
-                      initialValues={filters as MessagesFilterBarFormValues}
-                      conversationId={Number(selectedChatId)}
-                      onClose={triggerFiltersBarVisibility}
-                      onSubmit={(filter) => {
-                        triggerGetPaginatedMessages(chatsPage, { force: true }, filter);
-                      }}
-                    />
-
-                    <HorizontalDivider color='var(--cv-bg-secondary)' height='0.2rem' />
+                    <section className='bg-light p-3 rounded-tl-2 rounded-bl-2'>
+                      <MessagesFilterBar
+                        initialValues={filters as MessagesFilterBarFormValues}
+                        conversationId={Number(selectedChatId)}
+                        onClose={triggerFiltersBarVisibility}
+                        onSubmit={(filter) => {
+                          triggerGetPaginatedMessages(chatsPage, { force: true }, filter);
+                        }}
+                      />
+                    </section>
                   </Show.When>
 
-                  <StackLayout ref={messagesRef} className='overflow-y-container overflow-x-hidden'>
-                    {(messages?.data ?? [])?.map((message) => (
-                      <Suspense key={message.id} fallback={<LoadingOverlay />}>
-                        <Message
-                          message={message}
-                          isSavedMessages={isSavedMessagesChat}
-                          onStopTyping={triggerStopTypingNotification}
-                          onStartTyping={triggerStartTypingNotification}
-                          chatParticipantId={Number(chatParticipant?.id)}
-                          onDeleteMessage={onDeleteMessage}
-                          onUpdateMessage={onUpdateMessage}
-                          onOpenFile={toggleFileDialogVisibility}
-                          onReplyMessage={handleSendMessageWithThread}
-                        />
-                      </Suspense>
-                    ))}
+                  <StackLayout space="1rem" className='overflow-y-auto bg-light p-3 rounded-tl-2 rounded-bl-2'>
+                    <StackLayout
+                      ref={messagesRef}
+                      className='overflow-y-container overflow-x-hidden'
+                    >
+                      {(messages?.data ?? [])?.map((message) => (
+                        <Suspense key={message.id} fallback={<LoadingOverlay />}>
+                          <Message
+                            message={message}
+                            isSavedMessages={isSavedMessagesChat}
+                            onStopTyping={triggerStopTypingNotification}
+                            onStartTyping={triggerStartTypingNotification}
+                            chatParticipantId={Number(chatParticipant?.id)}
+                            onDeleteMessage={onDeleteMessage}
+                            onUpdateMessage={onUpdateMessage}
+                            onOpenFile={toggleFileDialogVisibility}
+                            onReplyMessage={handleSendMessageWithThread}
+                          />
+                        </Suspense>
+                      ))}
 
-                    <Show.When isTrue={!messagesLoading && !messages?.totalItems}>
-                      <span className='text-md text-truncate'>{t('message.empty')}</span>
+                      <Show.When isTrue={!messagesLoading && !messages?.totalItems}>
+                        <span className='text-md text-truncate'>{t('message.empty')}</span>
+                      </Show.When>
+                    </StackLayout>
+                    </StackLayout>
+
+                    <StackLayout space="1rem" className=' bg-light p-3 rounded-tl-2 rounded-bl-2'>
+
+                    <Show.When isTrue={openMessageControls}>
+                      <CenteredVertialLayout space='0.5rem' justifyContent='space-between'>
+                        <PaginationControls
+                          paginatedResponse={messages}
+                          currentPage={messagesPage}
+                          onPageChange={triggerGetPaginatedMessages}
+                        />
+
+                        <Show>
+                          <Show.When isTrue={isAnyoneTyping}>
+                            <Icon
+                              className='typing-indicator'
+                              name={cilKeyboard}
+                              color='var(--cv-primary)'
+                              size={32}
+                            />
+                          </Show.When>
+                          <Show.Else>
+                            <div />
+                          </Show.Else>
+                        </Show>
+
+                        <CenteredVertialLayout space='0.5rem'>
+                          <Button
+                            className='messages-filter-button'
+                            color={isActive || isFiltersBarVisible ? 'primary' : 'secondary'}
+                            onClick={triggerFiltersBarVisibility}
+                          >
+                            <Icon color='var(--cv-light)' name={cilFilter} size={15} />
+                          </Button>
+
+                          <PaginationScrollButton messagesRef={messagesRef} />
+                        </CenteredVertialLayout>
+                      </CenteredVertialLayout>
+                    </Show.When>
+
+                    <Show.When isTrue={isAnyChatSelected && Boolean(chatParticipant?.id)}>
+                      <MessageForm
+                        onStopTyping={triggerStopTypingNotification}
+                        onStartTyping={triggerStartTypingNotification}
+                        onCreateMessage={handleSendMessage}
+                      >
+                        <Button
+                          color='secondary'
+                          type='button'
+                          onClick={toggleMessageControls}
+                        >
+                          <Icon color='var(--cv-light)' name={openMessageControls? cilLineStyle : cilLineWeight} size={15} />
+                        </Button>
+                      </MessageForm>
                     </Show.When>
                   </StackLayout>
-
-                  <Show.When isTrue={openMessageControls}>
-                    <CenteredVertialLayout space='0.5rem' justifyContent='space-between'>
-                      <PaginationControls
-                        paginatedResponse={messages}
-                        currentPage={messagesPage}
-                        onPageChange={triggerGetPaginatedMessages}
-                      />
-
-                      <Show>
-                        <Show.When isTrue={isAnyoneTyping}>
-                          <Icon
-                            className='typing-indicator'
-                            name={cilKeyboard}
-                            color='var(--cv-primary)'
-                            size={32}
-                          />
-                        </Show.When>
-                        <Show.Else>
-                          <div />
-                        </Show.Else>
-                      </Show>
-
-                      <CenteredVertialLayout space='0.5rem'>
-                        <Button
-                          className='messages-filter-button'
-                          color={isActive ? 'primary' : 'secondary'}
-                          onClick={triggerFiltersBarVisibility}
-                        >
-                          <Icon color='var(--cv-light)' name={cilFilter} size={15} />
-                        </Button>
-
-                        <PaginationScrollButton messagesRef={messagesRef} />
-                      </CenteredVertialLayout>
-                    </CenteredVertialLayout>
-                  </Show.When>
-
-                  <Show.When isTrue={isAnyChatSelected && Boolean(chatParticipant?.id)}>
-                    <MessageForm
-                      onStopTyping={triggerStopTypingNotification}
-                      onStartTyping={triggerStartTypingNotification}
-                      onCreateMessage={handleSendMessage}
-                    >
-                      <Button
-                        color='secondary'
-                        type='button'
-                        className={classNames({
-                          'line-through': !openMessageControls,
-                        })}
-                        onClick={toggleMessageControls}
-                      >
-                        Tools
-                      </Button>
-                    </MessageForm>
-                  </Show.When>
                 </>
               )}
             </Filters>

@@ -20,6 +20,7 @@ import {
   useFormatDatetime,
   useIcons,
   FormatDateTime,
+  HorizontalDivider,
 } from '@circle-vibe/components';
 
 import { FormikHelpers } from 'formik';
@@ -80,12 +81,12 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
 
   return (
     <StackLayout space='0.5rem' className='element_effect-hover-reverse hover-container'>
-      <StackLayout space='0.5rem' className='bg-tertiary rounded-1 p-2 rounded-2'>
+      <StackLayout space='0.5rem' className='bg-tertiary p-2 rounded-1'>
         <Show.When isTrue={Boolean(content) && !files?.length}>
           <StackLayout
             space='0.5rem'
             justifyContent='space-between'
-            className='white-space-pre-wrap'
+            className='white-space-pre-wrap text-sm'
           >
             <TextMessagePreview>{messageContent}</TextMessagePreview>
 
@@ -108,10 +109,12 @@ export const Message: ExtendedReactFunctionalComponent<MessageProps> = ({
           className='flex-wrap'
         >
           {/* SENDER, TIMESTAMP */}
-          <ClusterLayout space='0.5rem' alignItems='center' className='max-w-full text-sm'>
+          <ClusterLayout space='0.4rem' alignItems='center' className='max-w-full text-sm'>
             <Show.When isTrue={Boolean(sender) && !isSavedMessages}>
               <UserAvatar
                 user={sender.user}
+                size='1.4rem'
+                fontSize='2xs'
                 className='cursor-pointer'
                 url={avatarUrl ?? undefined}
                 fallback={imageFallback}

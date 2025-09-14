@@ -1,7 +1,4 @@
 .user-avatar {
-  width: 1.75rem;
-  height: 1.75rem;
-  border-radius: 50%;
   overflow: hidden;
   text-align: center;
   display: flex;
@@ -9,4 +6,7 @@
   justify-content: center;
   border: 1px solid var(--cv-dark);
   background-color: var(--cv-tertiary);
+
+  width: var(--cv-avatar-size);
+  height: var(--cv-avatar-size);
 }

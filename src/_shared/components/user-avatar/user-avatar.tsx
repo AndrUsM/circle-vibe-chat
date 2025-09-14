@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { User } from '@circle-vibe/shared';
 
 import {
+  CustomCssVariables,
   ExtendedReactFunctionalComponent,
   Popover,
   Show,
@@ -18,6 +19,8 @@ interface UserAvatarProps extends React.ImgHTMLAttributes<HTMLImageElement> {
   url?: string;
   user?: User;
   fallback: string;
+  size?: string;
+  fontSize?: string;
 }
 
 export const UserAvatar: ExtendedReactFunctionalComponent<UserAvatarProps> = ({
@@ -25,6 +28,8 @@ export const UserAvatar: ExtendedReactFunctionalComponent<UserAvatarProps> = ({
   fallback,
   className,
   user,
+  fontSize = 'xs',
+  size = '1.75rem',
   ...rest
 }) => {
   const [isImageLoaded, setIsImageLoaded] = useState(true);
@@ -38,9 +43,14 @@ export const UserAvatar: ExtendedReactFunctionalComponent<UserAvatarProps> = ({
       <Show>
         <Show.When isTrue={Boolean(url) && isImageLoaded}>
           <img
-            className={classNames('user-avatar', className)}
+            className={classNames('user-avatar rounded-2', className)}
             src={url}
             onError={() => setIsImageLoaded(false)}
+            style={
+              {
+                '--cv-avatar-size': size,
+              } as CustomCssVariables
+            }
             {...rest}
             {...popoverReferenceProps}
           />
@@ -48,7 +58,12 @@ export const UserAvatar: ExtendedReactFunctionalComponent<UserAvatarProps> = ({
 
         <Show.Else>
           <div
-            className={classNames('user-avatar text-xs', className)}
+            className={classNames(`user-avatar font-semibold rounded-2 text-${fontSize}`, className)}
+            style={
+              {
+                '--cv-avatar-size': size,
+              } as CustomCssVariables
+            }
             {...rest}
             {...popoverReferenceProps}
           >
