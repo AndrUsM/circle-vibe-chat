@@ -133,6 +133,7 @@ export const Conversations: React.FC = () => {
           className='relative flex items-center justify-center w-full messages-resizer-section bg-light rounded-tr-2 rounded-br-2'
           minSize={30}
         >
+          {/* TODO: add a property to customize rounding, to remove !important in styles */}
           <Button className='toggle-chats-section-button rounded-tl-0' color='secondary' onClick={onExpandChats}>
             <Icon name={cilArrowThickToRight} color='var(--cv-light)' size={16} />
           </Button>
