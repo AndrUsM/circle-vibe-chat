@@ -6,6 +6,7 @@ import { useNotification } from '@core/hooks';
 import { request } from '@core/request';
 
 import { SignUpFormInput } from '@features/users/components/sign-up-form/constants';
+import { GLOBAL_PAGES_ENUM } from '@core/navigation';
 
 export const useSignUp = () => {
   const notification = useNotification();
@@ -31,7 +32,7 @@ export const useSignUp = () => {
         });
       })
       .then(() => {
-        navigate('/auth/sign-in');
+        navigate(`/${GLOBAL_PAGES_ENUM.AUTH}/sign-in`);
         notification({
           type: 'success',
           content: 'Check your email, and login with identification-key and password!',

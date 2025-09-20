@@ -3,6 +3,7 @@ import { MessageFileEntityType } from '@circle-vibe/shared';
 import { Button, Icon, Show, StackLayout, Tooltip, useIcons } from '@circle-vibe/components';
 
 import './uploaded-file-preview.scss';
+import React from 'react';
 
 export interface UploadedFilePreviewProps {
   fileSource: string;
@@ -29,6 +30,7 @@ export const UploadedFilePreview: React.FC<UploadedFilePreviewProps> = ({
         <img
           className='rounded-2 w-full max-w-40 min-h-16 image-rendering-pixelated'
           src={fileSource}
+          alt={fileSource}
         />
       </Show.When>
 
@@ -45,14 +47,14 @@ export const UploadedFilePreview: React.FC<UploadedFilePreviewProps> = ({
       </Show.When>
 
       <Show.When isTrue={entityType === MessageFileEntityType.AUDIO}>
-        <audio className='rounded-2 w-full max-w-40 min-h-16 min-w-70' preload="metadata" controls>
-          <source src={fileSource} type="audio/mpeg" />
+        <audio className='rounded-2 w-full max-w-40 min-h-16 min-w-70' preload='metadata' controls>
+          <source src={fileSource} type='audio/mpeg' />
 
           <StackLayout space='0.25rem'>
             You browser does not support the audio element.
-            <a href="myAudio.mp4">ссылка на аудио</a>
+            <a href={fileSource}>ссылка на аудио</a>
           </StackLayout>
-          </audio>
+        </audio>
       </Show.When>
     </div>
   );

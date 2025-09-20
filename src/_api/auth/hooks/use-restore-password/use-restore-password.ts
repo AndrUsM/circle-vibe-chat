@@ -5,7 +5,7 @@ import { User } from '@circle-vibe/shared';
 import { useNavigate } from 'react-router-dom';
 
 import { useCurrentSessionCredentials, useNotification } from '@core/hooks';
-import { PrivatePagesEnum } from '@core/navigation';
+import { GLOBAL_PAGES_ENUM, PrivatePagesEnum } from '@core/navigation';
 import { request } from '@core/request';
 
 interface RestorePasswordInput {
@@ -44,7 +44,7 @@ export const useRestorePassword = () => {
     setCurrentUser(user);
     setToken(token);
 
-    void navigate(`/app/${PrivatePagesEnum.CONVERSATIONS}`, { replace: true });
+    void navigate(`/${GLOBAL_PAGES_ENUM.APP}/${PrivatePagesEnum.CONVERSATIONS}`, { replace: true });
 
     notification({
       type: 'success',

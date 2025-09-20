@@ -6,7 +6,7 @@ import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
 import { useCurrentUser, useNotification } from '@core/hooks';
-import { PrivatePagesEnum } from '@core/navigation';
+import { GLOBAL_PAGES_ENUM, PrivatePagesEnum } from '@core/navigation';
 import { request } from '@core/request';
 import { setAuthToken } from '@core/utils';
 
@@ -41,7 +41,7 @@ export const useSignIn = () => {
         content: 'Successfully signed in!',
       });
 
-      void navigate(`/app/${PrivatePagesEnum.CONVERSATIONS}`);
+      void navigate(`/${GLOBAL_PAGES_ENUM.APP}/${PrivatePagesEnum.CONVERSATIONS}`);
     } catch {
       notification({
         type: 'warning',

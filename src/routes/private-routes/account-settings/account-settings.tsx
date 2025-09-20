@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import React, { useState } from 'react';
 
 import { Show, Tabs } from '@circle-vibe/components';
 
@@ -6,7 +6,7 @@ import { useNavigate } from 'react-router-dom';
 
 import { BackNavigationButton, PageContent } from '@shared/components';
 
-import { PrivatePagesEnum } from '@core/navigation';
+import { GLOBAL_PAGES_ENUM, PrivatePagesEnum } from '@core/navigation';
 
 import {
   AccountSettingsForm,
@@ -19,7 +19,7 @@ export const AccountSettings: React.FC = () => {
   const [currentTab, setCurrentTab] = useState<AccountSettingsTabs>(AccountSettingsTabs.GENERAL);
 
   const goToConversatios = () => {
-    navigate(`/app/${PrivatePagesEnum.CONVERSATIONS}`);
+    navigate(`/${GLOBAL_PAGES_ENUM.APP}/${PrivatePagesEnum.CONVERSATIONS}`);
   };
 
   return (

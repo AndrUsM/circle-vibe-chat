@@ -1,9 +1,9 @@
-import { Link } from "react-router-dom";
+import { Link } from 'react-router-dom';
 
-import { ExtendedReactFunctionalComponent } from "@circle-vibe/components";
+import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
 
-import { useCurrentUser } from "@core/hooks";
-import { PrivatePagesEnum, PublicPagesEnum } from "@core/navigation";
+import { useCurrentUser } from '@core/hooks';
+import { GLOBAL_PAGES_ENUM, PrivatePagesEnum, PublicPagesEnum } from '@core/navigation';
 
 import logoSrc from '../../../../public/logo.svg';
 
@@ -14,12 +14,12 @@ export const TopBarLogo: ExtendedReactFunctionalComponent = () => {
     <Link
       to={
         user
-          ? `/app/${PrivatePagesEnum.CONVERSATIONS}`
-          : `/auth/${PublicPagesEnum.SIGN_IN}`
+          ? `/${GLOBAL_PAGES_ENUM.APP}/${PrivatePagesEnum.CONVERSATIONS}`
+          : `/${GLOBAL_PAGES_ENUM.AUTH}/${PublicPagesEnum.SIGN_IN}`
       }
-      className="cursor-pointer"
+      className='cursor-pointer'
     >
-      <img src={logoSrc} alt="Circle Vibe Chat logo" height="28px" />
+      <img src={logoSrc} alt='Circle Vibe Chat logo' height='28px' />
     </Link>
   );
 };

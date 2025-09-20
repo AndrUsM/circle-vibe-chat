@@ -24,7 +24,7 @@ import { useNavigate } from 'react-router-dom';
 import { FileUploadForm, FileUploadFormFileType } from '@shared/components';
 import { USER_TYPE_DROPDOWN_OPTIONS } from '@shared/constants';
 
-import { PublicPagesEnum } from '@core/navigation';
+import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@core/navigation';
 
 import {
   SIGN_UP_FORM_INITIAL_VALUES,
@@ -40,11 +40,11 @@ export const SignUpForm: React.FC = () => {
   const onSubmit = useSignUp();
 
   const onNavigateToSignInPage = () => {
-    void navigate(`/auth/${PublicPagesEnum.SIGN_IN}`);
+    void navigate(`/${GLOBAL_PAGES_ENUM.AUTH}/${PublicPagesEnum.SIGN_IN}`);
   };
 
   const onNavigateToRestorePasswordPage = () => {
-    void navigate(`/auth/${PublicPagesEnum.RESET_PASSWORD}`);
+    void navigate(`/${GLOBAL_PAGES_ENUM.AUTH}/${PublicPagesEnum.RESET_PASSWORD}`);
   };
 
   return (

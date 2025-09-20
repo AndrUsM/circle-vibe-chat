@@ -1,3 +1,4 @@
+import React from 'react';
 import {
   CenteredVertialLayout,
   FormControlInput,
@@ -12,7 +13,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { PublicPagesEnum } from '@core/navigation';
+import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@core/navigation';
 
 import { useSignIn } from '@features/users/hooks';
 
@@ -25,11 +26,11 @@ export const AuthorizationForm: React.FC = () => {
   const onSubmit = useSignIn();
 
   const onNavigateToSignUpPage = () => {
-    void navigate(`/auth/${PublicPagesEnum.SIGN_UP}`);
+    void navigate(`/${GLOBAL_PAGES_ENUM.AUTH}/${PublicPagesEnum.SIGN_UP}`);
   };
 
   const onNavigateToRestorePasswordPage = () => {
-    void navigate(`/auth/${PublicPagesEnum.RESET_PASSWORD}`);
+    void navigate(`/${GLOBAL_PAGES_ENUM.AUTH}/${PublicPagesEnum.RESET_PASSWORD}`);
   };
 
   return (

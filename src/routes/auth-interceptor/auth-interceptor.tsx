@@ -4,7 +4,7 @@ import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { PrivatePagesEnum, PublicPagesEnum } from '@core/navigation';
+import { GLOBAL_PAGES_ENUM, PrivatePagesEnum, PublicPagesEnum } from '@core/navigation';
 import { getAuthToken } from '@core/utils';
 
 export const AuthInterceptor: ExtendedReactFunctionalComponent = ({ children }) => {
@@ -14,12 +14,12 @@ export const AuthInterceptor: ExtendedReactFunctionalComponent = ({ children }) 
   useEffect(() => {
     const token = getAuthToken();
 
-    if (!token && !location.pathname.includes('auth')) {
-      navigate(`/auth/${PublicPagesEnum.SIGN_IN}`, { replace: true });
+    if (!token && !location.pathname.includes(GLOBAL_PAGES_ENUM.AUTH)) {
+      navigate(`/${GLOBAL_PAGES_ENUM.AUTH}/${PublicPagesEnum.SIGN_IN}`, { replace: true });
     }
 
-    if (token && !location.pathname.includes('app')) {
-      navigate(`/app/${PrivatePagesEnum.CONVERSATIONS}`, { replace: true });
+    if (token && !location.pathname.includes(GLOBAL_PAGES_ENUM.APP)) {
+      navigate(`/${GLOBAL_PAGES_ENUM.APP}/${PrivatePagesEnum.CONVERSATIONS}`, { replace: true });
     }
   }, [location.pathname]);
 

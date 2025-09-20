@@ -10,11 +10,7 @@ let modalRoot = document.getElementById('modal-root');
 
 export const useConfirmation = () => {
   return useCallback(
-    (
-      content: React.ReactNode | string,
-      confirmButtonColor?: string,
-      minWidth?: string,
-    ): Promise<boolean> => {
+    (content: React.ReactNode | string, confirmButtonColor?: string): Promise<boolean> => {
       const container = document.createElement('div');
       const root = createRoot(container);
       modalRoot!.appendChild(container);

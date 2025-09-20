@@ -1,4 +1,4 @@
-import { use, useCallback, useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import {
   Button,
@@ -19,7 +19,7 @@ import { FormikProps } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
 import { useNotification } from '@core/hooks';
-import { PublicPagesEnum } from '@core/navigation';
+import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@core/navigation';
 
 import { useGenerateAccountConfirmationCode, useRestorePassword } from '@api/auth/hooks';
 
@@ -43,10 +43,10 @@ export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
     useGenerateAccountConfirmationCode();
 
   const goToSignInPage = () => {
-    navigate(`/auth/${PublicPagesEnum.SIGN_IN}`, { replace: true });
+    navigate(`/${GLOBAL_PAGES_ENUM.AUTH}/${PublicPagesEnum.SIGN_IN}`, { replace: true });
   };
   const goToSignUpPage = () => {
-    void navigate(`/auth/${PublicPagesEnum.SIGN_UP}`, { replace: true });
+    void navigate(`/${GLOBAL_PAGES_ENUM.AUTH}/${PublicPagesEnum.SIGN_UP}`, { replace: true });
   };
   const restorePassword = useRestorePassword();
   const onGenerateConfirmaitonCode = useCallback(async (values: RestorePasswordFormValues) => {

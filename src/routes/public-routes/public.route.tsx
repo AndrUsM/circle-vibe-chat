@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 
 import { Navigate, Route } from 'react-router-dom';
 
-import { PublicPagesEnum } from '@core/navigation';
+import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@core/navigation';
 
 const SignInFormLazy = React.lazy(() =>
   import('./sign-in').then(({ SignInForm }) => ({
@@ -29,6 +29,9 @@ export const PublicRouter: ReactNode = (
     <Route path={PublicPagesEnum.RESET_PASSWORD} Component={ResetPasswordLazy} />
 
     {/* !DEFAULT ROUTE */}
-    <Route path='' element={<Navigate to={`/auth/${PublicPagesEnum.SIGN_IN}`} replace />} />
+    <Route
+      path=''
+      element={<Navigate to={`/${GLOBAL_PAGES_ENUM.AUTH}/${PublicPagesEnum.SIGN_IN}`} replace />}
+    />
   </>
 );
