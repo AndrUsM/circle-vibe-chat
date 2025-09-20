@@ -7,7 +7,6 @@ export const useSortedByTypeFiles = (files: MessageFile[]) => {
     () =>
       (files ?? [])?.reduce(
         (acc, file) => {
-          console.log(file.entityType)
           if (file.entityType === MessageFileEntityType.IMAGE) {
             acc.images.push(file);
 

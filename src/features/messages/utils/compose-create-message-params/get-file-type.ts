@@ -7,6 +7,14 @@ export const getFileType = (file: File): MessageFileType => {
     return MessageFileType.MP4;
   }
 
+  if (type.includes('image')) {
+    return MessageFileType.IMAGE;
+  }
+
+  if (type.includes('audio')) {
+    return MessageFileType.MP3_AUDIO;
+  }
+
   if (documentRegex.test(file.name)) {
     return MessageFileType.DOCUMENT;
   }

@@ -11,5 +11,9 @@ export const getEntityType = (file: File): MessageFileEntityType => {
     return MessageFileEntityType.VIDEO;
   }
 
+  if (type.includes('audio')) {
+    return MessageFileEntityType.AUDIO;
+  }
+
   return MessageFileEntityType.FILE;
 };
