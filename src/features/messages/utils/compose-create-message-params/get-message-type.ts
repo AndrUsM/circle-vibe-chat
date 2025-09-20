@@ -17,5 +17,9 @@ export const getMessageType = (formValues: MessageFormValues): MessageType => {
     return MessageType.VIDEO;
   }
 
+  if (file.type.includes('audio')) {
+    return MessageType.AUDIO;
+  }
+
   return MessageType.FILE;
 };

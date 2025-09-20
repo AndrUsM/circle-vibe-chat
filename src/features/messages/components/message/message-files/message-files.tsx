@@ -71,6 +71,32 @@ export const MessageFiles: React.FC<MessageFilesProps> = ({ files, messageType, 
         )}
       </Show.When>
 
+      <Show.When isTrue={messageType === MessageType.AUDIO}>
+        {sortedByTypeFiles.audios?.map(({ description, optimizedUrl, fileName }, fileTypeIndex) => (
+          <React.Fragment key={`audio-${fileName}-${fileTypeIndex}`}>
+            <div className='ml-auto'>
+              <Suspense fallback={<LoadingOverlay />}>
+                <StackLayout
+                  space='0.5rem'
+                  justifyContent='space-between'
+                  className='w-full'
+                >
+                  <audio src={optimizedUrl} controls className='w-full min-w-20'></audio>
+
+                  <a href={optimizedUrl} target='_blank' rel='noopener noreferrer' className='rounded-4 bg-light text-link italic truncate text-xs p-2'>{fileName}</a>
+                </StackLayout>
+              </Suspense>
+            </div>
+
+            <Show.When isTrue={Boolean(description)}>
+              <span className='white-space-pre-wrap message-description bg-light italic'>
+                {description}
+              </span>
+            </Show.When>
+          </React.Fragment>
+        ))}
+      </Show.When>
+
       <Show.When isTrue={messageType === MessageType.FILE}>
         {sortedByTypeFiles.files?.map(({ description, url, fileName }, fileTypeIndex) => (
           <CenteredVertialLayout

@@ -4,7 +4,6 @@ import {
   Button,
   CenteredVertialLayout,
   FormControl,
-  HorizontalDivider,
   Icon,
   Input,
   LoadingOverlay,
@@ -16,7 +15,6 @@ import {
 } from '@circle-vibe/components';
 
 import * as Resizer from '@column-resizer/react';
-import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import { useDebouncedCallback } from 'use-debounce';
 
@@ -133,8 +131,17 @@ export const Conversations: React.FC = () => {
           className='relative flex items-center justify-center w-full messages-resizer-section bg-light rounded-tr-2 rounded-br-2'
           minSize={30}
         >
-          {/* TODO: add a property to customize rounding, to remove !important in styles */}
-          <Button className='toggle-chats-section-button rounded-tl-0' color='secondary' onClick={onExpandChats}>
+          <Button
+            className='toggle-chats-section-button'
+            color='secondary'
+            borderRadius={{
+              topLeft: false,
+              bottomLeft: false,
+              topRight: true,
+              bottomRight: true,
+            }}
+            onClick={onExpandChats}
+          >
             <Icon name={cilArrowThickToRight} color='var(--cv-light)' size={16} />
           </Button>
 
@@ -194,7 +201,11 @@ export const Conversations: React.FC = () => {
           className='relative flex items-center w-full rounded-tl-2 rounded-bl-2'
           minSize={175}
         >
-          <StackLayout space="0.625rem" justifyContent='space-between' className='w-full overflow-x-hidden'>
+          <StackLayout
+            space='0.625rem'
+            justifyContent='space-between'
+            className='w-full overflow-x-hidden'
+          >
             <Filters initialValue={MESSAGES_FILTER_BAR_FORM_INITIAL_VALUES}>
               {({ isActive, filters }) => (
                 <>
@@ -211,7 +222,10 @@ export const Conversations: React.FC = () => {
                     </section>
                   </Show.When>
 
-                  <StackLayout space="1rem" className='overflow-y-auto bg-light p-3 rounded-tl-2 rounded-bl-2'>
+                  <StackLayout
+                    space='1rem'
+                    className='overflow-y-auto bg-light p-3 rounded-tl-2 rounded-bl-2'
+                  >
                     <StackLayout
                       ref={messagesRef}
                       className='overflow-y-container overflow-x-hidden'
@@ -236,10 +250,9 @@ export const Conversations: React.FC = () => {
                         <span className='text-md text-truncate'>{t('message.empty')}</span>
                       </Show.When>
                     </StackLayout>
-                    </StackLayout>
+                  </StackLayout>
 
-                    <StackLayout space="1rem" className=' bg-light p-3 rounded-tl-2 rounded-bl-2'>
-
+                  <StackLayout space='1rem' className=' bg-light p-3 rounded-tl-2 rounded-bl-2'>
                     <Show.When isTrue={openMessageControls}>
                       <CenteredVertialLayout space='0.5rem' justifyContent='space-between'>
                         <PaginationControls
@@ -282,12 +295,12 @@ export const Conversations: React.FC = () => {
                         onStartTyping={triggerStartTypingNotification}
                         onCreateMessage={handleSendMessage}
                       >
-                        <Button
-                          color='secondary'
-                          type='button'
-                          onClick={toggleMessageControls}
-                        >
-                          <Icon color='var(--cv-light)' name={openMessageControls? cilLineStyle : cilLineWeight} size={15} />
+                        <Button color='secondary' type='button' onClick={toggleMessageControls}>
+                          <Icon
+                            color='var(--cv-light)'
+                            name={openMessageControls ? cilLineStyle : cilLineWeight}
+                            size={15}
+                          />
                         </Button>
                       </MessageForm>
                     </Show.When>

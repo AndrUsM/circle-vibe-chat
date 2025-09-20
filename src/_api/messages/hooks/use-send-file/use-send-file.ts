@@ -56,9 +56,26 @@ export const useSendFile = () => {
     return response.data as UploadVideoOutputDto;
   };
 
+  const uploadAudio = async (file: File, bucket: ConversationBucketNameEnum) => {
+    const data = new FormData();
+    data.append('audio', file);
+
+    const response = await fileServerRequest({
+      method: 'POST',
+      url: '/audio/upload',
+      data,
+      params: {
+        bucket,
+      },
+    });
+
+    return response.data as UploadFileOutputDto;
+  }
+
   return {
     uploadFile,
     uploadImage,
     uploadVideo,
+    uploadAudio,
   };
 };

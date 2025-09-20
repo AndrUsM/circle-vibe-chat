@@ -43,6 +43,17 @@ export const UploadedFilePreview: React.FC<UploadedFilePreviewProps> = ({
           </div>
         </Tooltip>
       </Show.When>
+
+      <Show.When isTrue={entityType === MessageFileEntityType.AUDIO}>
+        <audio className='rounded-2 w-full max-w-40 min-h-16 min-w-70' preload="metadata" controls>
+          <source src={fileSource} type="audio/mpeg" />
+
+          <StackLayout space='0.25rem'>
+            You browser does not support the audio element.
+            <a href="myAudio.mp4">ссылка на аудио</a>
+          </StackLayout>
+          </audio>
+      </Show.When>
     </div>
   );
 };

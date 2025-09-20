@@ -18,6 +18,10 @@ export const useFileEntityType = (fileInputRef: RefObject<HTMLInputElement | nul
       return MessageFileEntityType.VIDEO;
     }
 
+    if (fileType.startsWith('audio/')) {
+      return MessageFileEntityType.AUDIO;
+    }
+
     return MessageFileEntityType.FILE;
   }, [fileInputRef?.current?.files]);
 };

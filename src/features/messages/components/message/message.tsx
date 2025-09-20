@@ -20,7 +20,6 @@ import {
   useFormatDatetime,
   useIcons,
   FormatDateTime,
-  HorizontalDivider,
 } from '@circle-vibe/components';
 
 import { FormikHelpers } from 'formik';
