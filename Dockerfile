@@ -13,6 +13,6 @@ FROM node:22.14.0
 RUN npm install -g serve
 
 WORKDIR /app
-COPY --from=builder /app/build ./build
+COPY --from=builder /app/dist ./dist
 
-CMD ["serve", "-s", "build", "-l", "5173"]
+CMD ["serve", "-s", "dist", "-l", "5173"]
