@@ -13,4 +13,4 @@ services:
 
 networks:
   circle-vibe-network:
-    external: true
+    driver: bridge
