@@ -20,9 +20,11 @@ interface ISocketContext {
 export const SocketContext = createContext<ISocketContext | null>(null);
 
 export const SocketProvider: ExtendedReactFunctionalComponent = ({ children }) => {
+  // @ts-ignore
+  const chatSocketApiUrl = import.meta.env.VITE_APP_CHAT_SOCKET_API_URL;
   const { user } = useCurrentUser();
   const socket = io(
-    `${import.meta.env.VITE_APP_CHAT_SOCKET_API_URL}/${GatewayNamespaces.CHAT_MAIN}`,
+    `${chatSocketApiUrl}/${GatewayNamespaces.CHAT_MAIN}`,
     {
       transports: ['websocket'],
       autoConnect: false,
