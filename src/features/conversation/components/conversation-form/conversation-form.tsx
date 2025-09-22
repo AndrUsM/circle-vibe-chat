@@ -30,11 +30,11 @@ export const ConversationForm: ExtendedReactFunctionalComponent = () => {
     >
       <StackLayout space='0.5rem'>
         <FormGroup isRequired label='Name' formFieldName='name'>
-          <FormControlInput placeholder='My Chat' />
+          <FormControlInput placeholder='Book Club Picks' />
         </FormGroup>
 
         <FormGroup isRequired label='Description' formFieldName='description'>
-          <FormControlTextarea className='resize-vertical p-3 min-h-20' placeholder='My Chat' />
+          <FormControlTextarea className='resize-vertical p-3 min-h-20' placeholder='Book Club Picks' />
         </FormGroup>
 
         <FormGroup isRequired label='Type' formFieldName='type'>

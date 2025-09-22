@@ -9,6 +9,7 @@ import {
   RequestChatsWithPaginationChatSocketParams,
   RequestMessagesWithPaginationChatSocketParams,
   DEFAULT_PAGINATION_PAGE_SIZE,
+  ChatType,
 } from '@circle-vibe/shared';
 
 import { FormikHelpers } from 'formik';
@@ -194,6 +195,9 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     page: number,
     filters?: {
       name?: string;
+      empty?: boolean;
+      removed?: boolean;
+      type?: ChatType;
     },
   ) => {
     setMessagesPage(page);
@@ -205,6 +209,9 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       page,
       pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
       name: filters?.name,
+      empty: filters?.empty,
+      removed: filters?.removed,
+      type: filters?.type,
     };
 
     socket.emit(ChatSocketCommand.REQUEST_CHATS_WITH_PAGINATION, params);

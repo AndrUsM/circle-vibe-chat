@@ -3,7 +3,7 @@ export interface IFiltersContext<T> {
   isActive: boolean;
   initialValue: T;
   setFilters: (filters: T) => void;
-  setFilter: (key: keyof T, value: T[keyof T]) => void;
+  setFilter: (key: unknown, value: T[keyof T]) => void;
   resetFilters: VoidFunction;
   resetFilter: (key: keyof T) => void;
 }

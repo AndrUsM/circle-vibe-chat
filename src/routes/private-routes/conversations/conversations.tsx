@@ -3,6 +3,7 @@ import React, { Suspense, useCallback, useRef } from 'react';
 import {
   Button,
   CenteredVertialLayout,
+  ClusterLayout,
   FormControl,
   Icon,
   Input,
@@ -21,7 +22,14 @@ import { useDebouncedCallback } from 'use-debounce';
 import { Filters, PaginationControls, PaginationScrollButton } from '@shared/components';
 import { useConfirmation, useScrollToBlockPosition } from '@shared/hooks';
 
-import { Chat, useConversationGateway, useInitialChatSelection } from '@features/conversation';
+import {
+  Chat,
+  useConversationGateway,
+  useInitialChatSelection,
+  ConversationsFilterBar,
+  ConversationsFilterBarFormValues,
+  CONVERSATOINS_FILTER_BAR_FORM_INITIAL_VALUES,
+} from '@features/conversation';
 import {
   Message,
   MessageForm,
@@ -39,17 +47,20 @@ import { useDeleteMessage } from '@api/messages';
 import { ConversationModals } from './conversation-modals';
 
 import './conversation.scss';
+import { ChatType } from '@circle-vibe/shared';
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
-  const { cilKeyboard, cilFilter, cilArrowThickToRight, cilLineWeight, cilLineStyle } = useIcons();
-  const chatsSectionRef = useRef<HTMLDivElement>(null);
   const confirm = useConfirmation();
+  const chatsSectionRef = useRef<HTMLDivElement>(null);
+  const messagesRef = useRef<HTMLDivElement>(null);
+
+  const { cilKeyboard, cilFilter, cilArrowThickToRight, cilLineWeight, cilLineStyle } = useIcons();
   const onScrollToPosition = useScrollToBlockPosition();
   const deleteMessage = useDeleteMessage();
   const [isFiltersBarVisible, triggerFiltersBarVisibility, setFilterBarVisibility] =
     useBoolean(false);
-  const messagesRef = useRef<HTMLDivElement>(null);
+  const [isChatsFiltersBarVisible, triggerChatsFiltersBarVisibility] = useBoolean(false);
   const { toggleFileDialogVisibility, previewFile } = usePreviewFileState();
 
   const [openChatCreationModal, toggleOpenChatCreationModal, setOpenChatCreationModal] =
@@ -146,25 +157,55 @@ export const Conversations: React.FC = () => {
           </Button>
 
           <StackLayout className='w-full p-3 overflow-x-hidden'>
-            <StackLayout
-              space='1rem'
-              justifyContent='justify-between'
-              className='flex-wrap chats-section_desktop-only-content'
+            <Filters
+              onChange={(filters) => {
+                const { isPrivateChat, ...rest } = filters as ConversationsFilterBarFormValues;
+                triggerGetPaginatedChats(1, {
+                  ...rest,
+                  type: isPrivateChat ? ChatType.PRIVATE : undefined,
+                } as ConversationsFilterBarFormValues);
+              }}
+              initialValue={CONVERSATOINS_FILTER_BAR_FORM_INITIAL_VALUES}
             >
-              <FormControl className='w-full'>
-                <Input
-                  className='p-4 rounded-2'
-                  placeholder={t('input.search.placeholder')}
-                  onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                    debouncedChatSearch(String(e.target.value));
-                  }}
-                />
-              </FormControl>
+              {({ isActive, setFilter }) => (
+                <StackLayout
+                  space='1rem'
+                  justifyContent='justify-between'
+                  className='flex-wrap chats-section_desktop-only-content'
+                >
+                  <FormControl className='w-full'>
+                    <Input
+                      className='p-4 rounded-2'
+                      placeholder={t('input.search.placeholder')}
+                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
+                        setFilter('name', e.target.value as never);
+                      }}
+                    />
+                  </FormControl>
 
-              <Button size='medium' className='w-full' onClick={toggleOpenChatCreationModal}>
-                {t('button.actions.create')}
-              </Button>
-            </StackLayout>
+                  <Show.When isTrue={isChatsFiltersBarVisible}>
+                    <ConversationsFilterBar />
+                  </Show.When>
+
+                  <ClusterLayout space='0.75rem'>
+                    <Button size='medium' className='w-full' onClick={toggleOpenChatCreationModal}>
+                      {t('button.actions.create')}
+                    </Button>
+
+                    <Show.When isTrue={Number(chats?.totalItems) > 0}>
+                      <Button
+                        size='medium'
+                        className='w-10'
+                        color={isActive ? 'primary' : 'secondary'}
+                        onClick={triggerChatsFiltersBarVisibility}
+                      >
+                        <Icon name={cilFilter} color='var(--cv-light)' size={16} />
+                      </Button>
+                    </Show.When>
+                  </ClusterLayout>
+                </StackLayout>
+              )}
+            </Filters>
 
             <StackLayout className='overflow-y-container-no-gutter'>
               {chats?.data.map((chat) => (
