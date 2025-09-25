@@ -5,6 +5,6 @@ import { ConversationsFilterBarFormValues } from '../types';
 export const CONVERSATIONS_FILTER_BAR_FORM_SCHEMA = object<ConversationsFilterBarFormValues>({
   userId: number().notRequired(),
   empty: boolean().notRequired(),
-  hidden: boolean().notRequired(),
+  isPublic: boolean().notRequired(),
   removed: boolean().notRequired(),
 });

@@ -48,10 +48,6 @@ export const ConversationForm: ExtendedReactFunctionalComponent = () => {
           <FormControlInput min={0} step={1} type='number' />
         </FormGroup>
 
-        <FormGroup formFieldName='hidden'>
-          <FormControlCheckbox>Hidden</FormControlCheckbox>
-        </FormGroup>
-
         <SubmitButton>Create</SubmitButton>
       </StackLayout>
     </Form>

@@ -29,6 +29,7 @@ import {
   ConversationsFilterBar,
   ConversationsFilterBarFormValues,
   CONVERSATOINS_FILTER_BAR_FORM_INITIAL_VALUES,
+  conversationFilterBarValuesToRequestMap,
 } from '@features/conversation';
 import {
   Message,
@@ -48,6 +49,7 @@ import { ConversationModals } from './conversation-modals';
 
 import './conversation.scss';
 import { ChatType } from '@circle-vibe/shared';
+import { DEFAULT_PAGINATION_PAGE } from '@shared/constants';
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
@@ -159,11 +161,12 @@ export const Conversations: React.FC = () => {
           <StackLayout className='w-full p-3 overflow-x-hidden'>
             <Filters
               onChange={(filters) => {
-                const { isPrivateChat, ...rest } = filters as ConversationsFilterBarFormValues;
-                triggerGetPaginatedChats(1, {
-                  ...rest,
-                  type: isPrivateChat ? ChatType.PRIVATE : undefined,
-                } as ConversationsFilterBarFormValues);
+                triggerGetPaginatedChats(
+                  DEFAULT_PAGINATION_PAGE,
+                  conversationFilterBarValuesToRequestMap(
+                    filters as ConversationsFilterBarFormValues,
+                  ),
+                );
               }}
               initialValue={CONVERSATOINS_FILTER_BAR_FORM_INITIAL_VALUES}
             >
