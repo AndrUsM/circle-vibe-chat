@@ -18,7 +18,7 @@ export const useSendVideoAsBuffer = () => {
   const notification = useNotification();
 
   return useCallback(
-    async (file: File, messageInputDto: SendMessageChatSocketParams) => {
+    async (file: File, messageInputDto: SendMessageChatSocketParams, bucket: string) => {
       if (!file) {
         notification({
           type: 'error',
@@ -33,7 +33,7 @@ export const useSendVideoAsBuffer = () => {
         content: `Started uploading video ${file.name}`,
       });
 
-      const video = await uploadVideo(file, ConversationBucketNameEnum.CONVERSATIONS);
+      const video = await uploadVideo(file, bucket);
       const { filePath, optimisedFilePath } = video;
 
       socket.emit(

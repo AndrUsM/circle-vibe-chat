@@ -14,6 +14,7 @@ import {
   useBoolean,
   useIcons,
 } from '@circle-vibe/components';
+import { DEFAULT_PAGINATION_PAGE } from '@circle-vibe/shared';
 
 import * as Resizer from '@column-resizer/react';
 import { useTranslation } from 'react-i18next';
@@ -48,8 +49,6 @@ import { useDeleteMessage } from '@api/messages';
 import { ConversationModals } from './conversation-modals';
 
 import './conversation.scss';
-import { ChatType } from '@circle-vibe/shared';
-import { DEFAULT_PAGINATION_PAGE } from '@shared/constants';
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();

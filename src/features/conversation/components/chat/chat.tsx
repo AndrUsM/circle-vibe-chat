@@ -44,7 +44,7 @@ export const Chat: ExtendedReactFunctionalComponent<ChatProps> = ({
 
   return (
     <ClusterLayout
-      space='0.5rem'
+      space='0.25rem'
       justifyContent='space-between'
       alignItems='center'
       className={classNames('relative overflow-hidden chat p-2 rounded-2 cursor-pointer', {

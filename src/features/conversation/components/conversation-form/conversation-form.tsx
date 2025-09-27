@@ -3,11 +3,11 @@ import { ChatType } from '@circle-vibe/shared';
 import {
   ExtendedReactFunctionalComponent,
   Form,
-  FormControlCheckbox,
   FormControlInput,
   FormControlSelect,
   FormControlTextarea,
   FormGroup,
+  noop,
   StackLayout,
   SubmitButton,
 } from '@circle-vibe/components';
@@ -19,8 +19,14 @@ import {
   CREATE_CONVERSATION_FORM_VALIDATION_SCHEMA,
 } from './constants';
 
-export const ConversationForm: ExtendedReactFunctionalComponent = () => {
-  const createConversation = useHandleChatCreation();
+interface ConversationFormProps {
+  onClose?: VoidFunction;
+}
+
+export const ConversationForm: ExtendedReactFunctionalComponent<ConversationFormProps> = ({
+  onClose = noop
+}) => {
+  const createConversation = useHandleChatCreation(onClose);
 
   return (
     <Form

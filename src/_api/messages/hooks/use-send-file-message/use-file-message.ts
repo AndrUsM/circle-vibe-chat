@@ -1,4 +1,4 @@
-import { ChatSocketCommand, ConversationBucketNameEnum } from '@circle-vibe/shared';
+import { ChatSocketCommand } from '@circle-vibe/shared';
 
 import { useSocket } from '@core/hooks';
 import { composeCreateMessageFileParams, UseSendMessageInput } from '@features/messages/utils';
@@ -10,9 +10,9 @@ export const useSendFileMessage = () => {
   const { socket } = useSocket();
   const getMessageTypeToUploadingMethodMap = useMessageTypeToUploadingMethodMap();
 
-  return async (file: File, messageInputDto: UseSendMessageInput) => {
+  return async (file: File, messageInputDto: UseSendMessageInput, bucket: string) => {
     const uploadingMethod = getMessageTypeToUploadingMethodMap(messageInputDto.messageType);
-    const fileUrl: IFileUrl = await uploadingMethod(file, ConversationBucketNameEnum.CONVERSATIONS);
+    const fileUrl: IFileUrl = await uploadingMethod(file, bucket);
 
     const payload = composeCreateMessageFileParams(
       messageInputDto,

@@ -8,7 +8,7 @@ import {
 import { fileServerRequest } from '@core/request';
 
 export const useSendFile = () => {
-  const uploadFile = async (file: File, bucket: ConversationBucketNameEnum) => {
+  const uploadFile = async (file: File, bucket: string) => {
     const data = new FormData();
     data.append('file', file);
 
@@ -24,7 +24,7 @@ export const useSendFile = () => {
     return response.data as UploadFileOutputDto;
   };
 
-  const uploadImage = async (file: File, bucket: ConversationBucketNameEnum) => {
+  const uploadImage = async (file: File, bucket: string | ConversationBucketNameEnum) => {
     const data = new FormData();
     data.append('image', file);
 
@@ -40,7 +40,7 @@ export const useSendFile = () => {
     return response.data as UploadImageOutputDto;
   };
 
-  const uploadVideo = async (file: File, bucket: ConversationBucketNameEnum) => {
+  const uploadVideo = async (file: File, bucket: string) => {
     const data = new FormData();
     data.append('video', file);
 
@@ -56,7 +56,7 @@ export const useSendFile = () => {
     return response.data as UploadVideoOutputDto;
   };
 
-  const uploadAudio = async (file: File, bucket: ConversationBucketNameEnum) => {
+  const uploadAudio = async (file: File, bucket: string) => {
     const data = new FormData();
     data.append('audio', file);
 

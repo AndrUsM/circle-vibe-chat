@@ -30,7 +30,7 @@ export const ConversationModals: ExtendedReactFunctionalComponent<ConversationMo
         </Modal.Header>
 
         <Modal.Body>
-          <ConversationForm />
+          <ConversationForm onClose={() => setOpenChatCreationModal(false)} />
         </Modal.Body>
       </Modal.Root>
 

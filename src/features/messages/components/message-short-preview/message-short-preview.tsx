@@ -31,7 +31,7 @@ export const MessageShortPreview: ExtendedReactFunctionalComponent<MessageShortP
       <Show.Else>
         <StackLayout space='0.25rem' className='w-full'>
           <Show.When isTrue={Boolean(files?.length)}>
-            <span className='text-sm truncate white-space-nowrap'>
+            <span className='truncate white-space-nowrap'>
               {files?.length}
               {files?.length === 1 ? 'file' : 'files'}
               {content?.length ? 'with text message' : ''}

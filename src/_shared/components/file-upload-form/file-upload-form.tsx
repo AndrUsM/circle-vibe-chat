@@ -1,7 +1,5 @@
 import React, { ChangeEvent, useRef } from 'react';
 
-import { ConversationBucketNameEnum } from '@circle-vibe/shared';
-
 import {
   CenteredVertialLayout,
   FormControl,
@@ -29,7 +27,7 @@ interface FileUploadFormProps {
   label: string;
   url: string | null;
   type?: FileUploadFormFileType;
-  bucket: ConversationBucketNameEnum;
+  bucket: string;
   disabled?: boolean;
   isRequired?: boolean;
   afterUpload: (fileUrls: ComposedFileUploadResponse) => void;
