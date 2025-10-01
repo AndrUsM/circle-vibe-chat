@@ -5,5 +5,6 @@ export const CONVERSATOINS_FILTER_BAR_FORM_INITIAL_VALUES: ConversationsFilterBa
   userId: undefined,
   empty: false,
   removed: false,
-  isPrivateChat: false
+  isPrivateChat: false,
+  userIds: [],
 };

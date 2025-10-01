@@ -3,10 +3,7 @@ import React, { Suspense, useCallback, useRef } from 'react';
 import {
   Button,
   CenteredVertialLayout,
-  ClusterLayout,
-  FormControl,
   Icon,
-  Input,
   LoadingOverlay,
   Modal,
   Show,
@@ -14,7 +11,6 @@ import {
   useBoolean,
   useIcons,
 } from '@circle-vibe/components';
-import { DEFAULT_PAGINATION_PAGE } from '@circle-vibe/shared';
 
 import * as Resizer from '@column-resizer/react';
 import { useTranslation } from 'react-i18next';
@@ -23,15 +19,7 @@ import { useDebouncedCallback } from 'use-debounce';
 import { Filters, PaginationControls, PaginationScrollButton } from '@shared/components';
 import { useConfirmation, useScrollToBlockPosition } from '@shared/hooks';
 
-import {
-  Chat,
-  useConversationGateway,
-  useInitialChatSelection,
-  ConversationsFilterBar,
-  ConversationsFilterBarFormValues,
-  CONVERSATOINS_FILTER_BAR_FORM_INITIAL_VALUES,
-  conversationFilterBarValuesToRequestMap,
-} from '@features/conversation';
+import { Chat, InitialSetup, useConversationGateway, useInitialChatSelection } from '@features/conversation';
 import {
   Message,
   MessageForm,
@@ -49,6 +37,8 @@ import { useDeleteMessage } from '@api/messages';
 import { ConversationModals } from './conversation-modals';
 
 import './conversation.scss';
+import { RESIZE_BUTTON_BORDER_RADIUS_CONFIG } from './constants';
+import { ConversationChatFilters } from './conversation-chat-filters';
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
@@ -111,10 +101,9 @@ export const Conversations: React.FC = () => {
     isSavedMessagesChat,
     onChatSelect,
     triggerGetPaginatedChats,
-    triggerSearchChatsByName,
   } = useConversationGateway(onScrollMessages);
 
-  const debouncedChatSearch = useDebouncedCallback(triggerSearchChatsByName, 1000);
+  const debouncedChatFilter = useDebouncedCallback(triggerGetPaginatedChats, 1000);
 
   const onDeleteMessage = useCallback(
     async (messageId: number) => {
@@ -146,91 +135,51 @@ export const Conversations: React.FC = () => {
           <Button
             className='toggle-chats-section-button'
             color='secondary'
-            borderRadius={{
-              topLeft: false,
-              bottomLeft: false,
-              topRight: true,
-              bottomRight: true,
-            }}
+            borderRadius={RESIZE_BUTTON_BORDER_RADIUS_CONFIG}
             onClick={onExpandChats}
           >
             <Icon name={cilArrowThickToRight} color='var(--cv-light)' size={16} />
           </Button>
 
           <StackLayout className='w-full p-3 overflow-x-hidden'>
-            <Filters
-              onChange={(filters) => {
-                triggerGetPaginatedChats(
-                  DEFAULT_PAGINATION_PAGE,
-                  conversationFilterBarValuesToRequestMap(
-                    filters as ConversationsFilterBarFormValues,
-                  ),
-                );
-              }}
-              initialValue={CONVERSATOINS_FILTER_BAR_FORM_INITIAL_VALUES}
-            >
-              {({ isActive, setFilter }) => (
-                <StackLayout
-                  space='1rem'
-                  justifyContent='justify-between'
-                  className='flex-wrap chats-section_desktop-only-content'
-                >
-                  <FormControl className='w-full'>
-                    <Input
-                      className='p-4 rounded-2'
-                      placeholder={t('input.search.placeholder')}
-                      onChange={(e: React.ChangeEvent<HTMLInputElement>) => {
-                        setFilter('name', e.target.value as never);
+            <Show>
+              <Show.When isTrue={false}>
+                <ConversationChatFilters
+                  isChatsFiltersBarVisible={isChatsFiltersBarVisible}
+                  isChatsNotEmpty={Number(chats?.totalItems) > 0}
+                  toggleOpenChatCreationModal={toggleOpenChatCreationModal}
+                  triggerChatsFiltersBarVisibility={triggerChatsFiltersBarVisibility}
+                  onChange={debouncedChatFilter}
+                />
+
+                <StackLayout className='overflow-y-container-no-gutter'>
+                  {chats?.data.map((chat) => (
+                    <Chat
+                      key={chat.id}
+                      chat={chat}
+                      chatParticipant={chatParticipant}
+                      selected={selectedChatId === chat.id}
+                      onClick={() => {
+                        if (chat.id !== selectedChatId) {
+                          onChatSelect(chat.id);
+                          setFilterBarVisibility(false);
+                        }
                       }}
                     />
-                  </FormControl>
-
-                  <Show.When isTrue={isChatsFiltersBarVisible}>
-                    <ConversationsFilterBar />
-                  </Show.When>
-
-                  <ClusterLayout space='0.75rem'>
-                    <Button size='medium' className='w-full' onClick={toggleOpenChatCreationModal}>
-                      {t('button.actions.create')}
-                    </Button>
-
-                    <Show.When isTrue={Number(chats?.totalItems) > 0}>
-                      <Button
-                        size='medium'
-                        className='w-10'
-                        color={isActive ? 'primary' : 'secondary'}
-                        onClick={triggerChatsFiltersBarVisibility}
-                      >
-                        <Icon name={cilFilter} color='var(--cv-light)' size={16} />
-                      </Button>
-                    </Show.When>
-                  </ClusterLayout>
+                  ))}
                 </StackLayout>
-              )}
-            </Filters>
 
-            <StackLayout className='overflow-y-container-no-gutter'>
-              {chats?.data.map((chat) => (
-                <Chat
-                  key={chat.id}
-                  chat={chat}
-                  chatParticipant={chatParticipant}
-                  selected={selectedChatId === chat.id}
-                  onClick={() => {
-                    if (chat.id !== selectedChatId) {
-                      onChatSelect(chat.id);
-                      setFilterBarVisibility(false);
-                    }
-                  }}
+                <PaginationControls
+                  paginatedResponse={chats}
+                  currentPage={chatsPage}
+                  onPageChange={triggerGetPaginatedChats}
                 />
-              ))}
-            </StackLayout>
+              </Show.When>
 
-            <PaginationControls
-              paginatedResponse={chats}
-              currentPage={chatsPage}
-              onPageChange={triggerGetPaginatedChats}
-            />
+              <Show.Else>
+                <InitialSetup />
+              </Show.Else>
+            </Show>
           </StackLayout>
 
           <Show.When isTrue={chatsLoading}>

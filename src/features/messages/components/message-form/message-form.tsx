@@ -125,7 +125,7 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
             />
           </Show.When>
 
-          <StackLayout space='0.5rem' alignItems='flex-start' data-color-mode='light'>
+          <StackLayout space='0.5rem' alignItems='flex-end' data-color-mode='light'>
             <FormikFormControl formFieldName='content' className='w-full'>
               <MDEditor
                 ref={textareaRef}
@@ -149,7 +149,7 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
               />
             </FormikFormControl>
 
-            <ClusterLayout justifyContent='flex-end' space='0.5rem' alignItems='flex-start'>
+            <ClusterLayout justifyContent='flex-end' space='0.5rem' alignItems='flex-end'>
               {children}
 
               <Button

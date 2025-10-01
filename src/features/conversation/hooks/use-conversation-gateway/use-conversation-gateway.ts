@@ -10,6 +10,7 @@ import {
   RequestMessagesWithPaginationChatSocketParams,
   DEFAULT_PAGINATION_PAGE_SIZE,
   ChatType,
+  User,
 } from '@circle-vibe/shared';
 
 import { FormikHelpers } from 'formik';
@@ -26,6 +27,7 @@ import { useCreateThread } from '@api/threads';
 
 import { useConversationGatewayState } from './use-conversation-gateway-state';
 import { useChatSocketLogicInitialization } from './use-conversation-socket-intialization';
+import { PaginatedChatsFilters } from '@features/conversation/types';
 
 /**
  * A custom React hook that manages the conversation gateway logic, handling chat and message interactions.
@@ -193,19 +195,15 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
 
   const triggerGetPaginatedChats = (
     page: number,
-    filters?: {
-      name?: string;
-      empty?: boolean;
-      removed?: boolean;
-      type?: ChatType;
-    },
+    filters?: PaginatedChatsFilters,
   ) => {
     setMessagesPage(page);
     setChatsLoading(true);
 
     const userId = user?.id;
+    const userIds = filters?.userIds ?? [];
     const params: RequestChatsWithPaginationChatSocketParams = {
-      userId,
+      userId: [userId, ...userIds],
       page,
       pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
       name: filters?.name,

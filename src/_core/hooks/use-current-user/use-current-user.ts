@@ -11,7 +11,7 @@ export const useCurrentUser = (): CurrentUserContext => {
   const user = userContext?.user;
 
   return {
-    user: user as User,
+    user: user ?? {} as User,
     setUser: userContext?.setUser ?? noop,
     clear: userContext?.clear ?? noop,
   };

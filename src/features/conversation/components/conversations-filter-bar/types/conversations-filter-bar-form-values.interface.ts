@@ -6,4 +6,5 @@ export interface ConversationsFilterBarFormValues {
   removed?: boolean;
   name?: string;
   isPrivateChat?: boolean;
+  userIds?: number[];
 }

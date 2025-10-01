@@ -37,6 +37,19 @@ export const useSignUp = () => {
           type: 'success',
           content: 'Check your email, and login with identification-key and password!',
         });
+      })
+      .catch((error) => {
+        if (error?.response?.data) {
+          notification({
+            type: 'error',
+            content: error.response.data?.message,
+          });
+        } else {
+          notification({
+            type: 'error',
+            content: 'Unknown error, please contact support service'
+          })
+        }
       });
   }, []);
 };
