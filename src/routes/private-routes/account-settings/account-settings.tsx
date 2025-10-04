@@ -13,8 +13,10 @@ import {
   AccountSettingsTabs,
   InviteAccountSettingsForm,
 } from '@features/users';
+import { useTranslation } from 'react-i18next';
 
 export const AccountSettings: React.FC = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const [currentTab, setCurrentTab] = useState<AccountSettingsTabs>(AccountSettingsTabs.GENERAL);
 
@@ -31,14 +33,14 @@ export const AccountSettings: React.FC = () => {
           active={currentTab === AccountSettingsTabs.GENERAL}
           onClick={() => setCurrentTab(AccountSettingsTabs.GENERAL)}
         >
-          General
+          {t('settings.account-settings.general.label')}
         </Tabs.Button>
 
         <Tabs.Button
           active={currentTab === AccountSettingsTabs.INVITES}
           onClick={() => setCurrentTab(AccountSettingsTabs.INVITES)}
         >
-          Invites
+          {t('settings.account-settings.invites.label')}
         </Tabs.Button>
       </Tabs>
 

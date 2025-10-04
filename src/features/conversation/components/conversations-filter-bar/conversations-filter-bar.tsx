@@ -74,9 +74,9 @@ export const ConversationsFilterBar: React.FC<ConversationsFilterBarProps> = ({ 
         </Checkbox>
       </StackLayout>
 
-      <HorizontalDivider color='var(--cv-bg-secondary)' />
+      <Show.When isTrue={conversationParticipants.length > 1}>
+        <HorizontalDivider color='var(--cv-bg-secondary)' />
 
-      <Show.When isTrue={conversationParticipants.length > 0}>
         <StackLayout
           space='0.5rem'
           className='flex-wrap conversations-filter-bar__participants overflow-y-container overflow-x-hidden max-w-full'
@@ -86,7 +86,7 @@ export const ConversationsFilterBar: React.FC<ConversationsFilterBarProps> = ({ 
           {conversationParticipants.map(({ user }) => (
             <CenteredVertialLayout
               className={classNames('w-full overflow-x-hidden', {
-                'font-semibold': user.id === userId,
+                'element_state-disabled': user.id === userId,
               })}
             >
               <Checkbox

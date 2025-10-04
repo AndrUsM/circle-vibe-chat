@@ -45,7 +45,7 @@ export const useSignIn = () => {
     } catch {
       notification({
         type: 'warning',
-        content: t('login.wrong-credentials.message'),
+        content: t('auth.wrong-credentials.message'),
       });
     }
   }, []);

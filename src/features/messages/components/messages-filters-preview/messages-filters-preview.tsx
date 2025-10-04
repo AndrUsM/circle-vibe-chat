@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import {
   CenteredVertialLayout,
   ClusterLayout,
@@ -7,6 +9,7 @@ import {
   Tooltip,
   useIcons,
 } from '@circle-vibe/components';
+
 import { MessagesFilterBarFormValues } from '../messages-filter-bar';
 
 interface MessagesFilterPreviewProps {
@@ -20,6 +23,7 @@ export const MessagesFilterPreview: React.FC<MessagesFilterPreviewProps> = ({
   resetFilters,
   triggerFiltersBarVisibility,
 }) => {
+  const {t} = useTranslation();
   const { cilChevronBottom, cilClearAll } = useIcons();
 
   return (
@@ -28,15 +32,15 @@ export const MessagesFilterPreview: React.FC<MessagesFilterPreviewProps> = ({
       className='bg-primary text-light p-3 rounded-tl-2 rounded-bl-2'
     >
       <StackLayout space='0.15rem'>
-        <div>Searching by: "{filters?.content}"</div>
+        <div>{t('filters.search-by.label')}: "{filters?.content}"</div>
 
         <Show.When isTrue={Boolean(filters.senderIds?.length)}>
-          <div>Selected participants: {filters.senderIds?.length}</div>
+          <div>{t('filters.conversation.selected-participants.label')}: {filters.senderIds?.length}</div>
         </Show.When>
       </StackLayout>
 
       <ClusterLayout alignItems='center' space='0.75rem'>
-        <Tooltip title='Clear filters'>
+        <Tooltip title={t('filters.clear-filters.label')}>
           <Icon
             className='cursor-pointer'
             name={cilClearAll}
@@ -46,7 +50,7 @@ export const MessagesFilterPreview: React.FC<MessagesFilterPreviewProps> = ({
           />
         </Tooltip>
 
-        <Tooltip title='Open filters'>
+        <Tooltip title={t('filters.open-filters.label')}>
           <Icon
             className='cursor-pointer'
             name={cilChevronBottom}

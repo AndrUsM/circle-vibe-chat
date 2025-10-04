@@ -48,17 +48,17 @@ export const AuthorizationForm: React.FC = () => {
       </FormGroup>
 
       <StackLayout space={'1rem'}>
-        <FormSubmitButton>{t('login.sign-in.submit-button')}</FormSubmitButton>
+        <FormSubmitButton>{t('auth.sign-in.submit-button')}</FormSubmitButton>
 
         <HorizontalDivider height='1px' />
 
         <CenteredVertialLayout space={'1rem'} justifyContent='center'>
           <Button color='secondary' onClick={onNavigateToSignUpPage}>
-            {t('login.create-account.button')}
+            {t('auth.create-account.button')}
           </Button>
 
           <Button color='secondary' onClick={onNavigateToRestorePasswordPage}>
-            {t('login.restore-password.button')}
+            {t('auth.restore-password.button')}
           </Button>
         </CenteredVertialLayout>
       </StackLayout>

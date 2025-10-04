@@ -83,7 +83,7 @@ export const ConversationChatFilters: ExtendedReactFunctionalComponent<
               <Button
                 size='medium'
                 className='w-10'
-                color={isActive ? 'primary' : 'secondary'}
+                color={isActive || isChatsFiltersBarVisible ? 'primary' : 'secondary'}
                 onClick={triggerChatsFiltersBarVisibility}
               >
                 <Icon name={cilFilter} color='var(--cv-light)' size={16} />

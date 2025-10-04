@@ -55,21 +55,33 @@ export const SignUpForm: React.FC = () => {
     >
       {({ values, setFieldValue }: FormikProps<SignUpFormInput>) => (
         <StackLayout space='0.75rem'>
-          <FormGroup isRequired label={'Name'} formFieldName={'firstname'}>
+          <FormGroup
+            isRequired
+            label={t('settings.account-settings.general.account-settings.firstname.label')}
+            formFieldName={'firstname'}
+          >
             <FormControlInput />
           </FormGroup>
 
-          <FormGroup isRequired label={'Surname'} formFieldName={'surname'}>
+          <FormGroup
+            isRequired
+            label={t('settings.account-settings.general.account-settings.surname.label')}
+            formFieldName={'surname'}
+          >
             <FormControlInput />
           </FormGroup>
 
-          <FormGroup isRequired label={'Username'} formFieldName={'username'}>
+          <FormGroup
+            isRequired
+            label={t('settings.account-settings.general.account-settings.username.label')}
+            formFieldName={'username'}
+          >
             <FormControlInput />
           </FormGroup>
 
           <FileUploadForm
             url={values.avatarUrl}
-            label='Avatar'
+            label={t('settings.account-settings.general.account-settings.avatar.label')}
             bucket={ConversationBucketNameEnum.USER_AVATARS}
             type={FileUploadFormFileType.IMAGE}
             afterUpload={(fileUrls) => {
@@ -80,11 +92,19 @@ export const SignUpForm: React.FC = () => {
             }}
           />
 
-          <FormGroup isRequired label={'Email'} formFieldName={'email'}>
+          <FormGroup
+            isRequired
+            label={t('settings.account-settings.general.account-settings.email.label')}
+            formFieldName={'email'}
+          >
             <FormControlInput type='email' />
           </FormGroup>
 
-          <FormGroup isRequired label='Password' formFieldName='password'>
+          <FormGroup
+            isRequired
+            label={t('settings.account-settings.general.account-settings.password.label')}
+            formFieldName='password'
+          >
             <FormControlInput type='password' />
           </FormGroup>
 
@@ -131,17 +151,17 @@ export const SignUpForm: React.FC = () => {
           </FormGroup>
 
           <StackLayout space={'1rem'}>
-            <FormSubmitButton>{t('login.sign-up.submit-button')}</FormSubmitButton>
+            <FormSubmitButton>{t('auth.sign-up.submit-button')}</FormSubmitButton>
 
             <HorizontalDivider height='1px' />
 
             <CenteredVertialLayout space={'1rem'} justifyContent='center'>
               <Button color='secondary' onClick={onNavigateToSignInPage}>
-                {t('login.sign-in.submit-button')}
+                {t('auth.sign-in.submit-button')}
               </Button>
 
               <Button color='secondary' onClick={onNavigateToRestorePasswordPage}>
-                {t('login.restore-password.button')}
+                {t('auth.restore-password.button')}
               </Button>
             </CenteredVertialLayout>
           </StackLayout>
