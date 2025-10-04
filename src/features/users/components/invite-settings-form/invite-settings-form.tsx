@@ -1,3 +1,5 @@
+import { useTranslation } from 'react-i18next';
+
 import {
   ExtendedReactFunctionalComponent,
   FormControlTextarea,
@@ -16,6 +18,7 @@ import {
 } from './constants';
 
 export const InviteAccountSettingsForm: ExtendedReactFunctionalComponent = () => {
+  const { t } = useTranslation();
   const onAcceptInvite = useHandleAcceptInvite();
 
   return (
@@ -25,18 +28,26 @@ export const InviteAccountSettingsForm: ExtendedReactFunctionalComponent = () =>
       onSubmit={onAcceptInvite}
     >
       <Section className='pt-6'>
-        <Section.Header>Accept Invite</Section.Header>
+        <Section.Header>
+          {t('settings.account-settings.invites.accept-invite.label')}
+        </Section.Header>
 
         <Section.Description>
-          Insert your token to accept invite and get access to conversation.
+          {t('settings.account-settings.invites.accept-invite.description')}
         </Section.Description>
 
-        <FormGroup isRequired label='Token' formFieldName='token'>
+        <FormGroup
+          isRequired
+          label={t('settings.account-settings.invites.token.label')}
+          formFieldName='token'
+        >
           <FormControlTextarea className='resize-vertical min-h-10 p-3' />
         </FormGroup>
       </Section>
 
-      <SubmitButton>Accept Invite</SubmitButton>
+      <SubmitButton>
+        {t('settings.account-settings.invites.accept-invite.button.label')}
+      </SubmitButton>
     </Form>
   );
 };

@@ -4,6 +4,7 @@
   "button.actions.cancel": "Cancel",
   "button.actions.create": "Create",
   "button.actions.delete": "Delete",
+  "button.actions.save": "Save",
   "button.actions.search": "Search",
   "button.actions.reset": "Reset",
   "message.empty": "There is not messages yet",
@@ -11,17 +12,82 @@
   "saved-messages": "Saved messages",
   "chat.empty": "There is not chats yet",
   "http-request.general-internal-server-error.message": "Something went wrong, we will work on it",
-  "login.wrong-credentials.message": "Please check email or password",
-  "login.sign-in.submit-button": "Sign in",
-  "login.sign-up.submit-button": "Sign-up",
-  "login.restore-password.button": "Restore password",
-  "login.create-account.button": "Create Account",
+
+  "auth.wrong-credentials.message": "Please check email or password",
+  "auth.sign-in.submit-button": "Sign in",
+  "auth.sign-up.submit-button": "Sign-up",
+  "auth.restore-password.button": "Restore password",
+  "auth.create-account.button": "Create Account",
+  "auth.reset-password.button": "Reset Password",
+  "auth.confirm-email.button": "Confirm Email",
+  "auth.account-confirmation.dialog.header": "Account Confirmation",
+  "auth.fields.email.label": "Email",
+  "auth.fields.password.label": "Password",
+  "auth.fields.confirmation-code.label": "Password",
+  "auth.fields.password.placeholder": "Password",
+
+  "conversations.form.field.name.label": "Name",
+  "conversations.form.field.description.label": "Description",
+  "conversations.form.field.description.placeholder": "Book Club Picks",
+  "conversations.form.field.name.placeholder": "Book Club Picks",
+  "conversations.form.field.type.label": "Type",
+  "conversations.form.field.members-limit.label": "Members Limit",
+
+  "conversations.initial-setup.description": "Before start use application, please finish setup.",
+  "conversations.initial-setup.button.label": "Finish Setup",
   "conversations.send.button": "Send",
   "conversations.send.input.placeholder": "Type your message...",
   "conversations.actions.account-settings": "Account Settings",
   "conversations.buttons.create-conversation": "Create conversation",
+
   "filters.conversation.chat-participants.label": "Chart Participants",
   "filters.conversation.private-conversations.label": "Private conversations",
   "filters.conversation.archived-conversations.label": "Archived conversations",
-  "filters.conversation.empty-conversations.label": "Empty conversations"
+  "filters.conversation.empty-conversations.label": "Empty conversations",
+  "filters.conversation.selected-participants.label": "Selected participants:",
+  "filters.search-by.label": "Searching by",
+  "filters.clear-filters.label": "Clear filters",
+  "filters.open-filters.label": "Open filters",
+  "settings.account-settings.general.label": "General",
+  "settings.account-settings.invites.label": "Invites",
+
+  "settings.account-settings.general.account-settings.label": "General Account Setting",
+  "settings.account-settings.general.account-settings.firstname.label": "Name",
+  "settings.account-settings.general.account-settings.surname.label": "Surname",
+  "settings.account-settings.general.account-settings.nickname.label": "Nickname",
+  "settings.account-settings.general.account-settings.username.label": "Username",
+  "settings.account-settings.general.account-settings.birth-date.label": "Birth Date",
+  "settings.account-settings.general.account-settings.avatar.label": "Avatar",
+
+  "settings.account-settings.general.account-settings.blocked-users.section.label": "Blocked Users",
+  "settings.account-settings.general.account-settings.blocked-users.label": "Blocked Users",
+
+  "settings.account-settings.general.account-settings.email.label": "Email",
+  "settings.account-settings.general.account-settings.phone.label": "Phone",
+  "settings.account-settings.general.account-settings.security.label": "Security",
+
+  "settings.account-settings.general.account-settings.password.label": "Password",
+  "settings.account-settings.general.account-settings.password-confirmation.label": "Password Confirmation",
+  "settings.account-settings.general.account-settings.account-type.label": "Account Type",
+  "settings.account-settings.general.account-settings.show-in-search.label": "Allow to search",
+  "settings.account-settings.general.account-settings.hide-contact-info.label": "Hide contact info",
+  "settings.account-settings.general.account-settings.location-information.label": "Location Information",
+
+  "settings.account-settings.general.account-settings.country.label": "Country",
+  "settings.account-settings.general.account-settings.city.label": "City",
+
+  "settings.account-settings.general.account-settings.personal-key.label": "Personal Key",
+
+  "settings.account-settings.invites.accept-invite.label": "Accept Invite",
+  "settings.account-settings.invites.accept-invite.description": "Insert your token to accept invite and get access to conversation.",
+  "settings.account-settings.invites.token.label": "Token",
+  "settings.account-settings.invites.accept-invite.button.label": "Accept Invite",
+
+  "user.account-type.private.label": "Private",
+  "user.account-type.public.label": "Public",
+
+  "conversations.type.private.label": "Private",
+  "conversations.type.public.label": "Public",
+
+  "notifications.confirmation-code-has-been-sent": "Confirmation code has been sent to your email!"
 }

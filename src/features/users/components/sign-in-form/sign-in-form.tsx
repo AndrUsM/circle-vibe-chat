@@ -39,26 +39,26 @@ export const AuthorizationForm: React.FC = () => {
       validationSchema={AUTHORIZATION_FORM_SCHEMA}
       initialValues={AUTHORIZATION_FORM_INITIAL_VALUES}
     >
-      <FormGroup isRequired label={'Email'} formFieldName={'email'}>
+      <FormGroup isRequired label={t('auth.fields.email.label')} formFieldName={'email'}>
         <FormControlInput type='email' />
       </FormGroup>
 
-      <FormGroup isRequired label='Password' formFieldName='password'>
+      <FormGroup isRequired label={t('auth.fields.password.label')} formFieldName='password'>
         <FormControlInput type='password' />
       </FormGroup>
 
-      <StackLayout space={'1rem'}>
-        <FormSubmitButton>{t('login.sign-in.submit-button')}</FormSubmitButton>
+      <StackLayout space='1rem'>
+        <FormSubmitButton>{t('auth.sign-in.submit-button')}</FormSubmitButton>
 
         <HorizontalDivider height='1px' />
 
-        <CenteredVertialLayout space={'1rem'} justifyContent='center'>
+        <CenteredVertialLayout space='1rem' justifyContent='center'>
           <Button color='secondary' onClick={onNavigateToSignUpPage}>
-            {t('login.create-account.button')}
+            {t('auth.create-account.button')}
           </Button>
 
           <Button color='secondary' onClick={onNavigateToRestorePasswordPage}>
-            {t('login.restore-password.button')}
+            {t('auth.restore-password.button')}
           </Button>
         </CenteredVertialLayout>
       </StackLayout>

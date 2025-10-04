@@ -1,4 +1,5 @@
 import React, { useCallback } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   Form,
@@ -24,6 +25,7 @@ export const AccountConfirmationForm: React.FC<AccountConfirmationFormProps> = (
   email,
   onClose = noop,
 }) => {
+  const { t } = useTranslation();
   const confirmAccount = useConfirmAccount();
   const onSubmit = useCallback(async (values: AccountConfirmationFormValues) => {
     const response = await confirmAccount(values);
@@ -43,11 +45,13 @@ export const AccountConfirmationForm: React.FC<AccountConfirmationFormProps> = (
       onSubmit={onSubmit}
     >
       <StackLayout space='1rem'>
-        <FormGroup label='Confirmation Code' formFieldName='code' isRequired>
+        <FormGroup label={t('auth.fields.confirmation-code.label')} formFieldName='code' isRequired>
           <FormControlInput />
         </FormGroup>
 
-        <FormSubmitButton>Confirm</FormSubmitButton>
+        <FormSubmitButton>
+          {t('button.actions.confirm')}
+        </FormSubmitButton>
       </StackLayout>
     </Form>
   );

@@ -1,4 +1,5 @@
 import { useCallback, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import {
   Button,
@@ -32,6 +33,7 @@ import {
 import { RestorePasswordFormValues } from './types';
 
 export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const notification = useNotification();
   const [email, setEmail] = useState('');
@@ -61,7 +63,7 @@ export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
       setConfirmationModalOpen(true);
       notification({
         type: 'success',
-        content: 'Confirmation code has been sent to your email!',
+        content: t('notifications.confirmation-code-has-been-sent'),
       });
     }
   }, []);
@@ -86,18 +88,21 @@ export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
       >
         {({ values, isValid }: FormikProps<RestorePasswordFormValues>) => (
           <StackLayout>
-            <FormGroup isRequired label='Email' formFieldName='email'>
-              <FormControlInput type='email' placeholder='Email' />
+            <FormGroup isRequired label={t('auth.fields.email.label')} formFieldName='email'>
+              <FormControlInput type='email' />
             </FormGroup>
 
-            <FormGroup isRequired label='Password' formFieldName='password'>
-              <FormControlInput type='password' placeholder='Password' />
+            <FormGroup isRequired label={t('auth.fields.password.label')} formFieldName='password'>
+              <FormControlInput
+                type='password'
+                placeholder={t('auth.fields.password.placeholder')}
+              />
             </FormGroup>
 
             <Show.When isTrue={isConfirmationCodeAdded}></Show.When>
 
             <Show.When isTrue={isConfirmationCodeAdded}>
-              <FormSubmitButton>Reset Password</FormSubmitButton>
+              <FormSubmitButton>{t('auth.reset-password.button')}</FormSubmitButton>
             </Show.When>
 
             <Show.When isTrue={!isConfirmationCodeAdded}>
@@ -108,7 +113,7 @@ export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
                   onGenerateConfirmaitonCode(values);
                 }}
               >
-                Confirm Email
+                {t('auth.confirm-email.button')}
               </Button>
             </Show.When>
 
@@ -116,11 +121,11 @@ export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
 
             <CenteredVertialLayout space={'1rem'} justifyContent='center'>
               <Button type='button' color='secondary' onClick={goToSignInPage}>
-                Sign-in
+                {t('auth.sign-in.submit-button')}
               </Button>
 
               <Button type='button' color='secondary' onClick={goToSignUpPage}>
-                Sign-up
+                {t('auth.sign-up.submit-button')}
               </Button>
             </CenteredVertialLayout>
           </StackLayout>
@@ -133,7 +138,7 @@ export const RestorePasswordForm: ExtendedReactFunctionalComponent = () => {
           setConfirmationModalOpen(false);
         }}
       >
-        <Modal.Header>Account Confirmation</Modal.Header>
+        <Modal.Header>{t('auth.account-confirmation.dialog.header')}</Modal.Header>
 
         <Modal.Body>
           <AccountConfirmationForm

@@ -1,4 +1,4 @@
-import { ChatType } from '@circle-vibe/shared';
+import { useTranslation } from 'react-i18next';
 
 import {
   ExtendedReactFunctionalComponent,
@@ -13,6 +13,7 @@ import {
 } from '@circle-vibe/components';
 
 import { useHandleChatCreation } from '@api/conversations';
+import { CONVERSATION_TYPE_DROPDOWN_OPTIONS } from '@shared/constants';
 
 import {
   CREATE_CONVERSATION_FORM_INITIAL_VALUES,
@@ -24,8 +25,9 @@ interface ConversationFormProps {
 }
 
 export const ConversationForm: ExtendedReactFunctionalComponent<ConversationFormProps> = ({
-  onClose = noop
+  onClose = noop,
 }) => {
+  const { t } = useTranslation();
   const createConversation = useHandleChatCreation(onClose);
 
   return (
@@ -35,26 +37,40 @@ export const ConversationForm: ExtendedReactFunctionalComponent<ConversationForm
       onSubmit={createConversation}
     >
       <StackLayout space='0.5rem'>
-        <FormGroup isRequired label='Name' formFieldName='name'>
-          <FormControlInput placeholder='Book Club Picks' />
+        <FormGroup isRequired label={t('conversations.form.field.name.label')} formFieldName='name'>
+          <FormControlInput placeholder={t('conversations.form.field.name.placeholder')} />
         </FormGroup>
 
-        <FormGroup isRequired label='Description' formFieldName='description'>
-          <FormControlTextarea className='resize-vertical p-3 min-h-20' placeholder='Book Club Picks' />
+        <FormGroup
+          isRequired
+          label={t('conversations.form.field.description.label')}
+          formFieldName='description'
+        >
+          <FormControlTextarea
+            className='resize-vertical p-3 min-h-20'
+            placeholder={t('conversations.form.field.description.placeholder')}
+          />
         </FormGroup>
 
-        <FormGroup isRequired label='Type' formFieldName='type'>
+        <FormGroup isRequired label={t('conversations.form.field.type.label')} formFieldName='type'>
           <FormControlSelect>
-            <option value={ChatType.PRIVATE}>Private</option>
-            <option value={ChatType.PUBLIC}>Public</option>
+            {CONVERSATION_TYPE_DROPDOWN_OPTIONS.map(({ key, label }) => (
+              <option key={`conversation-type-${key}`} value={key}>
+                {t(label)}
+              </option>
+            ))}
           </FormControlSelect>
         </FormGroup>
 
-        <FormGroup isRequired label='Members Limit' formFieldName='usersLimit'>
+        <FormGroup
+          isRequired
+          label={t('conversations.form.field.members-limit.label')}
+          formFieldName='usersLimit'
+        >
           <FormControlInput min={0} step={1} type='number' />
         </FormGroup>
 
-        <SubmitButton>Create</SubmitButton>
+        <SubmitButton>{t('button.actions.create')}</SubmitButton>
       </StackLayout>
     </Form>
   );

@@ -39,8 +39,11 @@ import { toggleArrayItem } from '@shared/utils';
 import { ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA } from './constants';
 import { AccountSettingsFormValues } from './types';
 import { composeAccountSettingsFormValues } from './utils';
+import { useTranslation } from 'react-i18next';
+import { USER_TYPE_DROPDOWN_OPTIONS } from '@shared/constants';
 
 export const AccountSettingsForm: React.FC = () => {
+  const { t } = useTranslation();
   const { user } = useCurrentUser();
   const { cilCopy } = useIcons();
   const updateUserSettings = useUpdateUserSettings();
@@ -73,28 +76,42 @@ export const AccountSettingsForm: React.FC = () => {
       {({ values, setFieldValue }: FormikProps<AccountSettingsFormValues>) => (
         <StackLayout space='2rem' className='pt-6'>
           <Section>
-            <Section.Header>General Account Setting</Section.Header>
+            <Section.Header>
+              {t('settings.account-settings.general.account-settings.label')}
+            </Section.Header>
 
             <Section.Content>
-              <FormGroup label='Firstname' formFieldName='firstname'>
+              <FormGroup
+                label={t('settings.account-settings.general.account-settings.firstname.label')}
+                formFieldName='firstname'
+              >
                 <FormControlInput />
               </FormGroup>
 
-              <FormGroup label='Surname' formFieldName='surname'>
+              <FormGroup
+                label={t('settings.account-settings.general.account-settings.surname.label')}
+                formFieldName='surname'
+              >
                 <FormControlInput />
               </FormGroup>
 
-              <FormGroup label='Nickname' formFieldName='username'>
+              <FormGroup
+                label={t('settings.account-settings.general.account-settings.username.label')}
+                formFieldName='username'
+              >
                 <FormControlInput />
               </FormGroup>
 
-              <FormGroup label='Birth Date' formFieldName='birthDate'>
+              <FormGroup
+                label={t('settings.account-settings.general.account-settings.birth-date.label')}
+                formFieldName='birthDate'
+              >
                 <FormControlInput type='date' />
               </FormGroup>
 
               <FileUploadForm
                 url={values?.avatarUrl ?? null}
-                label='Avatar'
+                label={t('settings.account-settings.general.account-settings.avatar.label')}
                 bucket={ConversationBucketNameEnum.USER_AVATARS}
                 type={FileUploadFormFileType.IMAGE}
                 afterUpload={(fileUrls: UploadImageOutputDto) => {
@@ -106,18 +123,26 @@ export const AccountSettingsForm: React.FC = () => {
           </Section>
 
           <Section>
-            <Section.Header>Blocked Users</Section.Header>
+            <Section.Header>
+              {t('settings.account-settings.general.account-settings.blocked-users.section.label')}
+            </Section.Header>
 
             <Section.Content>
-              <FormGroup label='Blocked Users' formFieldName='blockedUserIds'>
-                <StackLayout space="0.5rem">
+              <FormGroup
+                label={t('settings.account-settings.general.account-settings.blocked-users.label')}
+                formFieldName='blockedUserIds'
+              >
+                <StackLayout space='0.5rem'>
                   {usersRelatedWithCurrentUser?.map((participant) => (
-                    <CenteredVertialLayout key={participant.userId} onClick={() => {
-                      setFieldValue(
-                        'blockedUserIds',
-                        toggleArrayItem(values.blockedUserIds ?? [], participant.userId),
-                      );
-                    }}>
+                    <CenteredVertialLayout
+                      key={participant.userId}
+                      onClick={() => {
+                        setFieldValue(
+                          'blockedUserIds',
+                          toggleArrayItem(values.blockedUserIds ?? [], participant.userId),
+                        );
+                      }}
+                    >
                       <Checkbox checked={values.blockedUserIds?.includes(participant.userId)}>
                         {getUserFullName(participant.user)}
                       </Checkbox>
@@ -132,30 +157,49 @@ export const AccountSettingsForm: React.FC = () => {
             <Section.Header>Contact Information</Section.Header>
 
             <Section.Content>
-              <FormGroup label='Email' formFieldName='email'>
+              <FormGroup
+                label={t('settings.account-settings.general.account-settings.email.label')}
+                formFieldName='email'
+              >
                 <FormControlInput type='email' />
               </FormGroup>
 
-              <FormGroup label='Phone' formFieldName='primaryPhone'>
+              <FormGroup
+                label={t('settings.account-settings.general.account-settings.phone.label')}
+                formFieldName='primaryPhone'
+              >
                 <FormControlInput type='phone' />
               </FormGroup>
             </Section.Content>
           </Section>
 
           <Section>
-            <Section.Header>Security</Section.Header>
+            <Section.Header>
+              {t('settings.account-settings.general.account-settings.security.label')}
+            </Section.Header>
 
             <Section.Content>
               <StackLayout space='1rem'>
                 <StackLayout space='0.5rem'>
-                  <FormGroup label='Password' formFieldName='password'>
+                  <FormGroup
+                    label={t('settings.account-settings.general.account-settings.password.label')}
+                    formFieldName='password'
+                  >
                     <FormControlInput type='password' />
                   </FormGroup>
 
-                  <FormikFormControl label='Account Type' formFieldName='type'>
+                  <FormikFormControl
+                    label={t(
+                      'settings.account-settings.general.account-settings.account-type.label',
+                    )}
+                    formFieldName='type'
+                  >
                     <FormControlSelect>
-                      <option value={UserType.PRIVATE}>Private</option>
-                      <option value={UserType.PUBLIC}>Public</option>
+                      {USER_TYPE_DROPDOWN_OPTIONS.map(({ key, label }) => (
+                        <option key={`user-type-${key}`} value={key}>
+                          {t(label)}
+                        </option>
+                      ))}
                     </FormControlSelect>
 
                     <FormControlError />
@@ -164,11 +208,17 @@ export const AccountSettingsForm: React.FC = () => {
 
                 <StackLayout space='0'>
                   <FormikFormControl formFieldName='isAllowedToSearch'>
-                    <FormControlCheckbox>Show in search</FormControlCheckbox>
+                    <FormControlCheckbox>
+                      {t('settings.account-settings.general.account-settings.show-in-search.label')}
+                    </FormControlCheckbox>
                   </FormikFormControl>
 
                   <FormikFormControl formFieldName='isHiddenContactInfo'>
-                    <FormControlCheckbox>Hide contact info</FormControlCheckbox>
+                    <FormControlCheckbox>
+                      {t(
+                        'settings.account-settings.general.account-settings.hide-contact-info.label',
+                      )}
+                    </FormControlCheckbox>
                   </FormikFormControl>
                 </StackLayout>
               </StackLayout>
@@ -176,21 +226,31 @@ export const AccountSettingsForm: React.FC = () => {
           </Section>
 
           <Section>
-            <Section.Header>Location Information</Section.Header>
+            <Section.Header>
+              {t('settings.account-settings.general.account-settings.location-information.label')}
+            </Section.Header>
 
             <Section.Content>
-              <FormGroup label='Country' formFieldName='country'>
+              <FormGroup
+                label={t('settings.account-settings.general.account-settings.country.label')}
+                formFieldName='country'
+              >
                 <FormControlInput />
               </FormGroup>
 
-              <FormGroup label='City' formFieldName='city'>
+              <FormGroup
+                label={t('settings.account-settings.general.account-settings.city.label')}
+                formFieldName='city'
+              >
                 <FormControlInput />
               </FormGroup>
             </Section.Content>
           </Section>
 
           <Section>
-            <Section.Header>Personal Key</Section.Header>
+            <Section.Header>
+              {t('settings.account-settings.general.account-settings.personal-key.label')}
+            </Section.Header>
 
             <Section.Content>
               <StackLayout>
@@ -213,7 +273,7 @@ export const AccountSettingsForm: React.FC = () => {
             </Section.Content>
           </Section>
 
-          <FormSubmitButton>Save</FormSubmitButton>
+          <FormSubmitButton>{t('button.actions.save')}</FormSubmitButton>
         </StackLayout>
       )}
     </Form>

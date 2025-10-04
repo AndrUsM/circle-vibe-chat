@@ -55,21 +55,33 @@ export const SignUpForm: React.FC = () => {
     >
       {({ values, setFieldValue }: FormikProps<SignUpFormInput>) => (
         <StackLayout space='0.75rem'>
-          <FormGroup isRequired label={'Name'} formFieldName={'firstname'}>
+          <FormGroup
+            isRequired
+            label={t('settings.account-settings.general.account-settings.firstname.label')}
+            formFieldName='firstname'
+          >
             <FormControlInput />
           </FormGroup>
 
-          <FormGroup isRequired label={'Surname'} formFieldName={'surname'}>
+          <FormGroup
+            isRequired
+            label={t('settings.account-settings.general.account-settings.surname.label')}
+            formFieldName='surname'
+          >
             <FormControlInput />
           </FormGroup>
 
-          <FormGroup isRequired label={'Username'} formFieldName={'username'}>
+          <FormGroup
+            isRequired
+            label={t('settings.account-settings.general.account-settings.username.label')}
+            formFieldName='username'
+          >
             <FormControlInput />
           </FormGroup>
 
           <FileUploadForm
             url={values.avatarUrl}
-            label='Avatar'
+            label={t('settings.account-settings.general.account-settings.avatar.label')}
             bucket={ConversationBucketNameEnum.USER_AVATARS}
             type={FileUploadFormFileType.IMAGE}
             afterUpload={(fileUrls) => {
@@ -80,27 +92,50 @@ export const SignUpForm: React.FC = () => {
             }}
           />
 
-          <FormGroup isRequired label={'Email'} formFieldName={'email'}>
+          <FormGroup
+            isRequired
+            label={t('settings.account-settings.general.account-settings.email.label')}
+            formFieldName={'email'}
+          >
             <FormControlInput type='email' />
           </FormGroup>
 
-          <FormGroup isRequired label='Password' formFieldName='password'>
+          <FormGroup
+            isRequired
+            label={t('settings.account-settings.general.account-settings.password.label')}
+            formFieldName='password'
+          >
             <FormControlInput type='password' />
           </FormGroup>
 
-          <FormGroup isRequired label='Password Confirmation' formFieldName='passwordConfirmation'>
+          <FormGroup
+            isRequired
+            label={t(
+              'settings.account-settings.general.account-settings.password-confirmation.label',
+            )}
+            formFieldName='passwordConfirmation'
+          >
             <FormControlInput type='password' />
           </FormGroup>
 
-          <FormGroup label={'Primary Phone'} formFieldName={'primaryPhone'}>
+          <FormGroup
+            label={t('settings.account-settings.general.account-settings.phone.label')}
+            formFieldName={'primaryPhone'}
+          >
             <FormControlInput type='tel' />
           </FormGroup>
 
-          <FormGroup label={'Birth Date'} formFieldName={'birthDate'}>
+          <FormGroup
+            label={t('settings.account-settings.general.account-settings.birth-date.label')}
+            formFieldName='birthDate'
+          >
             <FormControlInput type='date' />
           </FormGroup>
 
-          <FormGroup label='User Type' formFieldName='type'>
+          <FormGroup
+            label={t('settings.account-settings.general.account-settings.account-type.label')}
+            formFieldName='type'
+          >
             <FormControlSelect>
               {USER_TYPE_DROPDOWN_OPTIONS.map(({ key, label }) => (
                 <option value={key}>{t(label)}</option>
@@ -109,7 +144,11 @@ export const SignUpForm: React.FC = () => {
           </FormGroup>
 
           <ClusterLayout>
-            <FormGroup isRequired label='Country' formFieldName='country'>
+            <FormGroup
+              isRequired
+              label={t('settings.account-settings.general.account-settings.country.label')}
+              formFieldName='country'
+            >
               <FormControlSelect>
                 {countryDropdownOptions.map(({ code, label }) => (
                   <option value={code}>{t(label)}</option>
@@ -117,31 +156,40 @@ export const SignUpForm: React.FC = () => {
               </FormControlSelect>
             </FormGroup>
 
-            <FormGroup label='City' formFieldName='city'>
+            <FormGroup
+              label={t('settings.account-settings.general.account-settings.city.label')}
+              formFieldName='city'
+            >
               <FormControlInput />
             </FormGroup>
           </ClusterLayout>
 
           <FormGroup formFieldName='isHiddenContactInfo'>
-            <FormControlCheckbox>Is Contacts Hidden</FormControlCheckbox>
+            <FormControlCheckbox>
+              {t('settings.account-settings.general.account-settings.hide-contact-info.label')}
+            </FormControlCheckbox>
           </FormGroup>
 
           <FormGroup formFieldName='isAllowedToSearch'>
-            <FormControlCheckbox>Allow to Search</FormControlCheckbox>
+            <FormControlCheckbox>
+              {t('settings.account-settings.general.account-settings.show-in-search.label')}
+            </FormControlCheckbox>
           </FormGroup>
 
-          <StackLayout space={'1rem'}>
-            <FormSubmitButton>{t('login.sign-up.submit-button')}</FormSubmitButton>
+          <StackLayout space='1rem'>
+            <FormSubmitButton>
+              {t('auth.sign-up.submit-button')}
+            </FormSubmitButton>
 
             <HorizontalDivider height='1px' />
 
-            <CenteredVertialLayout space={'1rem'} justifyContent='center'>
+            <CenteredVertialLayout space='1rem' justifyContent='center'>
               <Button color='secondary' onClick={onNavigateToSignInPage}>
-                {t('login.sign-in.submit-button')}
+                {t('auth.sign-in.submit-button')}
               </Button>
 
               <Button color='secondary' onClick={onNavigateToRestorePasswordPage}>
-                {t('login.restore-password.button')}
+                {t('auth.restore-password.button')}
               </Button>
             </CenteredVertialLayout>
           </StackLayout>
