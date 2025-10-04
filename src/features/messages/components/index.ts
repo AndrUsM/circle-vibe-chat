@@ -5,3 +5,4 @@ export * from './messsage-update-dialog';
 export * from './message-form';
 export * from './text-message-preview';
 export * from './messages-filter-bar';
+export * from './messages-filters-preview';

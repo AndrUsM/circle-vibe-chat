@@ -1,2 +1,1 @@
-export * from './conversation-modals';
 export * from './message-update-modal';

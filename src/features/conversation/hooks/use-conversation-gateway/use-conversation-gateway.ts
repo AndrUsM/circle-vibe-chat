@@ -27,7 +27,7 @@ import { useCreateThread } from '@api/threads';
 
 import { useConversationGatewayState } from './use-conversation-gateway-state';
 import { useChatSocketLogicInitialization } from './use-conversation-socket-intialization';
-import { PaginatedChatsFilters } from '@features/conversation/types';
+import { PaginatedChatsFilters, PaginatedMessageFilters, PaginatedmessageOptions } from '@features/conversation/types';
 
 /**
  * A custom React hook that manages the conversation gateway logic, handling chat and message interactions.
@@ -72,6 +72,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   } = useActiveConversation();
   const { socket } = useSocket();
   const isAnyChatSelected = Boolean(selectedChatId);
+  const isFinishedSetup = Number(chats?.totalItems) > 0
   const allowToPreselectChat = useMemo<boolean>(
     () => Boolean(selectedChatId || chatParticipant),
     [selectedChatId, chatParticipant],
@@ -163,13 +164,8 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   const triggerGetPaginatedMessages = useCallback(
     (
       page: number,
-      options?: {
-        force?: boolean;
-      },
-      filters?: {
-        content?: string;
-        senderIds?: number[];
-      },
+      options?: PaginatedmessageOptions,
+      filters?: PaginatedMessageFilters,
     ) => {
       const isSamePage = options?.force ? false : page === messagesPage;
 
@@ -255,11 +251,12 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       selectedChatId,
       user,
       isAnyoneTyping,
+      isFinishedSetup,
+      isSavedMessagesChat,
       triggerStopTypingNotification,
       triggerStartTypingNotification,
       handleSendMessageWithThread,
       handleRefreshMessages,
-      isSavedMessagesChat,
       onChatSelect,
       triggerGetPaginatedChats,
       triggerSearchChatsByName,

@@ -6,10 +6,10 @@ import { IFiltersContext } from '@shared/components';
 
 import { FiltersContext } from './filters.context';
 
-interface FiltersProviderProps<T = unknown> {
-  initialValue: T;
-  onChange?: (value: T) => void;
-  children?: ((state: IFiltersContext<T>) => React.ReactNode) | React.ReactNode;
+interface FiltersProviderProps {
+  initialValue: any;
+  onChange?: (value: any) => void;
+  children?: ((state: IFiltersContext<any>) => React.ReactNode) | React.ReactNode;
 }
 
 export const Filters: React.FC<FiltersProviderProps> = ({
@@ -17,21 +17,21 @@ export const Filters: React.FC<FiltersProviderProps> = ({
   children,
   onChange = noop,
 }) => {
-  const [value, setValue] = useState<any>(initialValue);
-  const state: IFiltersContext<any> = useMemo(
+  const [value, setValue] = useState<typeof initialValue>(initialValue);
+  const state: IFiltersContext<typeof initialValue> = useMemo(
     () => ({
       filters: value,
       setFilters: (updatedValue) => setValue(updatedValue),
       setFilter: (key, fieldValue) => {
         setValue({
-          ...value,
+          ...value ?? {},
           [key]: fieldValue,
         });
       },
       initialValue,
       resetFilter: (key) => {
         setValue({
-          ...value,
+          ...value ?? {},
           [key]: (initialValue as Record<string, any>)[key as string],
         });
       },
@@ -47,7 +47,7 @@ export const Filters: React.FC<FiltersProviderProps> = ({
 
   return (
     <FiltersContext.Provider value={state}>
-      {typeof children === 'function' ? children(state) : children}
+      {typeof children === 'function' ? children(state as IFiltersContext<typeof initialValue>) : children}
     </FiltersContext.Provider>
   );
 };

@@ -7,7 +7,7 @@ import { MessageUpdateFormValues } from '@features/messages/types';
 
 import { useFindMessageById } from '@api/messages';
 
-interface MessageUpdateDialogState {
+export interface MessageUpdateDialogState {
   chatId: number;
   messageId: number;
   initialValues?: MessageUpdateFormValues;

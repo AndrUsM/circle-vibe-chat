@@ -5,7 +5,6 @@ import {
   CenteredVertialLayout,
   Icon,
   LoadingOverlay,
-  Modal,
   Show,
   StackLayout,
   useBoolean,
@@ -16,29 +15,38 @@ import * as Resizer from '@column-resizer/react';
 import { useTranslation } from 'react-i18next';
 import { useDebouncedCallback } from 'use-debounce';
 
-import { Filters, PaginationControls, PaginationScrollButton } from '@shared/components';
+import {
+  Filters,
+  IFiltersContext,
+  PaginationControls,
+  PaginationScrollButton,
+} from '@shared/components';
 import { useConfirmation, useScrollToBlockPosition } from '@shared/hooks';
 
-import { Chat, InitialSetup, useConversationGateway, useInitialChatSelection } from '@features/conversation';
+import {
+  Chat,
+  InitialSetup,
+  useConversationGateway,
+  useInitialChatSelection,
+} from '@features/conversation';
 import {
   Message,
   MessageForm,
   MESSAGES_FILTER_BAR_FORM_INITIAL_VALUES,
   MessagesFilterBar,
   MessagesFilterBarFormValues,
-  MessageUpdateDialog,
-  MessageUpdateFormValues,
+  MessagesFilterPreview,
   usePreviewFileState,
   useUpdateMessageState,
 } from '@features/messages';
 
 import { useDeleteMessage } from '@api/messages';
 
-import { ConversationModals } from './conversation-modals';
+import { ConversationModals, MessageUpdateModal } from './conversation-modals';
+import { ConversationChatFilters } from './conversation-chat-filters';
+import { RESIZE_BUTTON_BORDER_RADIUS_CONFIG } from './constants';
 
 import './conversation.scss';
-import { RESIZE_BUTTON_BORDER_RADIUS_CONFIG } from './constants';
-import { ConversationChatFilters } from './conversation-chat-filters';
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
@@ -49,20 +57,12 @@ export const Conversations: React.FC = () => {
   const { cilKeyboard, cilFilter, cilArrowThickToRight, cilLineWeight, cilLineStyle } = useIcons();
   const onScrollToPosition = useScrollToBlockPosition();
   const deleteMessage = useDeleteMessage();
-  const [isFiltersBarVisible, triggerFiltersBarVisibility, setFilterBarVisibility] =
-    useBoolean(false);
+  const [isFiltersBarVisible, triggerFiltersBarVisibility, setFilterBarVisibility] = useBoolean(false);
   const [isChatsFiltersBarVisible, triggerChatsFiltersBarVisibility] = useBoolean(false);
   const { toggleFileDialogVisibility, previewFile } = usePreviewFileState();
-
-  const [openChatCreationModal, toggleOpenChatCreationModal, setOpenChatCreationModal] =
-    useBoolean(false);
+  const [openChatCreationModal, toggleOpenChatCreationModal, setOpenChatCreationModal] = useBoolean(false);
   const [openMessageControls, toggleMessageControls] = useBoolean(false);
-  const {
-    openMessageUpdateDialog,
-    onCloseMessageUpdateDialog,
-    onOpenMessageUpdateDialog,
-    messageUpdateDialogState,
-  } = useUpdateMessageState();
+  const { openMessageUpdateDialog, onCloseMessageUpdateDialog, onOpenMessageUpdateDialog, messageUpdateDialogState } = useUpdateMessageState();
 
   const onScrollMessages = () => {
     if (messagesRef?.current?.scrollTop) {
@@ -73,11 +73,9 @@ export const Conversations: React.FC = () => {
   };
 
   const onExpandChats = () => {
-    if (!chatsSectionRef?.current) {
-      return;
+    if (chatsSectionRef?.current) {
+      chatsSectionRef.current.style.flexGrow = '1';
     }
-
-    chatsSectionRef.current.style.flexGrow = '1';
   };
 
   const {
@@ -92,13 +90,14 @@ export const Conversations: React.FC = () => {
     messagesLoading,
     selectedChatId,
     isAnyoneTyping,
+    isFinishedSetup,
+    isSavedMessagesChat,
     triggerStartTypingNotification,
     triggerStopTypingNotification,
     handleRefreshMessages,
     handleSendMessageWithThread,
     triggerGetPaginatedMessages,
     handleSendMessage,
-    isSavedMessagesChat,
     onChatSelect,
     triggerGetPaginatedChats,
   } = useConversationGateway(onScrollMessages);
@@ -113,12 +112,11 @@ export const Conversations: React.FC = () => {
     [selectedChatId, messagesPage],
   );
   const onUpdateMessage = useCallback(
-    (messageId: number) => {
+    (messageId: number) =>
       onOpenMessageUpdateDialog({
         chatId: Number(selectedChatId),
         messageId,
-      });
-    },
+      }),
     [selectedChatId],
   );
 
@@ -143,7 +141,7 @@ export const Conversations: React.FC = () => {
 
           <StackLayout className='w-full p-3 overflow-x-hidden'>
             <Show>
-              <Show.When isTrue={false}>
+              <Show.When isTrue={isFinishedSetup}>
                 <ConversationChatFilters
                   isChatsFiltersBarVisible={isChatsFiltersBarVisible}
                   isChatsNotEmpty={Number(chats?.totalItems) > 0}
@@ -199,8 +197,20 @@ export const Conversations: React.FC = () => {
             className='w-full overflow-x-hidden'
           >
             <Filters initialValue={MESSAGES_FILTER_BAR_FORM_INITIAL_VALUES}>
-              {({ isActive, filters }) => (
+              {({
+                isActive,
+                filters,
+                resetFilters,
+              }: IFiltersContext<MessagesFilterBarFormValues>) => (
                 <>
+                  <Show.When isTrue={!isFiltersBarVisible && isActive}>
+                    <MessagesFilterPreview
+                      filters={filters}
+                      resetFilters={resetFilters}
+                      triggerFiltersBarVisibility={triggerFiltersBarVisibility}
+                    />
+                  </Show.When>
+
                   <Show.When isTrue={isFiltersBarVisible && Boolean(selectedChatId)}>
                     <section className='bg-light p-3 rounded-tl-2 rounded-bl-2'>
                       <MessagesFilterBar
@@ -214,92 +224,92 @@ export const Conversations: React.FC = () => {
                     </section>
                   </Show.When>
 
-                  <StackLayout
-                    space='1rem'
-                    className='overflow-y-auto bg-light p-3 rounded-tl-2 rounded-bl-2'
-                  >
-                    <StackLayout
-                      ref={messagesRef}
-                      className='overflow-y-container overflow-x-hidden'
-                    >
-                      {(messages?.data ?? [])?.map((message) => (
-                        <Suspense key={message.id} fallback={<LoadingOverlay />}>
-                          <Message
-                            message={message}
-                            isSavedMessages={isSavedMessagesChat}
-                            onStopTyping={triggerStopTypingNotification}
-                            onStartTyping={triggerStartTypingNotification}
-                            chatParticipantId={Number(chatParticipant?.id)}
-                            onDeleteMessage={onDeleteMessage}
-                            onUpdateMessage={onUpdateMessage}
-                            onOpenFile={toggleFileDialogVisibility}
-                            onReplyMessage={handleSendMessageWithThread}
-                          />
-                        </Suspense>
-                      ))}
-
-                      <Show.When isTrue={!messagesLoading && !messages?.totalItems}>
-                        <span className='text-md text-truncate'>{t('message.empty')}</span>
-                      </Show.When>
-                    </StackLayout>
-                  </StackLayout>
-
-                  <StackLayout space='1rem' className=' bg-light p-3 rounded-tl-2 rounded-bl-2'>
-                    <Show.When isTrue={openMessageControls}>
-                      <CenteredVertialLayout space='0.5rem' justifyContent='space-between'>
-                        <PaginationControls
-                          paginatedResponse={messages}
-                          currentPage={messagesPage}
-                          onPageChange={triggerGetPaginatedMessages}
-                        />
-
-                        <Show>
-                          <Show.When isTrue={isAnyoneTyping}>
-                            <Icon
-                              className='typing-indicator'
-                              name={cilKeyboard}
-                              color='var(--cv-primary)'
-                              size={32}
-                            />
-                          </Show.When>
-                          <Show.Else>
-                            <div />
-                          </Show.Else>
-                        </Show>
-
-                        <CenteredVertialLayout space='0.5rem'>
-                          <Button
-                            className='messages-filter-button'
-                            color={isActive || isFiltersBarVisible ? 'primary' : 'secondary'}
-                            onClick={triggerFiltersBarVisibility}
-                          >
-                            <Icon color='var(--cv-light)' name={cilFilter} size={15} />
-                          </Button>
-
-                          <PaginationScrollButton messagesRef={messagesRef} />
-                        </CenteredVertialLayout>
-                      </CenteredVertialLayout>
-                    </Show.When>
-
-                    <Show.When isTrue={isAnyChatSelected && Boolean(chatParticipant?.id)}>
-                      <MessageForm
-                        onStopTyping={triggerStopTypingNotification}
-                        onStartTyping={triggerStartTypingNotification}
-                        onCreateMessage={handleSendMessage}
-                      >
-                        <Button color='secondary' type='button' onClick={toggleMessageControls}>
-                          <Icon
-                            color='var(--cv-light)'
-                            name={openMessageControls ? cilLineStyle : cilLineWeight}
-                            size={15}
-                          />
-                        </Button>
-                      </MessageForm>
-                    </Show.When>
-                  </StackLayout>
+                  <Show.When isTrue={!isFiltersBarVisible && !isActive}>
+                    <div />
+                  </Show.When>
                 </>
               )}
             </Filters>
+
+            <Show.When isTrue={Number(messages?.totalItems) > 0}>
+              <StackLayout
+                space='1rem'
+                className='overflow-y-auto bg-light p-3 rounded-tl-2 rounded-bl-2'
+              >
+                <StackLayout ref={messagesRef} className='overflow-y-container overflow-x-hidden'>
+                  {(messages?.data ?? [])?.map((message) => (
+                    <Suspense key={message.id} fallback={<LoadingOverlay />}>
+                      <Message
+                        message={message}
+                        isSavedMessages={isSavedMessagesChat}
+                        onStopTyping={triggerStopTypingNotification}
+                        onStartTyping={triggerStartTypingNotification}
+                        chatParticipantId={Number(chatParticipant?.id)}
+                        onDeleteMessage={onDeleteMessage}
+                        onUpdateMessage={onUpdateMessage}
+                        onOpenFile={toggleFileDialogVisibility}
+                        onReplyMessage={handleSendMessageWithThread}
+                      />
+                    </Suspense>
+                  ))}
+                </StackLayout>
+              </StackLayout>
+            </Show.When>
+
+            <Show.When isTrue={!messagesLoading && !messages?.totalItems}>
+              <span className='text-xl text-center text-secondary text-truncate'>
+                {t('message.empty')}
+              </span>
+            </Show.When>
+
+            <StackLayout space='1rem' className=' bg-light p-3 rounded-tl-2 rounded-bl-2'>
+              <Show.When isTrue={openMessageControls}>
+                <CenteredVertialLayout space='0.5rem' justifyContent='space-between'>
+                  <PaginationControls
+                    paginatedResponse={messages}
+                    currentPage={messagesPage}
+                    onPageChange={triggerGetPaginatedMessages}
+                  />
+
+                  <Show.When isTrue={isAnyoneTyping}>
+                    <Icon
+                      className='typing-indicator'
+                      name={cilKeyboard}
+                      color='var(--cv-primary)'
+                      size={32}
+                    />
+                  </Show.When>
+
+                  <CenteredVertialLayout space='0.5rem'>
+                    <Button
+                      className='messages-filter-button'
+                      color={isFiltersBarVisible ? 'primary' : 'secondary'}
+                      onClick={triggerFiltersBarVisibility}
+                    >
+                      <Icon color='var(--cv-light)' name={cilFilter} size={15} />
+                    </Button>
+
+                    <PaginationScrollButton messagesRef={messagesRef} />
+                  </CenteredVertialLayout>
+                </CenteredVertialLayout>
+              </Show.When>
+
+              <Show.When isTrue={isAnyChatSelected && Boolean(chatParticipant?.id)}>
+                <MessageForm
+                  onStopTyping={triggerStopTypingNotification}
+                  onStartTyping={triggerStartTypingNotification}
+                  onCreateMessage={handleSendMessage}
+                >
+                  <Button color='secondary' type='button' onClick={toggleMessageControls}>
+                    <Icon
+                      color='var(--cv-light)'
+                      name={openMessageControls ? cilLineStyle : cilLineWeight}
+                      size={15}
+                    />
+                  </Button>
+                </MessageForm>
+              </Show.When>
+            </StackLayout>
           </StackLayout>
 
           <Show.When isTrue={messagesLoading}>
@@ -315,21 +325,12 @@ export const Conversations: React.FC = () => {
         toggleFileDialogVisibility={toggleFileDialogVisibility}
       />
 
-      <Modal.Root isOpen={openMessageUpdateDialog} onClose={onCloseMessageUpdateDialog}>
-        <Modal.Header onClose={onCloseMessageUpdateDialog}>Update Message</Modal.Header>
-
-        <Modal.Body>
-          <MessageUpdateDialog
-            chatId={Number(messageUpdateDialogState?.chatId)}
-            messageId={Number(messageUpdateDialogState?.messageId)}
-            initialValues={messageUpdateDialogState?.initialValues as MessageUpdateFormValues}
-            onSuccess={() => {
-              handleRefreshMessages();
-              onCloseMessageUpdateDialog();
-            }}
-          />
-        </Modal.Body>
-      </Modal.Root>
+      <MessageUpdateModal
+        messageUpdateDialogState={messageUpdateDialogState}
+        isOpen={openMessageUpdateDialog}
+        onClose={onCloseMessageUpdateDialog}
+        onSuccess={handleRefreshMessages}
+      />
     </>
   );
 };
