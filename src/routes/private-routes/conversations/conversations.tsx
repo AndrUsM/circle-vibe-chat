@@ -143,6 +143,7 @@ export const Conversations: React.FC = () => {
             <Show>
               <Show.When isTrue={isFinishedSetup}>
                 <ConversationChatFilters
+                  userId={chatParticipant?.userId}
                   isChatsFiltersBarVisible={isChatsFiltersBarVisible}
                   isChatsNotEmpty={Number(chats?.totalItems) > 0}
                   toggleOpenChatCreationModal={toggleOpenChatCreationModal}

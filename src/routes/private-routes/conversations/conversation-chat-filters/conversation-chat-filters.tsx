@@ -25,6 +25,7 @@ import { Filters } from '@shared/components';
 interface ConversationChatFiltersProps {
   isChatsFiltersBarVisible: boolean;
   isChatsNotEmpty: boolean;
+  userId?: number;
   onChange: (page: number, filters?: PaginatedChatsFilters) => void;
   triggerChatsFiltersBarVisibility: VoidFunction;
   toggleOpenChatCreationModal: VoidFunction;
@@ -34,6 +35,7 @@ export const ConversationChatFilters: ExtendedReactFunctionalComponent<
   ConversationChatFiltersProps
 > = ({
   onChange,
+  userId,
   isChatsNotEmpty,
   isChatsFiltersBarVisible,
   triggerChatsFiltersBarVisibility,
@@ -68,8 +70,8 @@ export const ConversationChatFilters: ExtendedReactFunctionalComponent<
             />
           </FormControl>
 
-          <Show.When isTrue={isChatsFiltersBarVisible}>
-            <ConversationsFilterBar />
+          <Show.When isTrue={isChatsFiltersBarVisible && Boolean(userId)}>
+            <ConversationsFilterBar userId={Number(userId)} />
           </Show.When>
 
           <ClusterLayout space='0.75rem'>

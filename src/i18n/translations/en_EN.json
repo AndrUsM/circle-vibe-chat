@@ -19,5 +19,9 @@
   "conversations.send.button": "Send",
   "conversations.send.input.placeholder": "Type your message...",
   "conversations.actions.account-settings": "Account Settings",
-  "conversations.buttons.create-conversation": "Create conversation"
+  "conversations.buttons.create-conversation": "Create conversation",
+  "filters.conversation.chat-participants.label": "Chart Participants",
+  "filters.conversation.private-conversations.label": "Private conversations",
+  "filters.conversation.archived-conversations.label": "Archived conversations",
+  "filters.conversation.empty-conversations.label": "Empty conversations"
 }
