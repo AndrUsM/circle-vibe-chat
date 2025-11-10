@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
 
+
 import {
   ChatParticipant,
   ConversationBucketNameEnum,
   getUserFullName,
   UploadImageOutputDto,
-  UserType,
 } from '@circle-vibe/shared';
 
 import {
@@ -13,14 +13,17 @@ import {
   CenteredVertialLayout,
   Checkbox,
   Form,
+  FormControl,
   FormControlCheckbox,
   FormControlError,
   FormControlInput,
   FormControlSelect,
+  FormError,
   FormGroup,
   FormikFormControl,
   FormSubmitButton,
   Icon,
+  Label,
   StackLayout,
   Textarea,
   useCopyToClickboard,
@@ -41,6 +44,7 @@ import { AccountSettingsFormValues } from './types';
 import { composeAccountSettingsFormValues } from './utils';
 import { useTranslation } from 'react-i18next';
 import { USER_TYPE_DROPDOWN_OPTIONS } from '@shared/constants';
+import { DatePickerInput } from '@shared/components/date-picker';
 
 export const AccountSettingsForm: React.FC = () => {
   const { t } = useTranslation();
@@ -73,7 +77,7 @@ export const AccountSettingsForm: React.FC = () => {
       validationSchema={ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA}
       onSubmit={onSubmit}
     >
-      {({ values, setFieldValue }: FormikProps<AccountSettingsFormValues>) => (
+      {({ values, errors, setFieldValue }: FormikProps<AccountSettingsFormValues>) => (
         <StackLayout space='2rem' className='pt-6'>
           <Section>
             <Section.Header>
@@ -102,15 +106,23 @@ export const AccountSettingsForm: React.FC = () => {
                 <FormControlInput />
               </FormGroup>
 
-              <FormGroup
-                label={t('settings.account-settings.general.account-settings.birth-date.label')}
-                formFieldName='birthDate'
-              >
-                <FormControlInput type='date' />
-              </FormGroup>
+              <FormControl>
+                <Label>{t('settings.account-settings.general.account-settings.birth-date.label')}</Label>
+
+                <DatePickerInput
+                  value={values.birthDate ? new Date(values.birthDate) : null}
+                  onChange={(date) => {
+                    setFieldValue('birthDate', date?.toISOString())
+                  }} />
+
+                <FormError>
+                  {errors.birthDate}
+                </FormError>
+              </FormControl>
 
               <FileUploadForm
                 url={values?.avatarUrl ?? null}
+                acceptedFiles="image/*"
                 label={t('settings.account-settings.general.account-settings.avatar.label')}
                 bucket={ConversationBucketNameEnum.USER_AVATARS}
                 type={FileUploadFormFileType.IMAGE}

@@ -12,7 +12,7 @@ export const BackNavigationButton: React.FC<BackNavigationButtonProps> = ({ onCl
   return (
     <Button size='medium' color='primary' onClick={onClick}>
       <IconLayout space='0.5rem'>
-        <Icon color='var(--cv-light)' size={12} name={cilArrowThickLeft} />
+        <Icon color='var(--cv-light)' size={16} name={cilArrowThickLeft} />
 
         <span>Back</span>
       </IconLayout>

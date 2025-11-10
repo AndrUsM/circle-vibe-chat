@@ -26,6 +26,7 @@ import { ComposedFileUploadResponse } from './types';
 interface FileUploadFormProps {
   label: string;
   url: string | null;
+  acceptedFiles?: string;
   type?: FileUploadFormFileType;
   bucket: string;
   disabled?: boolean;
@@ -36,6 +37,7 @@ interface FileUploadFormProps {
 export const FileUploadForm: React.FC<FileUploadFormProps> = ({
   bucket,
   label,
+  acceptedFiles,
   type = FileUploadFormFileType.FILE,
   url,
   disabled = false,
@@ -61,6 +63,7 @@ export const FileUploadForm: React.FC<FileUploadFormProps> = ({
         <Input
           ref={fileInputRef}
           type='file'
+          accept={acceptedFiles}
           hidden={true}
           onChange={(event: ChangeEvent<HTMLInputElement>) => {
             const file = event?.currentTarget?.files?.length
