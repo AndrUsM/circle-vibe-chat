@@ -12,6 +12,7 @@ import {
   AccountSettingsForm,
   AccountSettingsTabs,
   InviteAccountSettingsForm,
+  AccountManagementForm,
 } from '@features/users';
 import { useTranslation } from 'react-i18next';
 
@@ -42,6 +43,13 @@ export const AccountSettings: React.FC = () => {
         >
           {t('settings.account-settings.invites.label')}
         </Tabs.Button>
+
+        <Tabs.Button
+          active={currentTab === AccountSettingsTabs.ACCOUNT_MANAGEMENT}
+          onClick={() => setCurrentTab(AccountSettingsTabs.ACCOUNT_MANAGEMENT)}
+        >
+          {t('settings.account-settings.manage-account.label')}
+        </Tabs.Button>
       </Tabs>
 
       <Show.When isTrue={currentTab === AccountSettingsTabs.GENERAL}>
@@ -50,6 +58,10 @@ export const AccountSettings: React.FC = () => {
 
       <Show.When isTrue={currentTab === AccountSettingsTabs.INVITES}>
         <InviteAccountSettingsForm />
+      </Show.When>
+
+      <Show.When isTrue={currentTab === AccountSettingsTabs.ACCOUNT_MANAGEMENT}>
+        <AccountManagementForm />
       </Show.When>
     </PageContent>
   );

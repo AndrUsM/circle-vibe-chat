@@ -40,6 +40,8 @@
   "conversations.actions.account-settings": "Account Settings",
   "conversations.buttons.create-conversation": "Create conversation",
 
+  "fields.select.option.empty.label": "Empty",
+
   "filters.conversation.chat-participants.label": "Chart Participants",
   "filters.conversation.private-conversations.label": "Private conversations",
   "filters.conversation.archived-conversations.label": "Archived conversations",
@@ -50,6 +52,7 @@
   "filters.open-filters.label": "Open filters",
   "settings.account-settings.general.label": "General",
   "settings.account-settings.invites.label": "Invites",
+  "settings.account-settings.manage-account.label": "Manage Account",
 
   "settings.account-settings.general.account-settings.label": "General Account Setting",
   "settings.account-settings.general.account-settings.firstname.label": "Name",
@@ -82,6 +85,12 @@
   "settings.account-settings.invites.accept-invite.description": "Insert your token to accept invite and get access to conversation.",
   "settings.account-settings.invites.token.label": "Token",
   "settings.account-settings.invites.accept-invite.button.label": "Accept Invite",
+
+  "settings.account-settings.security-settings.delete-account.label": "Delete Account",
+  "settings.account-settings.security-settings.delete-account.description": "Deleting your account will permanently remove your profile and all associated data. This action is irreversible.",
+
+  "settings.account-settings.security-settings.deactivate-account.label": "Deactivate Account",
+  "settings.account-settings.security-settings.deactivate-account.description": "Deactivate your account temporarily. Your data will be preserved, and you can activate your account again from the authentication page using Activate.",
 
   "user.account-type.private.label": "Private",
   "user.account-type.public.label": "Public",

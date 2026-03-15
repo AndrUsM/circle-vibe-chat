@@ -2,14 +2,11 @@ import { useCallback } from 'react';
 
 import { useNotification } from '@core/hooks';
 import { request } from '@core/request';
-import { getAuthToken } from '@core/utils';
 
 export const useFinishAccountSetup = () => {
   const notification = useNotification();
 
   return useCallback(async (userId: number) => {
-    const token = getAuthToken();
-
     const response = await request<{
       token: string;
     }>({
@@ -21,7 +18,10 @@ export const useFinishAccountSetup = () => {
 			notification({
 				type: 'success',
 				content: 'Finished!'
-			})
+			});
+
+      return response;
     }
+
   }, [notification]);
 };

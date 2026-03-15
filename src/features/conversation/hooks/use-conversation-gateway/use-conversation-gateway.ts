@@ -9,8 +9,6 @@ import {
   RequestChatsWithPaginationChatSocketParams,
   RequestMessagesWithPaginationChatSocketParams,
   DEFAULT_PAGINATION_PAGE_SIZE,
-  ChatType,
-  User,
 } from '@circle-vibe/shared';
 
 import { FormikHelpers } from 'formik';
@@ -72,7 +70,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   } = useActiveConversation();
   const { socket } = useSocket();
   const isAnyChatSelected = Boolean(selectedChatId);
-  const isFinishedSetup = Number(chats?.totalItems) > 0
+  const isFinishedSetup = Number(chats?.totalItems) > 0;
   const allowToPreselectChat = useMemo<boolean>(
     () => Boolean(selectedChatId || chatParticipant),
     [selectedChatId, chatParticipant],
@@ -162,11 +160,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   };
 
   const triggerGetPaginatedMessages = useCallback(
-    (
-      page: number,
-      options?: PaginatedmessageOptions,
-      filters?: PaginatedMessageFilters,
-    ) => {
+    (page: number, options?: PaginatedmessageOptions, filters?: PaginatedMessageFilters) => {
       const isSamePage = options?.force ? false : page === messagesPage;
 
       if (!selectedChatId || isSamePage) {
@@ -189,10 +183,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     [selectedChatId, messagesPage],
   );
 
-  const triggerGetPaginatedChats = (
-    page: number,
-    filters?: PaginatedChatsFilters,
-  ) => {
+  const triggerGetPaginatedChats = (page: number, filters?: PaginatedChatsFilters) => {
     setMessagesPage(page);
     setChatsLoading(true);
 

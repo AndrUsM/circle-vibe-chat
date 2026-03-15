@@ -119,6 +119,7 @@ export const SignUpForm: React.FC = () => {
           </FormGroup>
 
           <FormGroup
+            isRequired
             label={t('settings.account-settings.general.account-settings.phone.label')}
             formFieldName={'primaryPhone'}
           >
@@ -177,9 +178,7 @@ export const SignUpForm: React.FC = () => {
           </FormGroup>
 
           <StackLayout space='1rem'>
-            <FormSubmitButton>
-              {t('auth.sign-up.submit-button')}
-            </FormSubmitButton>
+            <FormSubmitButton>{t('auth.sign-up.submit-button')}</FormSubmitButton>
 
             <HorizontalDivider height='1px' />
 

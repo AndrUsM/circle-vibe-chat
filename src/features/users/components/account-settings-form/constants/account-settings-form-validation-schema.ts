@@ -5,9 +5,9 @@ import { object, string, date, boolean, mixed } from 'yup';
 import { AccountSettingsFormValues } from '../types';
 
 export const ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA = object<AccountSettingsFormValues>({
-  username: string(),
-  firstname: string(),
-  surname: string(),
+  username: string().required(),
+  firstname: string().required(),
+  surname: string().required(),
   birthDate: date().notRequired(),
   isHiddenContactInfo: boolean(),
   isAllowedToSearch: boolean(),
@@ -18,7 +18,7 @@ export const ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA = object<AccountSettingsFor
     .notRequired(),
   city: string(),
   country: mixed<CountryCode>(),
-  email: string().email(),
+  email: string().email().required(),
   primaryPhone: string(),
   type: mixed<UserType>(),
 });

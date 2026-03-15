@@ -94,6 +94,7 @@ export const AccountSettingsForm: React.FC = () => {
 
               <FormGroup
                 label={t('settings.account-settings.general.account-settings.surname.label')}
+                isRequired
                 formFieldName='surname'
               >
                 <FormControlInput />
@@ -101,28 +102,30 @@ export const AccountSettingsForm: React.FC = () => {
 
               <FormGroup
                 label={t('settings.account-settings.general.account-settings.username.label')}
+                isRequired
                 formFieldName='username'
               >
                 <FormControlInput />
               </FormGroup>
 
               <FormControl>
-                <Label>{t('settings.account-settings.general.account-settings.birth-date.label')}</Label>
+                <Label>
+                  {t('settings.account-settings.general.account-settings.birth-date.label')}
+                </Label>
 
                 <DatePickerInput
                   value={values.birthDate ? new Date(values.birthDate) : null}
                   onChange={(date) => {
-                    setFieldValue('birthDate', date?.toISOString())
-                  }} />
+                    setFieldValue('birthDate', date?.toISOString());
+                  }}
+                />
 
-                <FormError>
-                  {errors.birthDate}
-                </FormError>
+                <FormError>{errors.birthDate}</FormError>
               </FormControl>
 
               <FileUploadForm
                 url={values?.avatarUrl ?? null}
-                acceptedFiles="image/*"
+                acceptedFiles='image/*'
                 label={t('settings.account-settings.general.account-settings.avatar.label')}
                 bucket={ConversationBucketNameEnum.USER_AVATARS}
                 type={FileUploadFormFileType.IMAGE}
@@ -170,6 +173,7 @@ export const AccountSettingsForm: React.FC = () => {
 
             <Section.Content>
               <FormGroup
+                isRequired
                 label={t('settings.account-settings.general.account-settings.email.label')}
                 formFieldName='email'
               >

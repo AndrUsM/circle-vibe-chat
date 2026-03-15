@@ -24,6 +24,7 @@ const FILE_UPLOADING_VALIDATION_SCHEMA = mixed<File>()
 
 export const SIGN_UP_FORM_VALIDATION_SCHEMA = object<User>({
   username: string().required(),
+  firstname: string().required(),
   surname: string().required(),
   birthDate: string(),
   password: string().required(),
@@ -38,7 +39,7 @@ export const SIGN_UP_FORM_VALIDATION_SCHEMA = object<User>({
   zipCode: string(),
   phones: array().of(string().matches(PHONE_NUMBER_REGEX)),
   email: string().email().required(),
-  primaryPhone: string().matches(PHONE_NUMBER_REGEX),
+  primaryPhone: string().matches(PHONE_NUMBER_REGEX).required(),
   type: mixed().oneOf(Object.values(UserType)),
   secret: boolean(),
 });
