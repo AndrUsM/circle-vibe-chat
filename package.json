@@ -69,6 +69,6 @@
     "sass": "^1.86.0",
     "socket.io-client": "^4.8.1",
     "typescript": "~5.7.2",
-    "vite": "^5.0.0"
+    "vite": "^5.4.21"
   }
 }
