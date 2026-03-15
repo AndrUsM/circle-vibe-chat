@@ -2,7 +2,7 @@ import { useEffect } from 'react';
 
 import { Chat } from '@circle-vibe/shared';
 
-type SelectChatIdFn = (chatId: number) => void;
+type SelectChatIdFn = (chat: Chat) => void;
 
 export const useInitialChatSelection = (
   chats: Chat[],
@@ -14,7 +14,7 @@ export const useInitialChatSelection = (
       return;
     }
 
-    const defaultChatId = chats[0]?.id;
-    selectChatId(defaultChatId);
+    const defaultChat = chats[0];
+    selectChatId(defaultChat);
   }, [hasSelectedChat, chats]);
 };

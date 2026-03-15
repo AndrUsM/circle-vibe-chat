@@ -3,7 +3,6 @@ import { useCallback } from 'react';
 import {
   ChatSocketCommand,
   SendMessageChatSocketParams,
-  ConversationBucketNameEnum,
 } from '@circle-vibe/shared';
 
 import { useNotification, useSocket } from '@core/hooks';

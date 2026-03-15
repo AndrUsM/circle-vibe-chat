@@ -18,8 +18,9 @@ import {
   getMessageType,
 } from '@features/messages/utils';
 
-import { useSendFileMessage } from '../use-send-file-message/use-file-message';
-import { useSendVideoAsBuffer } from '../use-send-video-as-buffer';
+import { useSendFileMessage, useSendVideoAsBuffer } from '@api/messages';
+import { useActiveConversation } from '@features/conversation';
+
 
 export const useSendMessage = (
   chatParticipant: ChatParticipant | null,
@@ -27,6 +28,7 @@ export const useSendMessage = (
   setMessagesLoading: (_loading: boolean) => void,
 ) => {
   const { socket } = useSocket();
+  const { bucket } = useActiveConversation();
   const notification = useNotification();
   const sendVideo = useSendVideoAsBuffer();
   const sendFileMessage = useSendFileMessage();
@@ -35,7 +37,7 @@ export const useSendMessage = (
     async (formValues: MessageFormValues, { resetForm }: FormikHelpers<MessageFormValues>) => {
       const hasContent = Boolean(formValues.content || formValues.file);
 
-      if (!hasContent || !chatParticipant || !selectedChatId) {
+      if (!hasContent || !chatParticipant || !selectedChatId || !bucket) {
         notification({
           type: 'error',
           content: 'Failed to send message',
@@ -57,7 +59,7 @@ export const useSendMessage = (
               formValues,
             );
 
-            await sendVideo(formValues.file, messageInputDto);
+            await sendVideo(formValues.file, messageInputDto, String(bucket));
 
             resetForm();
             setMessagesLoading(false);

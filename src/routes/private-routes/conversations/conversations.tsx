@@ -48,6 +48,7 @@ import { ConversationChatFilters } from './conversation-chat-filters';
 import { RESIZE_BUTTON_BORDER_RADIUS_CONFIG } from './constants';
 
 import './conversation.scss';
+import { DEFAULT_PAGINATION_PAGE } from '@circle-vibe/shared';
 
 export const Conversations: React.FC = () => {
   const { t } = useTranslation();
@@ -112,6 +113,7 @@ export const Conversations: React.FC = () => {
     },
     [selectedChatId, messagesPage],
   );
+
   const onUpdateMessage = useCallback(
     (messageId: number) =>
       onOpenMessageUpdateDialog({
@@ -161,7 +163,7 @@ export const Conversations: React.FC = () => {
                       selected={selectedChatId === chat.id}
                       onClick={() => {
                         if (chat.id !== selectedChatId) {
-                          onChatSelect(chat.id);
+                          onChatSelect(chat);
                           setFilterBarVisibility(false);
                         }
                       }}
@@ -177,7 +179,9 @@ export const Conversations: React.FC = () => {
               </Show.When>
 
               <Show.Else>
-                <InitialSetup />
+                <InitialSetup
+                  onResetChats={() => triggerGetPaginatedChats(DEFAULT_PAGINATION_PAGE)}
+                />
               </Show.Else>
             </Show>
           </StackLayout>
@@ -304,7 +308,11 @@ export const Conversations: React.FC = () => {
                   onStartTyping={triggerStartTypingNotification}
                   onCreateMessage={handleSendMessage}
                 >
-                  <Button type='button' color={openMessageControls ? 'primary' : 'secondary'} onClick={toggleMessageControls}>
+                  <Button
+                    type='button'
+                    color={openMessageControls ? 'primary' : 'secondary'}
+                    onClick={toggleMessageControls}
+                  >
                     <Tooltip
                       title={t('conversations.buttons.open-messages-toolbar.tooltip')}
                       className='flex'

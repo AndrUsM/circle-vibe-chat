@@ -67,6 +67,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     setCurrentConversationParticipant: setChatParticipant,
     selectedChatId,
     setSelectedChatId,
+    setBucketName,
   } = useActiveConversation();
   const { socket } = useSocket();
   const isAnyChatSelected = Boolean(selectedChatId);
@@ -76,13 +77,15 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     [selectedChatId, chatParticipant],
   );
 
-  const onChatSelect = (chatId: number) => {
+  const onChatSelect = (chat: Chat) => {
+    const chatId = chat?.id;
     if (selectedChatId === chatId && !messages) {
       return;
     }
 
     resetMessagesState();
     setSelectedChatId(chatId);
+    setBucketName(chat?.bucket);
 
     socket.emit(ChatSocketCommand.JOIN_CHAT, { chatId });
   };

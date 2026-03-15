@@ -5,14 +5,16 @@ import { composeCreateMessageFileParams, UseSendMessageInput } from '@features/m
 
 import { IFileUrl } from './types';
 import { useMessageTypeToUploadingMethodMap } from './use-message-type-to-uploading-method-output';
+import { useActiveConversation } from '@features/conversation';
 
 export const useSendFileMessage = () => {
   const { socket } = useSocket();
+  const { bucket } = useActiveConversation();
   const getMessageTypeToUploadingMethodMap = useMessageTypeToUploadingMethodMap();
 
-  return async (file: File, messageInputDto: UseSendMessageInput, bucket: string) => {
+  return async (file: File, messageInputDto: UseSendMessageInput) => {
     const uploadingMethod = getMessageTypeToUploadingMethodMap(messageInputDto.messageType);
-    const fileUrl: IFileUrl = await uploadingMethod(file, bucket);
+    const fileUrl: IFileUrl = await uploadingMethod(file, String(bucket));
 
     const payload = composeCreateMessageFileParams(
       messageInputDto,

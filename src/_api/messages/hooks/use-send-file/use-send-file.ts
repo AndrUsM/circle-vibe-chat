@@ -2,7 +2,6 @@ import {
   UploadFileOutputDto,
   UploadImageOutputDto,
   UploadVideoOutputDto,
-  ConversationBucketNameEnum,
 } from '@circle-vibe/shared';
 
 import { fileServerRequest } from '@core/request';
@@ -24,7 +23,7 @@ export const useSendFile = () => {
     return response.data as UploadFileOutputDto;
   };
 
-  const uploadImage = async (file: File, bucket: string | ConversationBucketNameEnum) => {
+  const uploadImage = async (file: File, bucket: string) => {
     const data = new FormData();
     data.append('image', file);
 
