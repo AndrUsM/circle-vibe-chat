@@ -157,7 +157,9 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
                 type='button'
                 onClick={openFileSelectionDialog}
               >
-                <Icon size={16} color='var(--cv-light)' name={cilFile} />
+                <Tooltip title={t('conversations.buttons.upload-files.tooltip')} className='flex '>
+                  <Icon size={16} color='var(--cv-light)' name={cilFile} />
+                </Tooltip>
 
                 <input
                   type='file'

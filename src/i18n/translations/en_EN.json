@@ -39,6 +39,9 @@
   "conversations.send.input.placeholder": "Type your message...",
   "conversations.actions.account-settings": "Account Settings",
   "conversations.buttons.create-conversation": "Create conversation",
+  "conversations.buttons.open-messages-toolbar.tooltip": "Toggle messages toolbar",
+  "conversations.buttons.open-messages-filters.tooltip": "Toggle messages filters",
+  "conversations.buttons.upload-files.tooltip": "Upload files",
 
   "fields.select.option.empty.label": "Empty",
 

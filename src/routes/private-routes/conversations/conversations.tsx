@@ -7,6 +7,7 @@ import {
   LoadingOverlay,
   Show,
   StackLayout,
+  Tooltip,
   useBoolean,
   useIcons,
 } from '@circle-vibe/components';
@@ -287,7 +288,9 @@ export const Conversations: React.FC = () => {
                       color={isFiltersBarVisible ? 'primary' : 'secondary'}
                       onClick={triggerFiltersBarVisibility}
                     >
-                      <Icon color='var(--cv-light)' name={cilFilter} size={15} />
+                      <Tooltip title={t('conversations.buttons.open-messages-filters.tooltip')}>
+                        <Icon color='var(--cv-light)' name={cilFilter} size={15} />
+                      </Tooltip>
                     </Button>
 
                     <PaginationScrollButton messagesRef={messagesRef} />
@@ -301,12 +304,17 @@ export const Conversations: React.FC = () => {
                   onStartTyping={triggerStartTypingNotification}
                   onCreateMessage={handleSendMessage}
                 >
-                  <Button color='secondary' type='button' onClick={toggleMessageControls}>
-                    <Icon
-                      color='var(--cv-light)'
-                      name={openMessageControls ? cilLineStyle : cilLineWeight}
-                      size={15}
-                    />
+                  <Button type='button' color={openMessageControls ? 'primary' : 'secondary'} onClick={toggleMessageControls}>
+                    <Tooltip
+                      title={t('conversations.buttons.open-messages-toolbar.tooltip')}
+                      className='flex'
+                    >
+                      <Icon
+                        color='var(--cv-light)'
+                        name={openMessageControls ? cilLineStyle : cilLineWeight}
+                        size={15}
+                      />
+                    </Tooltip>
                   </Button>
                 </MessageForm>
               </Show.When>
