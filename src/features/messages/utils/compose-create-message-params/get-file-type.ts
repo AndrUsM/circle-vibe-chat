@@ -12,7 +12,7 @@ export const getFileType = (file: File): MessageFileType => {
   }
 
   if (type.includes('audio')) {
-    return MessageFileType.MP3_AUDIO;
+    return MessageFileType.AUDIO;
   }
 
   if (documentRegex.test(file.name)) {

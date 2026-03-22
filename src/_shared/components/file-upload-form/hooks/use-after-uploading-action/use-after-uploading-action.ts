@@ -1,7 +1,5 @@
 import { useCallback } from 'react';
 
-import { ConversationBucketNameEnum } from '@circle-vibe/shared';
-
 import { useConfirmation } from '@shared/hooks';
 
 import { useNotification } from '@core/hooks';
@@ -12,7 +10,7 @@ import { ComposedFileUploadResponse } from '../../types';
 
 type Callback = (output: ComposedFileUploadResponse) => void;
 
-export const useAfterUploadingAction = (callback: Callback, bucket: ConversationBucketNameEnum) => {
+export const useAfterUploadingAction = (callback: Callback, bucketName: string) => {
   const { uploadImage } = useSendFile();
   const notification = useNotification();
   const confirmation = useConfirmation();
@@ -21,7 +19,7 @@ export const useAfterUploadingAction = (callback: Callback, bucket: Conversation
     await confirmation('Are you sure you want to upload image?');
 
     try {
-      const response = await uploadImage(file, bucket);
+      const response = await uploadImage(file, bucketName);
 
       notification({
         type: 'success',
