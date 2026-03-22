@@ -5,14 +5,12 @@ import { User } from '@circle-vibe/shared';
 import { useCurrentUser, useNotification } from '@core/hooks';
 import { request } from '@core/request';
 
-import { useActiveConversation } from '@features/conversation';
 import { useNavigate } from 'react-router-dom';
 import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@core/navigation';
 
 export const useActivateAccount = () => {
   const { user, clear: clearCurrentUser } = useCurrentUser();
   const notification = useNotification();
-  const { clear: clearConversations } = useActiveConversation();
   const navigate = useNavigate();
 
   return useCallback(async () => {

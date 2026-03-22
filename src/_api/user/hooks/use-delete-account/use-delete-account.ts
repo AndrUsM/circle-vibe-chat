@@ -1,16 +1,13 @@
 import { useCallback } from 'react';
+import { useNavigate } from 'react-router-dom';
 
 import { User } from '@circle-vibe/shared';
 
 import { useCurrentUser, useNotification } from '@core/hooks';
 import { request } from '@core/request';
-
-import { AccountSettingsFormValues } from '@features/users/components/account-settings-form/types';
-
-import { composeUpdateUserPayload } from '@api/user/utils';
-import { useActiveConversation } from '@features/conversation';
-import { useNavigate } from 'react-router-dom';
 import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@core/navigation';
+
+import { useActiveConversation } from '@features/conversation';
 
 export const useDeleteAccount = () => {
   const { user, clear: clearCurrentUser } = useCurrentUser();
