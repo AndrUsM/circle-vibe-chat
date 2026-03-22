@@ -9,6 +9,7 @@ import { IConversationContext } from '@features/conversation';
 export const ConversationContext = createContext<IConversationContext>({
   selectedChatId: null,
   bucket: null,
+  clear: noop,
   setSelectedChatId: noop,
   currentConversationParticipant: {} as ChatParticipant,
   setCurrentConversationParticipant: noop,

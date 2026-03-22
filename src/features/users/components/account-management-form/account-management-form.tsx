@@ -11,21 +11,22 @@ import { Section } from '@shared/components';
 
 import './account-management-form.scss';
 import { useConfirmation } from '@shared/hooks';
+import { useDeactivateAccount, useDeleteAccount } from '@api/user';
 
 export const AccountManagementForm: React.FC = () => {
   const { t } = useTranslation();
   const confirm = useConfirmation();
+  const deleteAccount = useDeleteAccount();
+  const deactivateAccount = useDeactivateAccount();
 
   const onDelete = async () => {
     await confirm("Are you sure you want to delete account?", "danger");
-
-    console.log("Deleted")
+    await deleteAccount();
   }
 
   const onDeactivate = async () => {
     await confirm('Are you sure you want to deactivate account?', 'danger');
-
-    console.log('Freeze');
+    await deactivateAccount();
   };
 
   return (

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useCallback, useState } from 'react';
 
 import { ChatParticipant } from '@circle-vibe/shared';
 
@@ -10,10 +10,20 @@ import { IConversationContext } from './conversation.context-interface';
 export const ConversationProvider: ExtendedReactFunctionalComponent = ({ children }) => {
   const [participant, setParticipant] = useState<ChatParticipant | null>(null);
   const [selectedChatId, setSelectedChatId] = useState<number | null>(null);
+  const [bucket, setBucketName] = useState<string | null>(null);
+
+  const clear = useCallback(() => {
+    setParticipant(null);
+    setSelectedChatId(null);
+    setBucketName(null);
+  }, [])
 
   const state: IConversationContext = {
+    bucket,
     selectedChatId,
     currentConversationParticipant: participant,
+    clear,
+    setBucketName,
     setSelectedChatId: (chatId: number) => setSelectedChatId(chatId),
     setCurrentConversationParticipant: setParticipant,
   };
