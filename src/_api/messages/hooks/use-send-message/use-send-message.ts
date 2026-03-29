@@ -31,7 +31,7 @@ export const useSendMessage = (
   const { bucket } = useActiveConversation();
   const notification = useNotification();
   const sendVideo = useSendVideoAsBuffer();
-  const sendFileMessage = useSendFileMessage();
+  const sendFileMessage = useSendFileMessage()
 
   return useCallback(
     async (formValues: MessageFormValues, { resetForm }: FormikHelpers<MessageFormValues>) => {

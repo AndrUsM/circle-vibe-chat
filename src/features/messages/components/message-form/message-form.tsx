@@ -11,14 +11,16 @@ import {
   FormSubmitButton,
   Icon,
   LoadingOverlay,
+  noop,
   Show,
   StackLayout,
   Tooltip,
+  useBoolean,
   useIcons,
 } from '@circle-vibe/components';
 
 import MDEditor, { RefMDEditor } from '@uiw/react-md-editor';
-import { FormikHelpers, FormikProps } from 'formik';
+import { FormikHelpers, FormikProps, useFormik } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import {
@@ -32,6 +34,7 @@ import {
 import { UploadedFilePreview } from './uploaded-file-preview';
 
 import './message-form.scss';
+import { UploadFileMenuModal } from '@features/messages/components/message-form/upload-file-menu-modal/upload-file-menu-modal';
 
 interface MessageFormProps {
   initialValues?: Partial<MessageFormValues>;
@@ -52,6 +55,11 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
   const textareaRef = useRef<RefObject<RefMDEditor>>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fileMimeType = useFileEntityType(fileInputRef);
+  const [
+    isMessageTypeDialogOpen,
+    _triggerMessageTypeDialogVisibility,
+    setMessageTypeDialogVisibility,
+  ] = useBoolean(false);
   const {
     fileLoadingForPreview,
     fileSource,
@@ -67,6 +75,19 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
   const openFileSelectionDialog = () => fileInputRef?.current?.click();
   const onSubmit = useCallback(
     (values: MessageFormValues, options: FormikHelpers<MessageFormValues>) => {
+      if (values?.file) {
+        setMessageTypeDialogVisibility(true);
+
+        return;
+      }
+
+      onSendMessage(values, options);
+    },
+    [],
+  );
+
+  const onSendMessage = useCallback(
+    (values: MessageFormValues, options: FormikHelpers<MessageFormValues>) => {
       setFileLoadingForPreview(false);
       setFileSource(undefined);
 
@@ -75,116 +96,140 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
     [],
   );
 
+  const formContext = useFormik<MessageFormValues>({
+    onSubmit,
+    validationSchema: MESSAGE_FORM_VALIDATION_SCHEMA,
+    initialValues: {
+      ...initialValues,
+      ...MESSAGE_FORM_INITIAL_VALUE,
+    },
+    enableReinitialize: true,
+  });
+
   return (
-    <Form
-      enableReinitialize={true}
-      onSubmit={onSubmit}
-      validationSchema={MESSAGE_FORM_VALIDATION_SCHEMA}
-      initialValues={{
-        ...initialValues,
-        ...MESSAGE_FORM_INITIAL_VALUE,
-      }}
-    >
-      {({ values, setFieldValue }: FormikProps<MessageFormValues>) => (
-        <StackLayout space='1rem'>
-          <Show.When isTrue={fileLoadingForPreview}>
-            <StackLayout space='0.25rem' className='w-fit relative'>
-              <Button
-                color='primary'
-                size='small'
-                onClick={() => {
-                  abortReadFile();
-                  setFileLoadingForPreview(false);
-                  if (fileInputRef.current) {
-                    setFieldValue('file', null);
-                  }
-                }}
-              >
-                {t('button.actions.cancel')}
-              </Button>
+    <>
+      <Form
+        onSubmit={onSubmit}
+        enableReinitialize={true}
+        initialValues={{
+          ...initialValues,
+          ...MESSAGE_FORM_INITIAL_VALUE,
+        }}
+        validationSchema={MESSAGE_FORM_VALIDATION_SCHEMA}
+      >
+        {({ values, setFieldValue }: FormikProps<MessageFormValues>) => (
+          <StackLayout space='1rem'>
+            <Show.When isTrue={fileLoadingForPreview}>
+              <StackLayout space='0.25rem' className='w-fit relative'>
+                <Button
+                  color='primary'
+                  size='small'
+                  onClick={() => {
+                    abortReadFile();
+                    setFileLoadingForPreview(false);
+                    if (fileInputRef.current) {
+                      setFieldValue('file', null);
+                    }
+                  }}
+                >
+                  {t('button.actions.cancel')}
+                </Button>
 
-              <div className='relative overflow-hidden file-empty-block bg-light rounded-2'>
-                <LoadingOverlay />
-              </div>
+                <div className='relative overflow-hidden file-empty-block bg-light rounded-2'>
+                  <LoadingOverlay />
+                </div>
 
-              <span className='text-xs italic bg-tertiary rounded-2 p-2 text-center'>
-                {readFileProgress}%, {totalReadedMb}/{totalFileSize} MB
-              </span>
-            </StackLayout>
-          </Show.When>
+                <span className='text-xs italic bg-tertiary rounded-2 p-2 text-center'>
+                  {readFileProgress}%, {totalReadedMb}/{totalFileSize} MB
+                </span>
+              </StackLayout>
+            </Show.When>
 
-          <Show.When isTrue={Boolean(fileSource) && !fileLoadingForPreview}>
-            <UploadedFilePreview
-              fileSource={String(fileSource)}
-              entityType={fileMimeType as MessageFileEntityType}
-              fileName={String(fileInputRef.current?.files?.[0]?.name)}
-              onClear={() => {
-                setFileSource(undefined);
-                setFieldValue('file', undefined);
-              }}
-            />
-          </Show.When>
-
-          <StackLayout space='0.5rem' alignItems='flex-end' data-color-mode='light'>
-            <FormikFormControl formFieldName='content' className='w-full'>
-              <MDEditor
-                ref={textareaRef}
-                preview='edit'
-                highlightEnable={false}
-                fullscreen={false}
-                hideToolbar={true}
-                enableScroll={false}
-                height={50}
-                minHeight={50}
-                maxHeight={500}
-                textareaProps={{
-                  placeholder: t('conversations.send.input.placeholder'),
-                  onKeyDown: values.content.length ? onStartTyping : onStopTyping,
-                  onMouseLeave: onStopTyping,
-                }}
-                value={values.content}
-                onChange={(message) => {
-                  setFieldValue('content', message);
+            <Show.When isTrue={Boolean(fileSource) && !fileLoadingForPreview}>
+              <UploadedFilePreview
+                fileSource={String(fileSource)}
+                entityType={fileMimeType as MessageFileEntityType}
+                fileName={String(fileInputRef.current?.files?.[0]?.name)}
+                onClear={() => {
+                  setFileSource(undefined);
+                  setFieldValue('file', undefined);
                 }}
               />
-            </FormikFormControl>
+            </Show.When>
 
-            <ClusterLayout justifyContent='flex-end' space='0.5rem' alignItems='flex-end'>
-              {children}
-
-              <Button
-                disabled={Boolean(values.file?.name)}
-                type='button'
-                onClick={openFileSelectionDialog}
-              >
-                <Tooltip title={t('conversations.buttons.upload-files.tooltip')} className='flex '>
-                  <Icon size={16} color='var(--cv-light)' name={cilFile} />
-                </Tooltip>
-
-                <input
-                  type='file'
-                  ref={fileInputRef}
-                  hidden
-                  onChange={(event) => {
-                    setFileLoadingForPreview(true);
-                    handleFileChange(event, setFieldValue);
+            <StackLayout space='0.5rem' alignItems='flex-end' data-color-mode='light'>
+              <FormikFormControl formFieldName='content' className='w-full'>
+                <MDEditor
+                  ref={textareaRef}
+                  preview='edit'
+                  highlightEnable={false}
+                  fullscreen={false}
+                  hideToolbar={true}
+                  enableScroll={false}
+                  height={50}
+                  minHeight={50}
+                  maxHeight={500}
+                  textareaProps={{
+                    placeholder: t('conversations.send.input.placeholder'),
+                    onKeyDown: values.content.length ? onStartTyping : onStopTyping,
+                    onMouseLeave: onStopTyping,
+                  }}
+                  value={values.content}
+                  onChange={(message) => {
+                    setFieldValue('content', message);
                   }}
                 />
-              </Button>
+              </FormikFormControl>
 
-              <FormSubmitButton
-                className='text-center'
-                disabled={!values.file?.name && !values.content.length}
-                color='primary'
-              >
-                <Tooltip title={t('conversations.send.button')} className='flex '>
-                  <Icon color='var(--cv-light)' size={16} name={cilSend} />
-                </Tooltip>
-              </FormSubmitButton>
-            </ClusterLayout>
+              <ClusterLayout justifyContent='flex-end' space='0.5rem' alignItems='flex-end'>
+                {children}
+
+                <Button
+                  disabled={Boolean(values.file?.name)}
+                  type='button'
+                  onClick={openFileSelectionDialog}
+                >
+                  <Tooltip
+                    title={t('conversations.buttons.upload-files.tooltip')}
+                    className='flex '
+                  >
+                    <Icon size={16} color='var(--cv-light)' name={cilFile} />
+                  </Tooltip>
+
+                  <input
+                    type='file'
+                    ref={fileInputRef}
+                    hidden
+                    onChange={(event) => {
+                      setFileLoadingForPreview(true);
+                      handleFileChange(event, setFieldValue);
+                    }}
+                  />
+                </Button>
+
+                <FormSubmitButton
+                  className='text-center'
+                  disabled={!values.file?.name && !values.content.length}
+                  color='primary'
+                >
+                  <Tooltip title={t('conversations.send.button')} className='flex '>
+                    <Icon color='var(--cv-light)' size={16} name={cilSend} />
+                  </Tooltip>
+                </FormSubmitButton>
+              </ClusterLayout>
+            </StackLayout>
           </StackLayout>
-        </StackLayout>
-      )}
-    </Form>
+        )}
+      </Form>
+
+      <UploadFileMenuModal
+        isOpen={isMessageTypeDialogOpen}
+        onClose={() => setMessageTypeDialogVisibility(false)}
+        onSuccess={(type) => {
+          console.log(type);
+          // onSendMessage(formContext.values, formContext);
+        }}
+      />
+    </>
   );
 };
