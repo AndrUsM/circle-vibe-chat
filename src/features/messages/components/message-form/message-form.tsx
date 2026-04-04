@@ -1,6 +1,6 @@
-import React, { RefObject, useCallback, useRef } from 'react';
+import React, { RefObject, useCallback, useRef, useState } from 'react';
 
-import { MessageFileEntityType } from '@circle-vibe/shared';
+import { MessageFileEntityType, MessageType } from '@circle-vibe/shared';
 
 import {
   Button,
@@ -11,7 +11,6 @@ import {
   FormSubmitButton,
   Icon,
   LoadingOverlay,
-  noop,
   Show,
   StackLayout,
   Tooltip,
@@ -20,10 +19,11 @@ import {
 } from '@circle-vibe/components';
 
 import MDEditor, { RefMDEditor } from '@uiw/react-md-editor';
-import { FormikHelpers, FormikProps, useFormik } from 'formik';
+import { FormikHelpers, FormikProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 
 import {
+  getMessageType,
   MESSAGE_FORM_INITIAL_VALUE,
   MESSAGE_FORM_VALIDATION_SCHEMA,
   MessageFormValues,
@@ -32,9 +32,9 @@ import {
 } from '@features/messages';
 
 import { UploadedFilePreview } from './uploaded-file-preview';
+import { UploadFileMenuModal } from './upload-file-menu-modal';
 
 import './message-form.scss';
-import { UploadFileMenuModal } from '@features/messages/components/message-form/upload-file-menu-modal/upload-file-menu-modal';
 
 interface MessageFormProps {
   initialValues?: Partial<MessageFormValues>;
@@ -52,6 +52,7 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
 }) => {
   const { cilFile, cilSend } = useIcons();
   const { t } = useTranslation();
+  const [submittedFileType, setSubmittedFileType] = useState<MessageType>(MessageType.FILE);
   const textareaRef = useRef<RefObject<RefMDEditor>>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fileMimeType = useFileEntityType(fileInputRef);
@@ -75,15 +76,17 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
   const openFileSelectionDialog = () => fileInputRef?.current?.click();
   const onSubmit = useCallback(
     (values: MessageFormValues, options: FormikHelpers<MessageFormValues>) => {
-      if (values?.file) {
-        setMessageTypeDialogVisibility(true);
+      if (isMessageTypeDialogOpen || values.content) {
+        onSendMessage(values, options);
 
         return;
       }
 
-      onSendMessage(values, options);
+      if (values?.file) {
+        setMessageTypeDialogVisibility(true);
+      }
     },
-    [],
+    [isMessageTypeDialogOpen],
   );
 
   const onSendMessage = useCallback(
@@ -96,16 +99,6 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
     [],
   );
 
-  const formContext = useFormik<MessageFormValues>({
-    onSubmit,
-    validationSchema: MESSAGE_FORM_VALIDATION_SCHEMA,
-    initialValues: {
-      ...initialValues,
-      ...MESSAGE_FORM_INITIAL_VALUE,
-    },
-    enableReinitialize: true,
-  });
-
   return (
     <>
       <Form
@@ -117,8 +110,18 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
         }}
         validationSchema={MESSAGE_FORM_VALIDATION_SCHEMA}
       >
-        {({ values, setFieldValue }: FormikProps<MessageFormValues>) => (
+        {({ values, setFieldValue, submitForm }: FormikProps<MessageFormValues>) => (
           <StackLayout space='1rem'>
+            <UploadFileMenuModal
+              isOpen={isMessageTypeDialogOpen}
+              initialType={submittedFileType}
+              onClose={() => setMessageTypeDialogVisibility(false)}
+              onSuccess={async (type) => {
+                await setFieldValue('uploadAs', type);
+                await submitForm();
+              }}
+            />
+
             <Show.When isTrue={fileLoadingForPreview}>
               <StackLayout space='0.25rem' className='w-fit relative'>
                 <Button
@@ -127,9 +130,12 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
                   onClick={() => {
                     abortReadFile();
                     setFileLoadingForPreview(false);
+
                     if (fileInputRef.current) {
                       setFieldValue('file', null);
                     }
+
+                    setFieldValue('uploadAs', fileInputRef.current ? getMessageType(values) : null);
                   }}
                 >
                   {t('button.actions.cancel')}
@@ -153,6 +159,7 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
                 onClear={() => {
                   setFileSource(undefined);
                   setFieldValue('file', undefined);
+                  setFieldValue('uploadAs', null);
                 }}
               />
             </Show.When>
@@ -203,6 +210,10 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
                     onChange={(event) => {
                       setFileLoadingForPreview(true);
                       handleFileChange(event, setFieldValue);
+                      setFieldValue('uploadAs', null);
+                      setSubmittedFileType(
+                        getMessageType({ file: event.currentTarget.files?.item(0) as File }),
+                      );
                     }}
                   />
                 </Button>
@@ -221,15 +232,6 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
           </StackLayout>
         )}
       </Form>
-
-      <UploadFileMenuModal
-        isOpen={isMessageTypeDialogOpen}
-        onClose={() => setMessageTypeDialogVisibility(false)}
-        onSuccess={(type) => {
-          console.log(type);
-          // onSendMessage(formContext.values, formContext);
-        }}
-      />
     </>
   );
 };

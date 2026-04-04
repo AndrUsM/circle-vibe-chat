@@ -1,14 +1,18 @@
 import { MessageType } from '@circle-vibe/shared';
 
-import { MessageFormValues } from '@features/messages/types';
-
-export const getMessageType = (formValues: MessageFormValues): MessageType => {
+export const getMessageType = (formValues: {
+  file: File | null;
+  uploadAs?: MessageType;
+}): MessageType => {
   const file = formValues.file;
 
   if (!file) {
     return MessageType.TEXT;
   }
 
+  if (formValues?.uploadAs) {
+    return formValues?.uploadAs;
+  }
   if (file.type.includes('image')) {
     return MessageType.IMAGE;
   }

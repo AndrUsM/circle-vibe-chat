@@ -1,27 +1,27 @@
-import {
-  Button,
-  ClusterLayout,
-  Icon,
-  Modal,
-  Tooltip,
-  useIcons,
-} from '@circle-vibe/components';
-import { useState, FC } from 'react';
-import { UploadFileTypeEnum } from './types';
+import { useState, FC, useEffect } from 'react';
+
+import { Button, ClusterLayout, Icon, Modal, Tooltip, useIcons } from '@circle-vibe/components';
+import { MessageType } from '@circle-vibe/shared';
 
 interface UploadFileMenuModalProps {
   isOpen: boolean;
+  initialType?: MessageType;
   onClose: VoidFunction;
-  onSuccess: (type: UploadFileTypeEnum) => void;
+  onSuccess: (type: MessageType) => void;
 }
 
 export const UploadFileMenuModal: FC<UploadFileMenuModalProps> = ({
   isOpen,
   onClose,
+  initialType,
   onSuccess,
 }) => {
-  const { cilImage, cilFile, cilVideo } = useIcons();
-  const [type, setType] = useState<UploadFileTypeEnum>(UploadFileTypeEnum.FILE);
+  const { cilImage, cilFile, cilVideo, cilAudio } = useIcons();
+  const [type, setType] = useState<MessageType>(initialType ?? MessageType.FILE);
+
+  useEffect(() => {
+    setType(initialType ?? MessageType.FILE);
+  }, [initialType]);
 
   return (
     <Modal.Root isOpen={isOpen} onClose={onClose}>
@@ -33,7 +33,7 @@ export const UploadFileMenuModal: FC<UploadFileMenuModalProps> = ({
             <Button
               size='medium'
               color={type === 'IMAGE' ? 'primary' : 'secondary'}
-              onClick={() => setType(UploadFileTypeEnum.IMAGE)}
+              onClick={() => setType(MessageType.IMAGE)}
             >
               <Icon name={cilImage} size={60} color='primary' />
             </Button>
@@ -43,9 +43,19 @@ export const UploadFileMenuModal: FC<UploadFileMenuModalProps> = ({
             <Button
               size='medium'
               color={type === 'VIDEO' ? 'primary' : 'secondary'}
-              onClick={() => setType(UploadFileTypeEnum.VIDEO)}
+              onClick={() => setType(MessageType.VIDEO)}
             >
               <Icon name={cilVideo} size={60} color='primary' />
+            </Button>
+          </Tooltip>
+
+          <Tooltip title='Compressed audio'>
+            <Button
+              size='medium'
+              color={type === 'AUDIO' ? 'primary' : 'secondary'}
+              onClick={() => setType(MessageType.AUDIO)}
+            >
+              <Icon name={cilAudio} size={60} color='primary' />
             </Button>
           </Tooltip>
 
@@ -53,7 +63,7 @@ export const UploadFileMenuModal: FC<UploadFileMenuModalProps> = ({
             <Button
               size='medium'
               color={type === 'FILE' ? 'primary' : 'secondary'}
-              onClick={() => setType(UploadFileTypeEnum.FILE)}
+              onClick={() => setType(MessageType.FILE)}
             >
               <Icon name={cilFile} size={60} color='primary' />
             </Button>

@@ -1,1 +1,1 @@
-export * from './upload-file-menu-modal'
+export { UploadFileMenuModal } from './upload-file-menu-modal';

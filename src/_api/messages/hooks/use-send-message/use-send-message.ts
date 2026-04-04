@@ -21,7 +21,6 @@ import {
 import { useSendFileMessage, useSendVideoAsBuffer } from '@api/messages';
 import { useActiveConversation } from '@features/conversation';
 
-
 export const useSendMessage = (
   chatParticipant: ChatParticipant | null,
   selectedChatId: number | null,
@@ -31,7 +30,7 @@ export const useSendMessage = (
   const { bucket } = useActiveConversation();
   const notification = useNotification();
   const sendVideo = useSendVideoAsBuffer();
-  const sendFileMessage = useSendFileMessage()
+  const sendFileMessage = useSendFileMessage();
 
   return useCallback(
     async (formValues: MessageFormValues, { resetForm }: FormikHelpers<MessageFormValues>) => {
@@ -51,7 +50,7 @@ export const useSendMessage = (
       if (formValues.file) {
         const messageType = getMessageType(formValues);
 
-        if (messageType === MessageType.VIDEO) {
+        if (messageType === MessageType.VIDEO && formValues.uploadAs === MessageType.VIDEO) {
           try {
             const messageInputDto: SendMessageChatSocketParams = composeCreateMessageParams(
               chatParticipant,
