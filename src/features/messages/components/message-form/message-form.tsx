@@ -210,10 +210,11 @@ export const MessageForm: ExtendedReactFunctionalComponent<MessageFormProps> = (
                     onChange={(event) => {
                       setFileLoadingForPreview(true);
                       handleFileChange(event, setFieldValue);
+
+                      const fileType = getMessageType({ file: event.currentTarget.files?.item(0) as File });
+
                       setFieldValue('uploadAs', null);
-                      setSubmittedFileType(
-                        getMessageType({ file: event.currentTarget.files?.item(0) as File }),
-                      );
+                      setSubmittedFileType(fileType);
                     }}
                   />
                 </Button>

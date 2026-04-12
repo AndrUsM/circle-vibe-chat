@@ -13,7 +13,7 @@ import {
 
 import { FormikHelpers } from 'formik';
 
-import { composePaginationResponse } from '@shared/utils';
+import { composePaginationResponse, parseSocketPayload } from '@shared/utils';
 
 import { useCurrentUser, useNotification, useSocket } from '@core/hooks';
 
@@ -87,7 +87,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
     setSelectedChatId(chatId);
     setBucketName(chat?.bucket);
 
-    socket.emit(ChatSocketCommand.JOIN_CHAT, { chatId });
+    socket.emit(ChatSocketCommand.JOIN_CHAT, parseSocketPayload({ chatId }));
   };
 
   const resetMessagesState = () => {
@@ -172,13 +172,13 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
 
       setMessagesPage(page);
 
-      const params: RequestMessagesWithPaginationChatSocketParams = {
+      const params: RequestMessagesWithPaginationChatSocketParams = parseSocketPayload({
         chatId: selectedChatId,
         page,
         threadId: undefined,
         ...(filters ?? {}),
         pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
-      };
+      });
 
       setMessagesLoading(true);
       socket.emit(ChatSocketCommand.REQUEST_MESSAGES_WITH_PAGINATION, params);
@@ -192,7 +192,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
 
     const userId = user?.id;
     const userIds = filters?.userIds ?? [];
-    const params: RequestChatsWithPaginationChatSocketParams = {
+    const params: RequestChatsWithPaginationChatSocketParams = parseSocketPayload({
       userId: [userId, ...userIds],
       page,
       pageSize: DEFAULT_PAGINATION_PAGE_SIZE,
@@ -200,7 +200,7 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
       empty: filters?.empty,
       removed: filters?.removed,
       type: filters?.type,
-    };
+    });
 
     socket.emit(ChatSocketCommand.REQUEST_CHATS_WITH_PAGINATION, params);
   };
@@ -210,15 +210,21 @@ export const useConversationGateway = (onScrollMessages: VoidFunction) => {
   };
 
   const triggerStartTypingNotification = useCallback(() => {
-    socket.emit(ChatSocketCommand.MESSAGE_TYPE_START_TYPING, {
-      chatId: selectedChatId,
-    });
+    socket.emit(
+      ChatSocketCommand.MESSAGE_TYPE_START_TYPING,
+      parseSocketPayload({
+        chatId: selectedChatId,
+      }),
+    );
   }, [selectedChatId]);
 
   const triggerStopTypingNotification = useCallback(() => {
-    socket.emit(ChatSocketCommand.MESSAGE_TYPE_STOP_TYPING, {
-      chatId: selectedChatId,
-    });
+    socket.emit(
+      ChatSocketCommand.MESSAGE_TYPE_STOP_TYPING,
+      parseSocketPayload({
+        chatId: selectedChatId,
+      }),
+    );
   }, [selectedChatId]);
 
   useChatSocketLogicInitialization({

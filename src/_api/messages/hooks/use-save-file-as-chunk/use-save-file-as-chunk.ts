@@ -9,6 +9,7 @@ import {
 import { useNotification, useSocket } from '@core/hooks';
 
 import { handleUploadingVideoProcess } from './utils';
+import { parseSocketPayload } from '@shared/utils';
 
 export const useSaveFileAsChunk = () => {
   const { createFileSocketConnection } = useSocket();
@@ -34,7 +35,10 @@ export const useSaveFileAsChunk = () => {
             type: GenericFileServerSocketKeys,
           };
 
-          fileSocket.emit(GenericFileServerSocketKeys.START_UPLOAD, startVideoUploadPayload);
+          fileSocket.emit(
+            GenericFileServerSocketKeys.START_UPLOAD,
+            parseSocketPayload(startVideoUploadPayload),
+          );
 
           notification({
             type: 'success',

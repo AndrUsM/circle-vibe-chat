@@ -20,6 +20,7 @@ import {
 
 import { useSendFileMessage, useSendVideoAsBuffer } from '@api/messages';
 import { useActiveConversation } from '@features/conversation';
+import { parseSocketPayload } from '@shared/utils';
 
 export const useSendMessage = (
   chatParticipant: ChatParticipant | null,
@@ -86,7 +87,7 @@ export const useSendMessage = (
           formValues,
         );
 
-        socket.emit(ChatSocketCommand.SEND_MESSAGE, messageDto);
+        socket.emit(ChatSocketCommand.SEND_MESSAGE, parseSocketPayload(messageDto));
       }
 
       resetForm();

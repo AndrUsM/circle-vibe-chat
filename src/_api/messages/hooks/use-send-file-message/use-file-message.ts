@@ -1,11 +1,13 @@
 import { ChatSocketCommand } from '@circle-vibe/shared';
 
 import { useSocket } from '@core/hooks';
+import { parseSocketPayload } from '@shared/utils';
+
 import { composeCreateMessageFileParams, UseSendMessageInput } from '@features/messages/utils';
+import { useActiveConversation } from '@features/conversation';
 
 import { IFileUrl } from './types';
 import { useMessageTypeToUploadingMethodMap } from './use-message-type-to-uploading-method-output';
-import { useActiveConversation } from '@features/conversation';
 
 export const useSendFileMessage = () => {
   const { socket } = useSocket();
@@ -23,6 +25,8 @@ export const useSendFileMessage = () => {
       file,
     );
 
-    socket.emit(ChatSocketCommand.SEND_FILE_MESSAGE, payload);
+    console.log(payload);
+
+    socket.emit(ChatSocketCommand.SEND_FILE_MESSAGE, parseSocketPayload(payload));
   };
 };

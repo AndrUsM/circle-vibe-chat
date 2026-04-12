@@ -72,7 +72,14 @@ export const UploadFileMenuModal: FC<UploadFileMenuModalProps> = ({
       </Modal.Body>
 
       <Modal.Footer justifyContent='center'>
-        <Button size='medium' type='button' color='primary' onClick={onSuccess}>
+        <Button
+          size='medium'
+          type='button'
+          color='primary'
+          onClick={() => {
+            onSuccess(type);
+          }}
+        >
           Upload file
         </Button>
       </Modal.Footer>
