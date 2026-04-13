@@ -6,7 +6,7 @@ import { notificationFunction } from '@core/hooks';
 import { getAuthToken, setAuthToken } from '@core/utils';
 
 const axiosInstance = axios.create({
-  timeout: 10000,
+  timeout: 120_000,
 });
 
 axiosInstance.interceptors.response.use(
