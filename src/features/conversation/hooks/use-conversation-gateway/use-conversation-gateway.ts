@@ -13,19 +13,19 @@ import {
 
 import { FormikHelpers } from 'formik';
 
-import { composePaginationResponse, parseSocketPayload } from '@shared/utils';
+import { composePaginationResponse, parseSocketPayload } from '@/shared/utils';
 
-import { useCurrentUser, useNotification, useSocket } from '@core/hooks';
+import { useCurrentUser, useNotification, useSocket } from '@/core/hooks';
 
-import { useActiveConversation, useIsSavedMessagesChat } from '@features/conversation';
-import { MessageFormValues } from '@features/messages';
+import { useActiveConversation, useIsSavedMessagesChat } from '@/features/conversation';
+import { MessageFormValues } from '@/features/messages';
 
-import { useSendMessage } from '@api/messages';
-import { useCreateThread } from '@api/threads';
+import { useSendMessage } from '@/api/messages';
+import { useCreateThread } from '@/api/threads';
 
 import { useConversationGatewayState } from './use-conversation-gateway-state';
 import { useChatSocketLogicInitialization } from './use-conversation-socket-intialization';
-import { PaginatedChatsFilters, PaginatedMessageFilters, PaginatedmessageOptions } from '@features/conversation/types';
+import { PaginatedChatsFilters, PaginatedMessageFilters, PaginatedmessageOptions } from '@/features/conversation/types';
 
 /**
  * A custom React hook that manages the conversation gateway logic, handling chat and message interactions.

@@ -2,7 +2,7 @@ import React from 'react';
 
 import { StackLayout } from '@circle-vibe/components';
 
-import { AuthorizationForm } from '@features/users';
+import { AuthorizationForm } from '@/features/users';
 
 export const SignInForm: React.FC = () => {
   return (

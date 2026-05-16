@@ -2,7 +2,7 @@ import React, { ReactNode } from 'react';
 
 import { Navigate, Route } from 'react-router-dom';
 
-import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@core/navigation';
+import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@/core/navigation';
 
 const SignInFormLazy = React.lazy(() =>
   import('./sign-in').then(({ SignInForm }) => ({

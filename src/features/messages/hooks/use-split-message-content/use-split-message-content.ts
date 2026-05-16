@@ -2,7 +2,7 @@ import React, { useCallback, useMemo } from 'react';
 
 import { useIcons } from '@circle-vibe/components';
 
-import { MESSAGE_CONTENT_LIMIT } from '@features/messages/constants';
+import { MESSAGE_CONTENT_LIMIT } from '@/features/messages/constants';
 
 export const useSplitMessageContent = (content: string) => {
   const icons = useIcons();

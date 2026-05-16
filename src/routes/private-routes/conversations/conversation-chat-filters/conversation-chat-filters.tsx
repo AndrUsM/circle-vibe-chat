@@ -18,9 +18,9 @@ import {
   ConversationsFilterBar,
   ConversationsFilterBarFormValues,
   CONVERSATOINS_FILTER_BAR_FORM_INITIAL_VALUES,
-} from '@features/conversation';
-import { PaginatedChatsFilters } from '@features/conversation/types';
-import { Filters } from '@shared/components';
+} from '@/features/conversation';
+import { PaginatedChatsFilters } from '@/features/conversation/types';
+import { Filters } from '@/shared/components';
 
 interface ConversationChatFiltersProps {
   isChatsFiltersBarVisible: boolean;

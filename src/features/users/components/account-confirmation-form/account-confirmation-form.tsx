@@ -10,7 +10,7 @@ import {
   StackLayout,
 } from '@circle-vibe/components';
 
-import { useConfirmAccount } from '@api/auth/hooks';
+import { useConfirmAccount } from '@/api/auth/hooks';
 
 import { ACCOUNT_CONFIRMATION_FORM_VALIDATION_SCHEMA } from './constants/account-confirmaiton-form-validation-schema';
 import { ACCOUNT_CONFIRMATION_FORM_INITIAL_VALUES } from './constants/account-confirmation-form-initial-values';

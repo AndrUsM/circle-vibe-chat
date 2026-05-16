@@ -3,7 +3,7 @@ import {
   MessageUpdateDialog,
   MessageUpdateDialogState,
   MessageUpdateFormValues,
-} from '@features/messages';
+} from '@/features/messages';
 
 interface MessageUpdateModalProps {
   messageUpdateDialogState: MessageUpdateDialogState | null;

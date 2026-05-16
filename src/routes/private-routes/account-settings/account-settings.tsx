@@ -4,16 +4,16 @@ import { Show, Tabs } from '@circle-vibe/components';
 
 import { useNavigate } from 'react-router-dom';
 
-import { BackNavigationButton, PageContent } from '@shared/components';
+import { BackNavigationButton, PageContent } from '@/shared/components';
 
-import { GLOBAL_PAGES_ENUM, PrivatePagesEnum } from '@core/navigation';
+import { GLOBAL_PAGES_ENUM, PrivatePagesEnum } from '@/core/navigation';
 
 import {
   AccountSettingsForm,
   AccountSettingsTabs,
   InviteAccountSettingsForm,
   AccountManagementForm,
-} from '@features/users';
+} from '@/features/users';
 import { useTranslation } from 'react-i18next';
 
 export const AccountSettings: React.FC = () => {

@@ -15,10 +15,10 @@ import { useTranslation } from 'react-i18next';
 import {
   MESSAGE_UPDATE_FORM_INITIAL_VALUE,
   MESSAGE_UPDATE_FORM_VALIDATION_SCHEMA,
-} from '@features/messages/constants';
-import { MessageFormValues, MessageUpdateFormValues } from '@features/messages/types';
+} from '@/features/messages/constants';
+import { MessageFormValues, MessageUpdateFormValues } from '@/features/messages/types';
 
-import { useUpdateMessage } from '@api/messages';
+import { useUpdateMessage } from '@/api/messages';
 
 import { TextMessagePreview } from '../text-message-preview';
 

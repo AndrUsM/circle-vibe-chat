@@ -4,7 +4,7 @@ import { ChatParticipant } from '@circle-vibe/shared';
 
 import { FormikErrors } from 'formik';
 
-import { toggleArrayItem } from '@shared/utils';
+import { toggleArrayItem } from '@/shared/utils';
 
 import { MessagesFilterBarFormValues } from '../../types';
 

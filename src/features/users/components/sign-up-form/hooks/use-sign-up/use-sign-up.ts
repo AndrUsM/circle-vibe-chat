@@ -2,11 +2,11 @@ import { useCallback } from 'react';
 
 import { useNavigate } from 'react-router-dom';
 
-import { useNotification } from '@core/hooks';
-import { request } from '@core/request';
+import { useNotification } from '@/core/hooks';
+import { request } from '@/core/request';
 
-import { SignUpFormInput } from '@features/users/components/sign-up-form/constants';
-import { GLOBAL_PAGES_ENUM } from '@core/navigation';
+import { SignUpFormInput } from '@/features/users/components/sign-up-form/constants';
+import { GLOBAL_PAGES_ENUM } from '@/core/navigation';
 
 export const useSignUp = () => {
   const notification = useNotification();

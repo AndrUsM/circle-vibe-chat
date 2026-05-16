@@ -1,13 +1,13 @@
 import React from 'react';
 import { ClusterLayout, Icon, Tooltip, useIcons } from '@circle-vibe/components';
-import { TopBarLogo, UserAvatar } from '@shared/components';
+import { TopBarLogo, UserAvatar } from '@/shared/components';
 import { TopBarActions } from '../conversations/topbar-actions';
 import { Outlet, useNavigate } from 'react-router-dom';
 import { useTranslation } from 'react-i18next';
-import { useCurrentUser } from '@core/hooks';
+import { useCurrentUser } from '@/core/hooks';
 import { composeAvatarFallback } from '@circle-vibe/shared';
-import { PrivatePagesEnum } from '@core/navigation';
-import { ConversationProvider } from '@features/conversation';
+import { PrivatePagesEnum } from '@/core/navigation';
+import { ConversationProvider } from '@/features/conversation';
 
 export const PrivateRoutesLayout: React.FC = () => {
   const { t } = useTranslation();

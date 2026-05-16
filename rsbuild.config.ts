@@ -4,8 +4,6 @@ import { pluginReact } from '@rsbuild/plugin-react';
 import { pluginSass } from '@rsbuild/plugin-sass';
 import { pluginTypedCSSModules } from '@rsbuild/plugin-typed-css-modules';
 import { RsdoctorRspackPlugin } from '@rsdoctor/rspack-plugin';
-// @ts-ignore
-import { resolve } from 'path';
 
 const { publicVars } = loadEnv({ prefixes: ['VITE_APP_'] });
 
@@ -28,10 +26,7 @@ export default defineConfig({
 
   resolve: {
     alias: {
-      '@shared': resolve('./src/_shared'),
-      '@core': resolve('./src/_core'),
-      '@features': resolve('./src/features'),
-      '@api': resolve('./src/_api'),
+      "@": "./src",
     },
   },
 

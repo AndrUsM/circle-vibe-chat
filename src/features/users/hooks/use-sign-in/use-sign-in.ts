@@ -5,12 +5,12 @@ import { User } from '@circle-vibe/shared';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { useCurrentUser, useNotification } from '@core/hooks';
-import { GLOBAL_PAGES_ENUM, PrivatePagesEnum } from '@core/navigation';
-import { request } from '@core/request';
-import { setAuthToken } from '@core/utils';
+import { useCurrentUser, useNotification } from '@/core/hooks';
+import { GLOBAL_PAGES_ENUM, PrivatePagesEnum } from '@/core/navigation';
+import { request } from '@/core/request';
+import { setAuthToken } from '@/core/utils';
 
-import { SignInFormInput } from '@features/users/components/sign-in-form/types';
+import { SignInFormInput } from '@/features/users/components/sign-in-form/types';
 
 interface Response {
   token: string;

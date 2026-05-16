@@ -15,15 +15,15 @@ import {
   useCopyToClickboard,
 } from '@circle-vibe/components';
 
-import { Table, UserAvatar } from '@shared/components';
+import { Table, UserAvatar } from '@/shared/components';
 
-import { useNotification } from '@core/hooks';
+import { useNotification } from '@/core/hooks';
 
 import {
   useGetUserToInvite,
   useGenerateConversationInvite,
   useGetChatParticipants,
-} from '@api/conversations';
+} from '@/api/conversations';
 
 import {
   MANAGE_CONVERSATION_PARTICIPANTS_INITIAL_FORM_VALUE,

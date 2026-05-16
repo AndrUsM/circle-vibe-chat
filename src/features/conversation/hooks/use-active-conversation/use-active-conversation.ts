@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 
-import { ConversationContext } from '@features/conversation/context';
+import { ConversationContext } from '@/features/conversation/context';
 
 export const useActiveConversation = () => {
   const {

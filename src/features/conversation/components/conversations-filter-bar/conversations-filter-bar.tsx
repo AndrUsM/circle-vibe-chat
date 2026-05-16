@@ -11,8 +11,8 @@ import {
 } from '@circle-vibe/components';
 import { getUserFullName } from '@circle-vibe/shared';
 
-import { useFilter } from '@shared/components';
-import { ChatParticipantsWithUser, useConversationsParticipants } from '@api/conversations';
+import { useFilter } from '@/shared/components';
+import { ChatParticipantsWithUser, useConversationsParticipants } from '@/api/conversations';
 
 import { useToggleParticipantsFilter } from './hooks';
 

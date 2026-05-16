@@ -2,7 +2,7 @@ import React from 'react';
 
 import { Route } from 'react-router-dom';
 
-import { PrivatePagesEnum } from '@core/navigation';
+import { PrivatePagesEnum } from '@/core/navigation';
 
 const ConversationsLazy = React.lazy(() =>
   import('./conversations').then(({ Conversations }) => ({

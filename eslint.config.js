@@ -100,22 +100,22 @@ export default [
               position: 'before',
             },
             {
-              pattern: '@shared/**',
+              pattern: '@/shared/**',
               group: 'internal',
               position: 'after',
             },
             {
-              pattern: '@core/**',
+              pattern: '@/core/**',
               group: 'internal',
               position: 'after',
             },
             {
-              pattern: '@features/**',
+              pattern: '@/features/**',
               group: 'internal',
               position: 'after',
             },
             {
-              pattern: '@api/**',
+              pattern: '@/api/**',
               group: 'internal',
               position: 'after',
             },

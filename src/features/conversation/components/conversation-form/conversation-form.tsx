@@ -12,8 +12,8 @@ import {
   SubmitButton,
 } from '@circle-vibe/components';
 
-import { useHandleChatCreation } from '@api/conversations';
-import { CONVERSATION_TYPE_DROPDOWN_OPTIONS } from '@shared/constants';
+import { useHandleChatCreation } from '@/api/conversations';
+import { CONVERSATION_TYPE_DROPDOWN_OPTIONS } from '@/shared/constants';
 
 import {
   CREATE_CONVERSATION_FORM_INITIAL_VALUES,

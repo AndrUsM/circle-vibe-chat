@@ -2,7 +2,7 @@ import { ChangeEvent, useCallback, useMemo, useState } from 'react';
 
 import { useBoolean } from '@circle-vibe/components';
 
-import { useNotification } from '@core/hooks';
+import { useNotification } from '@/core/hooks';
 
 import { useReadFileForPreview } from '../use-read-file-for-preview';
 

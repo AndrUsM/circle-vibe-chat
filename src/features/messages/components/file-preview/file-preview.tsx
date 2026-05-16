@@ -2,7 +2,7 @@ import { MessageFile, MessageFileEntityType } from '@circle-vibe/shared';
 
 import { ExtendedReactFunctionalComponent, Show, Tooltip } from '@circle-vibe/components';
 
-import { openFileForPreview } from '@features/messages';
+import { openFileForPreview } from '@/features/messages';
 
 import './file-preview.scss';
 

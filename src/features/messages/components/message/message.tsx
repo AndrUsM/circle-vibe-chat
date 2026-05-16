@@ -24,7 +24,7 @@ import {
 
 import { FormikHelpers } from 'formik';
 
-import { UserAvatar } from '@shared/components';
+import { UserAvatar } from '@/shared/components';
 
 import {
   MessageForm,
@@ -32,7 +32,7 @@ import {
   TextMessagePreview,
   useSplitMessageContent,
   useThreadParticipants,
-} from '@features/messages';
+} from '@/features/messages';
 
 import { MessageFiles } from './message-files/message-files';
 

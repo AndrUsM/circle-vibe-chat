@@ -21,15 +21,15 @@ import {
   IFiltersContext,
   PaginationControls,
   PaginationScrollButton,
-} from '@shared/components';
-import { useConfirmation, useScrollToBlockPosition } from '@shared/hooks';
+} from '@/shared/components';
+import { useConfirmation, useScrollToBlockPosition } from '@/shared/hooks';
 
 import {
   Chat,
   InitialSetup,
   useConversationGateway,
   useInitialChatSelection,
-} from '@features/conversation';
+} from '@/features/conversation';
 import {
   Message,
   MessageForm,
@@ -39,9 +39,9 @@ import {
   MessagesFilterPreview,
   usePreviewFileState,
   useUpdateMessageState,
-} from '@features/messages';
+} from '@/features/messages';
 
-import { useDeleteMessage } from '@api/messages';
+import { useDeleteMessage } from '@/api/messages';
 
 import { ConversationModals, MessageUpdateModal } from './conversation-modals';
 import { ConversationChatFilters } from './conversation-chat-filters';

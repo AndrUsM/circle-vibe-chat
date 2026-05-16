@@ -2,8 +2,8 @@ import React from 'react';
 
 import { ToastContainer } from 'react-toastify';
 
-import { CurrentUserProvider } from '@core/context';
-import { useRestoreToken, useRestoreUser } from '@core/hooks';
+import { CurrentUserProvider } from '@/core/context';
+import { useRestoreToken, useRestoreUser } from '@/core/hooks';
 
 import { RootRoute } from './routes/root.route';
 

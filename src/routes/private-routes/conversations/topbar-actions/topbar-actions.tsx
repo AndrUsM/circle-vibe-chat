@@ -11,8 +11,8 @@ import {
 
 import { useNavigate } from 'react-router-dom';
 
-import { cookiesService, localStorageService } from '@core/services';
-import { useSocket } from '@core/hooks';
+import { cookiesService, localStorageService } from '@/core/services';
+import { useSocket } from '@/core/hooks';
 
 export const TopBarActions: ExtendedReactFunctionalComponent = () => {
   const { cilHamburgerMenu, cilAccountLogout } = useIcons();

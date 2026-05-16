@@ -14,9 +14,9 @@ import {
   Modal,
 } from '@circle-vibe/components';
 
-import { ConversationMembers, useActiveConversation } from '@features/conversation';
+import { ConversationMembers, useActiveConversation } from '@/features/conversation';
 
-import { useUpdateConversationParticipant } from '@api/conversation-participants';
+import { useUpdateConversationParticipant } from '@/api/conversation-participants';
 
 interface ChatActionsProps {
   chat: Chat;

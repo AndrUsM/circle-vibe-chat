@@ -19,10 +19,10 @@ import {
 import { FormikProps } from 'formik';
 import { useNavigate } from 'react-router-dom';
 
-import { useNotification } from '@core/hooks';
-import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@core/navigation';
+import { useNotification } from '@/core/hooks';
+import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@/core/navigation';
 
-import { useGenerateAccountConfirmationCode, useRestorePassword } from '@api/auth/hooks';
+import { useGenerateAccountConfirmationCode, useRestorePassword } from '@/api/auth/hooks';
 
 import { AccountConfirmationForm } from '../account-confirmation-form';
 

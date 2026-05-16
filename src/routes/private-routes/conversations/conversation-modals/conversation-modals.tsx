@@ -4,8 +4,8 @@ import { ExtendedReactFunctionalComponent, Modal } from '@circle-vibe/components
 
 import { useTranslation } from 'react-i18next';
 
-import { ConversationForm } from '@features/conversation';
-import { FilePreview } from '@features/messages';
+import { ConversationForm } from '@/features/conversation';
+import { FilePreview } from '@/features/messages';
 
 interface ConversationModalsProps {
   openChatCreationModal: boolean;

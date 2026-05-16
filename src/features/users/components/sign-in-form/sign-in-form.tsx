@@ -13,9 +13,9 @@ import {
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@core/navigation';
+import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@/core/navigation';
 
-import { useSignIn } from '@features/users/hooks';
+import { useSignIn } from '@/features/users/hooks';
 
 import { AUTHORIZATION_FORM_SCHEMA, AUTHORIZATION_FORM_INITIAL_VALUES } from './constants';
 

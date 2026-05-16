@@ -4,8 +4,8 @@ import { ExtendedReactFunctionalComponent } from '@circle-vibe/components';
 
 import { useLocation, useNavigate } from 'react-router-dom';
 
-import { GLOBAL_PAGES_ENUM, PrivatePagesEnum, PublicPagesEnum } from '@core/navigation';
-import { getAuthToken } from '@core/utils';
+import { GLOBAL_PAGES_ENUM, PrivatePagesEnum, PublicPagesEnum } from '@/core/navigation';
+import { getAuthToken } from '@/core/utils';
 
 export const AuthInterceptor: ExtendedReactFunctionalComponent = ({ children }) => {
   const location = useLocation();

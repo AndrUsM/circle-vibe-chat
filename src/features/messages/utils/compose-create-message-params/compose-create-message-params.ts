@@ -1,8 +1,8 @@
 import { ChatParticipant, SendMessageChatSocketParams } from '@circle-vibe/shared';
 
-import { encodeBase64 } from '@core/utils';
+import { encodeBase64 } from '@/core/utils';
 
-import { MessageFormValues } from '@features/messages/types';
+import { MessageFormValues } from '@/features/messages/types';
 
 import { getMessageType } from './get-message-type';
 

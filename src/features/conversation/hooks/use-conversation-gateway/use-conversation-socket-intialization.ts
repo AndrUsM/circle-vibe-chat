@@ -8,8 +8,8 @@ import {
   Message,
 } from '@circle-vibe/shared';
 
-import { useSocket } from '@core/hooks';
-import { setAuthToken } from '@core/utils';
+import { useSocket } from '@/core/hooks';
+import { setAuthToken } from '@/core/utils';
 
 interface UseChatSocketLogicInitializationOptions {
   socketListenerNotifyNewMessage: VoidFunction;

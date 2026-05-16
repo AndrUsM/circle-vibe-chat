@@ -4,9 +4,9 @@ import { MessageFile } from '@circle-vibe/shared';
 
 import { Show } from '@circle-vibe/components';
 
-import { VIDEO_MIME_TYPE } from '@shared/constants';
+import { VIDEO_MIME_TYPE } from '@/shared/constants';
 
-import { isVideoHasAudioTrack } from '@features/messages/utils';
+import { isVideoHasAudioTrack } from '@/features/messages/utils';
 
 interface VideoPreviewProps {
   videos: MessageFile[];

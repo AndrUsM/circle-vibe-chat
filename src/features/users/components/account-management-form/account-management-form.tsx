@@ -7,11 +7,11 @@ import {
   StackLayout,
 } from '@circle-vibe/components';
 
-import { Section } from '@shared/components';
+import { Section } from '@/shared/components';
 
 import './account-management-form.scss';
-import { useConfirmation } from '@shared/hooks';
-import { useDeactivateAccount, useDeleteAccount } from '@api/user';
+import { useConfirmation } from '@/shared/hooks';
+import { useDeactivateAccount, useDeleteAccount } from '@/api/user';
 
 export const AccountManagementForm: React.FC = () => {
   const { t } = useTranslation();

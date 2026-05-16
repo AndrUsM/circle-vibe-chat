@@ -2,8 +2,8 @@ import { useTranslation } from 'react-i18next';
 
 import { Button, StackLayout } from '@circle-vibe/components';
 
-import { useCurrentUser } from '@core/hooks';
-import { useFinishAccountSetup } from '@api/auth/hooks';
+import { useCurrentUser } from '@/core/hooks';
+import { useFinishAccountSetup } from '@/api/auth/hooks';
 
 interface InitialSetupProps {
   onResetChats: VoidFunction;

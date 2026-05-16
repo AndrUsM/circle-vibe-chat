@@ -17,7 +17,7 @@ import {
   useSortedByTypeFiles,
   openFileForPreview,
   NATIVE_BROWSER_EXTENSIONS_REGEXP,
-} from '@features/messages';
+} from '@/features/messages';
 
 import { VideoPreview } from '../video-preview';
 

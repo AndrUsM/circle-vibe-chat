@@ -29,7 +29,7 @@ import {
   MessageFormValues,
   useFileEntityType,
   useHandleFileUpload,
-} from '@features/messages';
+} from '@/features/messages';
 
 import { UploadedFilePreview } from './uploaded-file-preview';
 import { UploadFileMenuModal } from './upload-file-menu-modal';

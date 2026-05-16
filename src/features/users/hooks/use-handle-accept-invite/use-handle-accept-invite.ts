@@ -1,8 +1,8 @@
 import { useCallback } from 'react';
 
-import { useNotification } from '@core/hooks';
+import { useNotification } from '@/core/hooks';
 
-import { useAcceptInvite } from '@api/conversations';
+import { useAcceptInvite } from '@/api/conversations';
 
 import { AcceptInviteFormValues } from '../../types';
 

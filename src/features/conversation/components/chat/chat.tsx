@@ -14,7 +14,7 @@ import {
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 
-import { MessageShortPreview } from '@features/messages';
+import { MessageShortPreview } from '@/features/messages';
 
 import { ChatActions } from './chat-actions';
 

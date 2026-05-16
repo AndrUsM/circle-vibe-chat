@@ -8,7 +8,7 @@ import {
 } from '@circle-vibe/components';
 import { Form } from '@circle-vibe/components';
 
-import { Section } from '@shared/components';
+import { Section } from '@/shared/components';
 
 import { useHandleAcceptInvite } from '../../hooks/use-handle-accept-invite';
 

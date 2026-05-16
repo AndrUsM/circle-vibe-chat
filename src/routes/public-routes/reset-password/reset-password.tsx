@@ -2,7 +2,7 @@ import React from 'react';
 
 import { StackLayout } from '@circle-vibe/components';
 
-import { RestorePasswordForm } from '@features/users/components/restore-password-form/restore-password-form';
+import { RestorePasswordForm } from '@/features/users/components/restore-password-form/restore-password-form';
 
 export const ResetPassword: React.FC = () => {
   return (

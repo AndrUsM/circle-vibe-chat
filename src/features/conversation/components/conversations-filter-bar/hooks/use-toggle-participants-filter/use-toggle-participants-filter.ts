@@ -2,8 +2,8 @@ import { useCallback } from 'react';
 
 import { User } from '@circle-vibe/shared';
 
-import { toggleArrayItem } from '@shared/utils';
-import { ChatParticipantsWithUser } from '@api/conversations';
+import { toggleArrayItem } from '@/shared/utils';
+import { ChatParticipantsWithUser } from '@/api/conversations';
 
 import { ConversationsFilterBarFormValues } from '../../types';
 

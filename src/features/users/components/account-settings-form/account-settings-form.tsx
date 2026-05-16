@@ -32,19 +32,19 @@ import {
 
 import { FormikProps } from 'formik';
 
-import { FileUploadForm, FileUploadFormFileType, Section } from '@shared/components';
+import { FileUploadForm, FileUploadFormFileType, Section } from '@/shared/components';
 
-import { useCurrentUser } from '@core/hooks';
+import { useCurrentUser } from '@/core/hooks';
 
-import { useUpdateUserSettings, useUsersRelatedWithCurrent } from '@api/user';
-import { toggleArrayItem } from '@shared/utils';
+import { useUpdateUserSettings, useUsersRelatedWithCurrent } from '@/api/user';
+import { toggleArrayItem } from '@/shared/utils';
 
 import { ACCOUNT_SETTINGS_FORM_VALIDATION_SCHEMA } from './constants';
 import { AccountSettingsFormValues } from './types';
 import { composeAccountSettingsFormValues } from './utils';
 import { useTranslation } from 'react-i18next';
-import { USER_TYPE_DROPDOWN_OPTIONS } from '@shared/constants';
-import { DatePickerInput } from '@shared/components/date-picker';
+import { USER_TYPE_DROPDOWN_OPTIONS } from '@/shared/constants';
+import { DatePickerInput } from '@/shared/components/date-picker';
 
 export const AccountSettingsForm: React.FC = () => {
   const { t } = useTranslation();

@@ -21,10 +21,10 @@ import { FormikProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 import { useNavigate } from 'react-router-dom';
 
-import { FileUploadForm, FileUploadFormFileType } from '@shared/components';
-import { USER_TYPE_DROPDOWN_OPTIONS } from '@shared/constants';
+import { FileUploadForm, FileUploadFormFileType } from '@/shared/components';
+import { USER_TYPE_DROPDOWN_OPTIONS } from '@/shared/constants';
 
-import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@core/navigation';
+import { GLOBAL_PAGES_ENUM, PublicPagesEnum } from '@/core/navigation';
 
 import {
   SIGN_UP_FORM_INITIAL_VALUES,

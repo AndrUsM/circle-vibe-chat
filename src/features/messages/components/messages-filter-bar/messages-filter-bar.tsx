@@ -18,11 +18,11 @@ import classNames from 'classnames';
 import { FormikProps } from 'formik';
 import { useTranslation } from 'react-i18next';
 
-import { useFilters } from '@shared/components';
+import { useFilters } from '@/shared/components';
 
-import { useActiveConversation } from '@features/conversation';
+import { useActiveConversation } from '@/features/conversation';
 
-import { useGetChatParticipants } from '@api/conversations';
+import { useGetChatParticipants } from '@/api/conversations';
 
 import {
   MESSAGES_FILTER_BAR_FORM_INITIAL_VALUES,

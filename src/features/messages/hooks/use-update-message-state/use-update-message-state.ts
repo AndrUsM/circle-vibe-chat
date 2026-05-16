@@ -2,10 +2,10 @@ import { useMemo, useState } from 'react';
 
 import { useBoolean } from '@circle-vibe/components';
 
-import { MESSAGE_UPDATE_FORM_INITIAL_VALUE } from '@features/messages/constants';
-import { MessageUpdateFormValues } from '@features/messages/types';
+import { MESSAGE_UPDATE_FORM_INITIAL_VALUE } from '@/features/messages/constants';
+import { MessageUpdateFormValues } from '@/features/messages/types';
 
-import { useFindMessageById } from '@api/messages';
+import { useFindMessageById } from '@/api/messages';
 
 export interface MessageUpdateDialogState {
   chatId: number;
